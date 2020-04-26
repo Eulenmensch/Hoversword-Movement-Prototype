@@ -43,7 +43,6 @@ public class HoverBoardController02 : MonoBehaviour
             if (Physics.Raycast(hoverPoint.position, -transform.up, out hit, RaycastLength, GroundMask))
             {
                 SwordRB.AddForceAtPosition(transform.up * HoverForce * Mathf.Pow(RaycastLength - hit.distance, 2) / RaycastLength, hoverPoint.position, ForceMode.Acceleration);
-                Debug.DrawLine(hoverPoint.position, hoverPoint.position - transform.up * hit.distance, DebugGradient.Evaluate(hit.distance / RaycastLength));
             }
         }
 
@@ -54,14 +53,16 @@ public class HoverBoardController02 : MonoBehaviour
     private void ApplyMoveInput()
     {
         RaycastHit hit;
-        Vector3 groundForwardDirection;
+        Vector3 groundForwardDirection = new Vector3(transform.forward.x, 0.0f, transform.forward.z);
         if (Physics.Raycast(transform.position, -transform.up, out hit, RaycastLength, GroundMask))
         {
             groundForwardDirection = Vector3.Cross(hit.normal, -transform.right).normalized;
         }
-        else
+        else //if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, GroundMask))//FIXME: Maybe just don't add velocity in the air?
         {
             groundForwardDirection = new Vector3(transform.forward.x, 0.0f, transform.forward.z);
+            //groundForwardDirection = Vector3.Cross(hit.normal, -transform.right).normalized;
+            //groundForwardDirection = Vector3.zero;
         }
         SwordRB.AddForceAtPosition(groundForwardDirection * AccellerationForce * InputVector.y, Motor.position, ForceMode.Acceleration);
 
@@ -86,6 +87,15 @@ public class HoverBoardController02 : MonoBehaviour
             foreach (var hoverPoint in HoverPoints)
             {
                 Gizmos.DrawWireSphere(hoverPoint.position, 0.1f);
+
+                RaycastHit hit;
+                if (Physics.Raycast(hoverPoint.position, -transform.up, out hit, RaycastLength, GroundMask))
+                {
+                    Gizmos.color = DebugGradient.Evaluate(hit.distance / RaycastLength);
+                    Gizmos.DrawSphere(hit.point, 0.07f);
+                    Debug.DrawLine(hoverPoint.position, hoverPoint.position - transform.up * hit.distance, DebugGradient.Evaluate(hit.distance / RaycastLength));
+                }
+                Gizmos.color = Color.white;
             }
         }
 
