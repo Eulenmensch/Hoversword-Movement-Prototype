@@ -15,6 +15,7 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
     public Transform[] HoverPoints;
     public LayerMask GroundMask;
     public Transform CenterOfMass;
+    public Transform TurnMotor;
     public Transform Motor;
     public GUIStyle DebugTextStyle;
     public Gradient DebugGradient;
@@ -54,9 +55,10 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 groundForwardDirection = new Vector3(transform.forward.x, 0.0f, transform.forward.z);
-        if (Physics.Raycast(transform.position, -transform.up, out hit, RaycastLength, GroundMask))
+        if (Physics.Raycast(transform.position, -transform.up, out hit, RaycastLength * 1.5f, GroundMask))
         {
             groundForwardDirection = Vector3.Cross(hit.normal, -transform.right).normalized;
+            Debug.DrawLine(transform.position, hit.point, Color.magenta);
         }
         else //if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, GroundMask))//FIXME: Maybe just don't add velocity in the air?
         {
@@ -66,7 +68,8 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
         }
         SwordRB.AddForceAtPosition(groundForwardDirection * AccellerationForce * InputVector.y, Motor.position, ForceMode.Acceleration);
 
-        SwordRB.AddTorque(transform.up * TurnForce * InputVector.x, ForceMode.Acceleration);
+        //SwordRB.AddTorque(transform.up * TurnForce * InputVector.x, ForceMode.Acceleration);
+        SwordRB.AddForceAtPosition(-transform.right * TurnForce * Mathf.Pow(InputVector.x, 3), TurnMotor.position, ForceMode.Acceleration);
     }
 
     private void ApplyQuadraticDrag()
@@ -99,7 +102,7 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
             }
         }
 
-        Debug.DrawRay(transform.position, -transform.up, Color.red);
+        //Debug.DrawRay(transform.position, -transform.up, Color.red);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
     }
 
