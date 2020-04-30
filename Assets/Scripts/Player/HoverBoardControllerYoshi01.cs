@@ -108,6 +108,9 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
 
     private void OnGUI()
     {
+
+        GUI.Label(new Rect(10, 10, 100, 20), "TurnInput: " + InputVector.x.ToString("0.00"));
+        GUI.Label(new Rect(10, 40, 100, 20), "ThrustInput: " + InputVector.y.ToString("0.00"));
         foreach (var hoverPoint in HoverPoints)
         {
             RaycastHit hit;
