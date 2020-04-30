@@ -16,11 +16,26 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
     public LayerMask GroundMask;
     public Transform CenterOfMass;
     public Transform Motor;
-    public GUIStyle DebugTextStyle;
-    public Gradient DebugGradient;
+    public Transform TurnMotor;
+
+
 
     private Vector2 InputVector;
     private Rigidbody SwordRB;
+
+    // Debugging
+    [Header("Debugging")]
+    public bool showDirections;
+    public bool showGroundDistanceText;
+    public GUIStyle DebugTextStyle;
+    public bool showGroundDistanceRays;
+    public Gradient DebugGradient;
+    public bool showGroundForwardDirection;
+    private Vector3 groundForwardDirection;
+    public bool showTurnFrictionForce;
+    private Vector3 turnFrictionForce;
+    public bool showTurnTorque;
+    private Vector3 turnTorque;
 
     private void Start()
     {
@@ -39,22 +54,27 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
     {
         foreach (var hoverPoint in HoverPoints)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(hoverPoint.position, -transform.up, out hit, RaycastLength, GroundMask))
+            if (Physics.Raycast(hoverPoint.position, -transform.up, out RaycastHit hit, RaycastLength, GroundMask))
             {
+                // Apply Hover Force on Hover Points
+                // RaycastLength - hit.distance => can be anything from 0 to raycastlenght... should really by mapped to 0-1
+                // Why divide by Length again? -> So the multiplier is == Length when distance to ground == 0? But that isn't really helpful either...
+                // I should really map this to a animationCurve
                 SwordRB.AddForceAtPosition(transform.up * HoverForce * Mathf.Pow(RaycastLength - hit.distance, 2) / RaycastLength, hoverPoint.position, ForceMode.Acceleration);
             }
         }
 
         //makes the board take tighter turns with higher turn friction
-        SwordRB.AddForce(-transform.right * transform.InverseTransformVector(SwordRB.velocity).x * TurnFriction, ForceMode.Acceleration);
+        // transform.InverseTransformVector(SwordRB.velocity).x is greater or smaller than 0 according to movement direction
+        turnFrictionForce = -transform.right * transform.InverseTransformVector(SwordRB.velocity).x * TurnFriction;
+        SwordRB.AddForce(turnFrictionForce, ForceMode.Acceleration);
     }
 
     private void ApplyMoveInput()
     {
-        RaycastHit hit;
-        Vector3 groundForwardDirection = new Vector3(transform.forward.x, 0.0f, transform.forward.z);
-        if (Physics.Raycast(transform.position, -transform.up, out hit, RaycastLength, GroundMask))
+        //groundForwardDirection = new Vector3(transform.forward.x, 0.0f, transform.forward.z);
+
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, RaycastLength, GroundMask))
         {
             groundForwardDirection = Vector3.Cross(hit.normal, -transform.right).normalized;
         }
@@ -66,7 +86,11 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
         }
         SwordRB.AddForceAtPosition(groundForwardDirection * AccellerationForce * InputVector.y, Motor.position, ForceMode.Acceleration);
 
-        SwordRB.AddTorque(transform.up * TurnForce * InputVector.x, ForceMode.Acceleration);
+        //turnTorque = transform.up * TurnForce * InputVector.x;
+        //SwordRB.AddTorque(turnTorque, ForceMode.Acceleration);
+        // turning by adding force very low tipping the character to the side and turning it
+        turnTorque = -transform.right * TurnForce * Mathf.Pow(InputVector.x, 3);
+        SwordRB.AddForceAtPosition(turnTorque, TurnMotor.position, ForceMode.Acceleration);
     }
 
     private void ApplyQuadraticDrag()
@@ -82,7 +106,16 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (HoverPoints.Length > 1)
+        if (showGroundForwardDirection)
+            Debug.DrawLine(transform.position, transform.position + groundForwardDirection * 2f, Color.red);
+        if (showTurnFrictionForce)
+            Debug.DrawLine(transform.position, transform.position + turnFrictionForce, Color.blue);
+        if (showTurnTorque)
+            Debug.DrawLine(transform.position, transform.position + turnTorque, Color.cyan);
+
+
+
+        if (showGroundDistanceRays && HoverPoints.Length > 1)
         {
             foreach (var hoverPoint in HoverPoints)
             {
@@ -99,19 +132,25 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
             }
         }
 
-        Debug.DrawRay(transform.position, -transform.up, Color.red);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
+        if (showDirections)
+        {
+            Debug.DrawRay(transform.position, -transform.up, Color.red);
+            Debug.DrawRay(transform.position + transform.forward, transform.forward, Color.cyan);
+        }
     }
 
     private void OnGUI()
     {
-        foreach (var hoverPoint in HoverPoints)
+        if (showGroundDistanceText)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(hoverPoint.position, -transform.up, out hit, RaycastLength, GroundMask))
+            foreach (var hoverPoint in HoverPoints)
             {
-                string text = (hit.distance / RaycastLength).ToString("0.00"); //the ratio of intended height and actual height
-                Handles.Label(hoverPoint.position - transform.up * (hit.distance / 2), text, DebugTextStyle);
+                RaycastHit hit;
+                if (Physics.Raycast(hoverPoint.position, -transform.up, out hit, RaycastLength, GroundMask))
+                {
+                    string text = (hit.distance / RaycastLength).ToString("0.00"); //the ratio of intended height and actual height
+                    Handles.Label(hoverPoint.position - transform.up * (hit.distance / 2), text, DebugTextStyle);
+                }
             }
         }
     }
