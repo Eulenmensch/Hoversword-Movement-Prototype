@@ -12,6 +12,7 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
     public float Drag;
     public float AngularDrag;
     public float RaycastLength;
+    public float GroundStickRayLength;
     public Transform[] HoverPoints;
     public LayerMask GroundMask;
     public Transform CenterOfMass;
@@ -55,7 +56,7 @@ public class HoverBoardControllerYoshi01 : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 groundForwardDirection = new Vector3(transform.forward.x, 0.0f, transform.forward.z);
-        if (Physics.Raycast(transform.position, -transform.up, out hit, RaycastLength * 1.5f, GroundMask))
+        if (Physics.Raycast(transform.position, -transform.up, out hit, GroundStickRayLength, GroundMask))
         {
             groundForwardDirection = Vector3.Cross(hit.normal, -transform.right).normalized;
             Debug.DrawLine(transform.position, hit.point, Color.magenta);

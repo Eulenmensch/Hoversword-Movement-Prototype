@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 2068229036345150105}
   - component: {fileID: 2068229036345150110}
   m_Layer: 0
-  m_Name: JetBoard Elaborate
+  m_Name: Player Character Yoshi 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -532,6 +532,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   CenterOfMass: {fileID: 2068229035301632521}
+  TurnMotor: {fileID: 0}
   Motor: {fileID: 2068229036705090765}
   DebugTextStyle:
     m_Name: 
@@ -5772,11 +5773,11 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
+  m_UseCustomVertexStreams: 1
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
-  m_VertexStreams: 00010304
+  m_VertexStreams: 000304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
