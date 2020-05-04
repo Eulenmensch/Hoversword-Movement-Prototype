@@ -17,6 +17,7 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
     public Transform CenterOfMass;
     public Transform Motor;
     public Transform TurnMotor;
+    public float gravity;
 
 
 
@@ -91,11 +92,16 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
         // turning by adding force very low tipping the character to the side and turning it
         turnTorque = -transform.right * TurnForce * Mathf.Pow(InputVector.x, 3);
         SwordRB.AddForceAtPosition(turnTorque, TurnMotor.position, ForceMode.Acceleration);
+
+        // Apply gracity
+        SwordRB.AddForce(-Vector3.up * gravity, ForceMode.Acceleration);
     }
 
     private void ApplyQuadraticDrag()
     {
-        SwordRB.AddForce(-Drag * SwordRB.velocity.normalized * SwordRB.velocity.sqrMagnitude, ForceMode.Acceleration);
+        Vector3 drag = -Drag * SwordRB.velocity.normalized * SwordRB.velocity.sqrMagnitude;
+        // drag.y = 0;
+        SwordRB.AddForce(drag, ForceMode.Acceleration);
         SwordRB.AddTorque(-AngularDrag * SwordRB.angularVelocity.normalized * SwordRB.angularVelocity.sqrMagnitude, ForceMode.Acceleration);
     }
 
