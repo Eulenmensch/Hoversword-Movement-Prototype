@@ -13,4 +13,9 @@ public class InputManagerYoshi : Singleton<InputManagerYoshi>
         Thrust = inputVector.y;
         Turn = inputVector.x;
     }
+
+    private void Update()
+    {
+        //Debug.Log("I\'m a shitty singleton");
+    }
 }
