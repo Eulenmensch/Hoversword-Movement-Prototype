@@ -48,10 +48,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     public enum ThrustModes { Manual, Automatic }   //An enum for switching between types of input handling
     private Rigidbody RB;                   //A reference to the board's rigidbody
-    private PIDController[] PIDs;           //A reference to the PIDController class that handles error correction and smoothens out the hovering
+    private PIDController[] PIDs;           //References to the PIDController class that handles error correction and smoothens out the hovering
 
     private float MaxSpeed;                 //The maximum velocity the board can have on a flat surface given the defined parameters
     private Vector3 ThrustDirection;        //The direction thrust is applied to the rigidbody. I'm caching this value as a field for aerial movement
+
+    private float ThrustInput;              //The amount of thrust input set in the SetInput method
+    private float TurnInput;                //The amount of thrust input set in the SetInput method
 
     private void Start()
     {
@@ -141,7 +144,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         }
 
         //Calculate thrust force
-        Vector3 thrustForce = ThrustDirection * AccelerationForce * InputManagerYoshi.Instance.Thrust;
+        Vector3 thrustForce = ThrustDirection * AccelerationForce * ThrustInput;
         //Apply calculated thrust to the rigidbody at the thrust motor position
         RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
     }
@@ -154,7 +157,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private void Turn()
     {
         //Make the Turn Input scale exponentially to get more of a carving feel when steering
-        float scaledTurnInput = Mathf.Pow( InputManagerYoshi.Instance.Turn, 3 );
+        float scaledTurnInput = Mathf.Pow( TurnInput, 3 );
         //Calculate turn force
         Vector3 turnForce = -transform.right * TurnForce * scaledTurnInput;
         //Apply calculated turn force to the rigidbody at the turn motor position
@@ -204,5 +207,12 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         bool ray = Physics.Raycast( transform.position, -transform.up, out hit, GroundStickHeight, GroundMask );
         _hit = hit;
         return ray;
+    }
+
+    //Sets the thrust and turn input
+    public void SetInput(float _thrust, float _turn)
+    {
+        ThrustInput = _thrust;
+        TurnInput = _turn;
     }
 }

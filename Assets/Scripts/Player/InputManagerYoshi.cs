@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManagerYoshi : Singleton<InputManagerYoshi>
+public class InputManagerYoshi : MonoBehaviour
 {
-    [HideInInspector] public float Thrust;
-    [HideInInspector] public float Turn;
+    private HoverBoardControllerYoshi02 ControllerYoshi02;
+    private void Awake()
+    {
+        ControllerYoshi02 = GetComponent<HoverBoardControllerYoshi02>();
+    }
     public void GetMoveInput(InputAction.CallbackContext context)
     {
         Vector2 inputVector = context.ReadValue<Vector2>();
-        Thrust = inputVector.y;
-        Turn = inputVector.x;
-    }
-
-    private void Update()
-    {
-        //Debug.Log("I\'m a shitty singleton");
+        ControllerYoshi02.SetInput( inputVector.y, inputVector.x );
     }
 }
