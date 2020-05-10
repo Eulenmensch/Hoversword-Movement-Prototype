@@ -6719,9 +6719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverForce: 80
-  AnticipativeHoverForce: 0
   HoverHeight: 0.8
-  GroundStickForce: 0
   GroundStickHeight: 3
   HoverPoints:
   - {fileID: 5980199473105733124}
@@ -6735,14 +6733,15 @@ MonoBehaviour:
   AccelerationForce: 32.76
   TurnForce: 15
   SidewaysFriction: 2
-  ThrustMotorYFineTuning: {x: -1.3729426, y: -0.42294264}
-  TurnMotorZFineTuning: {x: 0.23713873, y: 0.5271387}
+  StabilizationForce: 3
+  StabilizationSpeed: 10
+  AirControlForce: 3
+  PitchControlMode: 0
+  RollControlMode: 0
   Drag: 0.01
   AngularDrag: 3
   GroundGravity: 30
   AirGravity: 33.7
-  CameraLookAtZOffset: {x: 0.0439234, y: 0.88392335}
-  FOV: {x: 0, y: 75}
   GroundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -6791,7 +6790,18 @@ MonoBehaviour:
     m_ActionId: dcb542e2-cebe-4487-a9d9-e1e333c8299c
     m_ActionName: Player/Move[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow,/XInputControllerWindows/rightTrigger,/XInputControllerWindows/leftTrigger,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8401968234058044255}
+        m_MethodName: GetAirControlInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6465eb62-4608-4934-9b67-53c769ae0893
     m_ActionName: Player/Look[/XInputControllerWindows/rightStick,/Mouse/delta,/Pen/delta]
   - m_PersistentCalls:
@@ -6835,6 +6845,10 @@ MonoBehaviour:
     m_ActionId: b4090013-96c9-44ac-9fd4-416454eaae68
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5653608b-a5a0-4c12-a55e-2f7084a1f198
+    m_ActionName: Player/LightAttack[/XInputControllerWindows/buttonWest,/Keyboard/v]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5980199474981844261}
         m_MethodName: GetAttackInput
@@ -6847,22 +6861,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 5653608b-a5a0-4c12-a55e-2f7084a1f198
-    m_ActionName: Player/LightAttack[/XInputControllerWindows/buttonWest,/Keyboard/v]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5980199474981844263}
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_ActionId: d14697a1-f1e1-46e7-afb4-3a857bdd3fe1
+    m_ActionName: Player/Crouch/Jump[/XInputControllerWindows/buttonSouth,/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4a145a25-e1ba-404a-9045-4dc5e7dbcedd
     m_ActionName: Player/Crouch/Jump[/XInputControllerWindows/buttonSouth,/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
