@@ -29,7 +29,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
-                    ""id"": ""6465eb62-4608-4934-9b67-53c769ae0893"",
+                    ""id"": ""5653608b-a5a0-4c12-a55e-2f7084a1f198"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -37,7 +37,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": ""LightAttack"",
                     ""type"": ""Button"",
-                    ""id"": ""5653608b-a5a0-4c12-a55e-2f7084a1f198"",
+                    ""id"": ""d14697a1-f1e1-46e7-afb4-3a857bdd3fe1"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
@@ -45,10 +45,18 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Crouch/Jump"",
                     ""type"": ""Button"",
-                    ""id"": ""d14697a1-f1e1-46e7-afb4-3a857bdd3fe1"",
+                    ""id"": ""4a145a25-e1ba-404a-9045-4dc5e7dbcedd"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Pitch&Roll"",
+                    ""type"": ""Value"",
+                    ""id"": ""6465eb62-4608-4934-9b67-53c769ae0893"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -282,6 +290,160 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""action"": ""Crouch/Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""c5af64e1-2f22-424e-87dd-8e25425151a4"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d0fd0db3-68a3-4c18-9889-2107539fbf29"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""6e0ba306-1630-47df-acfe-447d49bfa877"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ee31a22b-6897-4c0e-8ba2-bd91959c3fb6"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""694d8efe-89a7-446f-b839-bb06a03fb68c"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""40bc468a-a940-480c-b507-5d876c9bac9d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""131ea547-8c7b-4256-b2be-7094d2b1a1a6"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""36ecefb2-9329-43b1-aa90-47e1edee0278"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cab55e3e-48d6-48ba-be51-f56c023a75dc"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""d359ccf3-f1ec-45af-80cc-ea139c546ebc"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": """",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8122211c-8048-46df-ac1b-6a5662ffb39b"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""066388d5-f41f-40c9-ba89-c6883aba5920"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ef56b6a7-50f7-4a6b-96ed-7bf16a4af6f6"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""35bc6f39-967e-401b-aac0-e3bd5bd98b5c"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pitch&Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -861,6 +1023,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_LightAttack = m_Player.FindAction("LightAttack", throwIfNotFound: true);
         m_Player_CrouchJump = m_Player.FindAction("Crouch/Jump", throwIfNotFound: true);
+        m_Player_PitchRoll = m_Player.FindAction("Pitch&Roll", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -926,6 +1089,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_LightAttack;
     private readonly InputAction m_Player_CrouchJump;
+    private readonly InputAction m_Player_PitchRoll;
     public struct PlayerActions
     {
         private @InputActionsAsset m_Wrapper;
@@ -934,6 +1098,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @LightAttack => m_Wrapper.m_Player_LightAttack;
         public InputAction @CrouchJump => m_Wrapper.m_Player_CrouchJump;
+        public InputAction @PitchRoll => m_Wrapper.m_Player_PitchRoll;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -955,6 +1120,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 @CrouchJump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouchJump;
                 @CrouchJump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouchJump;
                 @CrouchJump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouchJump;
+                @PitchRoll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPitchRoll;
+                @PitchRoll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPitchRoll;
+                @PitchRoll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPitchRoll;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -971,6 +1139,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 @CrouchJump.started += instance.OnCrouchJump;
                 @CrouchJump.performed += instance.OnCrouchJump;
                 @CrouchJump.canceled += instance.OnCrouchJump;
+                @PitchRoll.started += instance.OnPitchRoll;
+                @PitchRoll.performed += instance.OnPitchRoll;
+                @PitchRoll.canceled += instance.OnPitchRoll;
             }
         }
     }
@@ -1131,6 +1302,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnLightAttack(InputAction.CallbackContext context);
         void OnCrouchJump(InputAction.CallbackContext context);
+        void OnPitchRoll(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

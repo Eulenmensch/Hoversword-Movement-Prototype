@@ -10,9 +10,9 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 {
     [Header( "Hover Settings" )]
     public float HoverForce;                //The force that pushes the board upwards
-    public float AnticipativeHoverForce;    //The force that smoothes out sudden changes in ground gradient
+    //public float AnticipativeHoverForce;    //The force that smoothes out sudden changes in ground gradient
     public float HoverHeight;               //The ideal height at which the board wants to hover
-    public float GroundStickForce;          //The force applied inverse to ground normal
+    //public float GroundStickForce;          //The force applied inverse to ground normal
     public float GroundStickHeight;         //The maximum height at which the acceleration force direction is projected on the ground and ground stick force is applied
     public Transform[] HoverPoints;         //The points from which ground distance is measured and where hover force is applied
 
@@ -22,12 +22,20 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [Range( 0.0f, 1.0f )] public float DerivativeGain;    //A tuning value for the derivative error correction
 
     [Header( "Handling Settings" )]
-    public ThrustModes ThrustMode;          //Dropdown to switch between thrust modes
+    [SerializeField] private ThrustModes ThrustMode;          //Dropdown to switch between thrust modes
     public float AccelerationForce;         //The force that accelerates the board in its forward direction, projected on the ground
     public float TurnForce;                 //The force that makes the board turn
     public float SidewaysFriction;              //The force that keeps the board from sliding sideways
-    [MinMaxSlider( -1, 1 )] public Vector2 ThrustMotorYFineTuning;     //Fine tuning for the thrust motor local y position
-    [MinMaxSlider( 0, 1 )] public Vector2 TurnMotorZFineTuning;        //Fine tuning for the turn motor local z position
+    //[MinMaxSlider( -1, 1 )] public Vector2 ThrustMotorYFineTuning;     //Fine tuning for the thrust motor local y position
+    //[MinMaxSlider( 0, 1 )] public Vector2 TurnMotorZFineTuning;        //Fine tuning for the turn motor local z position
+
+    [Header( "Aerial Handling Settings" )]
+    [SerializeField] private float StabilizationForce;      //The force exerted on the body to orient it upright
+    [SerializeField] private float StabilizationSpeed;      //The time it takes for the board to return to an upright state
+    [SerializeField] private float AirControlForce;         //The angular force exerted on the body by player input
+    [SerializeField] private AirControlModes PitchControlMode;          //Should the rotation around the sidewards axis be stabilized?
+    [SerializeField] private AirControlModes RollControlMode;            //Should the rotation around the forward axis be stabilized?
+
 
     [Header( "Physics Settings" )]
     public float Drag;                      //Quadratic force applied counter the board's velocity
@@ -36,8 +44,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     public float AirGravity;                //The gravity applied when 'airborne'
 
     [Header( "Camera Settings" )]
-    [MinMaxSlider( 0, 1 )] public Vector2 CameraLookAtZOffset;    //The offset of the camera look at which influences how much the camera leans into turns
-    [MinMaxSlider( 0, 1 )] public Vector2Int FOV;                 //The Camera's FOV
+    //[MinMaxSlider( 0, 1 )] public Vector2 CameraLookAtZOffset;    //The offset of the camera look at which influences how much the camera leans into turns
+    //[MinMaxSlider( 0, 1 )] public Vector2Int FOV;                 //The Camera's FOV
 
     [Header( "General Settings" )]
     [SerializeField] private LayerMask GroundMask;      //The layer mask that determines what counts as ground
@@ -45,16 +53,23 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private Transform ThrustMotor;     //The location where acceleration force is applied
     [SerializeField] private Transform TurnMotor;       //The location where turn force is applied
 
+    private enum ThrustModes { Manual, Automatic }          //An enum for switching between types of input handling
+    private enum AirControlModes { Manual, Stabilized }     //An enum for switching between types of rotational correction in the air
 
-    public enum ThrustModes { Manual, Automatic }   //An enum for switching between types of input handling
+    //References
     private Rigidbody RB;                   //A reference to the board's rigidbody
     private PIDController[] PIDs;           //References to the PIDController class that handles error correction and smoothens out the hovering
 
+    //Physics fields
     private float MaxSpeed;                 //The maximum velocity the board can have on a flat surface given the defined parameters
     private Vector3 ThrustDirection;        //The direction thrust is applied to the rigidbody. I'm caching this value as a field for aerial movement
 
+    //Input fields
     private float ThrustInput;              //The amount of thrust input set in the SetInput method
     private float TurnInput;                //The amount of thrust input set in the SetInput method
+    private float PitchInput;
+    private float RollInput;
+
 
     private void Start()
     {
@@ -87,9 +102,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     {
         SetGravity();
         Hover();
-        Thrust();
-        Turn();
-        ApplySidewaysFriction();
+        Thrust();               //TODO: Integrate in the Handling method once cleaned up
+        Handling();
         ApplyQuadraticDrag();
     }
 
@@ -108,6 +122,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
                 //Use the respective PID controller to calculate the percentage of hover force to be used
                 float forcePercent = PIDs[Array.IndexOf( HoverPoints, hoverPoint )].Control( HoverHeight, actualHeight );
+                Grapher.Log( forcePercent, "PID" + Array.IndexOf( HoverPoints, hoverPoint ).ToString() );   //plots the PID value in an editor toolTODO: remove when done tuning 
 
                 //calculate the adjusted force in the direction of the ground normal
                 Vector3 adjustedForce = HoverForce * forcePercent * groundNormal;
@@ -118,6 +133,19 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         }
     }
 
+    private void Handling()
+    {
+        if ( IsGrounded() )
+        {
+            //Thrust(); //FIXME: The thrust methods currently have code for grounded and aerial stuff that should be seperated first
+            Turn();
+            ApplySidewaysFriction();    //FIXME: Not sure if this should also run in the air
+        }
+        else
+        {
+            AirControl();
+        }
+    }
     private void Thrust()
     {
         if ( ThrustMode == ThrustModes.Manual )
@@ -129,7 +157,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
             ThrustAutomatic();
         }
     }
-    private void ThrustManual()
+    private void ThrustManual() //TODO: Seperate grounded and aerial code into two methods
     {
         RaycastHit hit;
 
@@ -149,9 +177,28 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
     }
 
-    private void ThrustAutomatic()
+    private void ThrustAutomatic()  //TODO: Seperate grounded and aerial code into two methods
     {
+        RaycastHit hit;
 
+        //If the board is 'grounded'
+        if ( IsGrounded( out hit ) )
+        {
+            //Project the board's forward direction onto the ground
+            Vector3 groundForward = Vector3.ProjectOnPlane( transform.forward, hit.normal );
+
+            //Set the direction thrust is applied in to the ground projected direction
+            ThrustDirection = groundForward;
+        }
+        else if ( !IsGrounded() )
+        {
+            ThrustDirection = Vector3.zero;
+        }
+
+        //Calculate thrust force
+        Vector3 thrustForce = ThrustDirection * AccelerationForce;
+        //Apply calculated thrust to the rigidbody at the thrust motor position
+        RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
     }
 
     private void Turn()
@@ -162,6 +209,48 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         Vector3 turnForce = -transform.right * TurnForce * scaledTurnInput;
         //Apply calculated turn force to the rigidbody at the turn motor position
         RB.AddForceAtPosition( turnForce, TurnMotor.position, ForceMode.Acceleration );
+    }
+
+    private void AirControl()
+    {
+        //Define the axis we use for pitch rotation
+        Vector3 pitchAxis = transform.right;
+        //Define the axis we use for roll rotation
+        Vector3 rollAxis = transform.forward;
+        //Define the up rotation the body is rotated to
+        Vector3 upDirection = Vector3.up;
+
+        if ( PitchControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( pitchAxis, upDirection ); }
+        if ( PitchControlMode == AirControlModes.Manual ) { ControlPitch(); }
+        //FIXME: Way too hacky, we need clean seperation of aerial and grounded turning but ok for prototyping
+        if ( RollControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( rollAxis, upDirection ); Turn(); } //FIXME:
+        if ( RollControlMode == AirControlModes.Manual ) { ControlRoll(); }
+    }
+
+    //Adds torque to the rigidbody to make it return to a upright position.
+    //Takes an axis to rotate around as well as the up direction as arguments
+    private void StabilizeAngularMotion(Vector3 _rotationAxis, Vector3 _upDirection)
+    {
+        //Do some spooky voodoo shit http://answers.unity.com/answers/10426/view.html
+        float predictedUpAngle = RB.angularVelocity.magnitude * Mathf.Rad2Deg * StabilizationForce / StabilizationSpeed;
+        //Calculate the necessary rotation
+        Vector3 predictedUp = Quaternion.AngleAxis( predictedUpAngle, RB.angularVelocity ) * transform.up;
+        //Do we need to rotate cw or ccw? In which plane?
+        Vector3 torqueVector = Vector3.Cross( predictedUp, _upDirection );
+        //Only affect the axis given by the attribute
+        torqueVector = Vector3.Project( torqueVector, _rotationAxis );
+
+        //Add the torque force to the body
+        RB.AddTorque( torqueVector * StabilizationSpeed * StabilizationSpeed, ForceMode.Acceleration );
+    }
+
+    private void ControlPitch()
+    {
+        RB.AddTorque( transform.right * AirControlForce * PitchInput, ForceMode.Acceleration );
+    }
+    private void ControlRoll()
+    {
+        RB.AddTorque( -transform.forward * AirControlForce * RollInput, ForceMode.Acceleration );
     }
 
     private void ApplySidewaysFriction()
@@ -210,9 +299,14 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     }
 
     //Sets the thrust and turn input
-    public void SetInput(float _thrust, float _turn)
+    public void SetMoveInput(float _thrust, float _turn)
     {
         ThrustInput = _thrust;
         TurnInput = _turn;
+    }
+    public void SetAirControlInput(float _pitch, float _roll)
+    {
+        PitchInput = _pitch;
+        RollInput = _roll;
     }
 }
