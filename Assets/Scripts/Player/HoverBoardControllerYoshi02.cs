@@ -122,7 +122,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
                 //Use the respective PID controller to calculate the percentage of hover force to be used
                 float forcePercent = PIDs[Array.IndexOf( HoverPoints, hoverPoint )].Control( HoverHeight, actualHeight );
-                Grapher.Log( forcePercent, "PID" + Array.IndexOf( HoverPoints, hoverPoint ).ToString() );   //plots the PID value in an editor toolTODO: remove when done tuning 
+                //Grapher.Log( forcePercent, "PID" + Array.IndexOf( HoverPoints, hoverPoint ).ToString() );   //plots the PID value in an editor toolTODO: remove when done tuning 
 
                 //calculate the adjusted force in the direction of the ground normal
                 Vector3 adjustedForce = HoverForce * forcePercent * groundNormal;
