@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using UnityEngine;
 
-public class TestScript : MonoBehaviour
+public interface ICollidable
 {
-    public int a = 5;
-    public string s;
+    DamageData Collide();
 }
