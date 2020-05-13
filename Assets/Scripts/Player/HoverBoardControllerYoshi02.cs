@@ -22,19 +22,22 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [Range( 0.0f, 1.0f )] public float DerivativeGain;    //A tuning value for the derivative error correction
 
     [Header( "Handling Settings" )]
-    [SerializeField] private ThrustModes ThrustMode;          //Dropdown to switch between thrust modes
-    public float AccelerationForce;         //The force that accelerates the board in its forward direction, projected on the ground
-    public float TurnForce;                 //The force that makes the board turn
-    public float SidewaysFriction;              //The force that keeps the board from sliding sideways
+    [SerializeField] private GroundThrustModes GroundThrustMode;    //Dropdown to switch between thrust modes on the ground
+    public float GroundAccelerationForce;                           //The force that accelerates the board in its forward direction, projected on the ground
+    public float TurnForce;                                         //The force that makes the board turn
+    public float SidewaysFriction;                                  //The force that keeps the board from sliding sideways
     //[MinMaxSlider( -1, 1 )] public Vector2 ThrustMotorYFineTuning;     //Fine tuning for the thrust motor local y position
     //[MinMaxSlider( 0, 1 )] public Vector2 TurnMotorZFineTuning;        //Fine tuning for the turn motor local z position
 
     [Header( "Aerial Handling Settings" )]
-    [SerializeField] private float StabilizationForce;      //The force exerted on the body to orient it upright
-    [SerializeField] private float StabilizationSpeed;      //The time it takes for the board to return to an upright state
-    [SerializeField] private float AirControlForce;         //The angular force exerted on the body by player input
-    [SerializeField] private AirControlModes PitchControlMode;          //Should the rotation around the sidewards axis be stabilized?
-    [SerializeField] private AirControlModes RollControlMode;            //Should the rotation around the forward axis be stabilized?
+    [SerializeField] private AirThrustModes AirThrustMode;     //Dropdown to switch between thrust modes in the air
+    [SerializeField] private float AirAccelerationForce;        //The force that accelerates the board in the air 
+    [SerializeField] private float JumpForce;                   //The impulse applied to the body upwards to make it jump
+    [SerializeField] private float StabilizationForce;          //The force exerted on the body to orient it upright
+    [SerializeField] private float StabilizationSpeed;          //The time it takes for the board to return to an upright state
+    [SerializeField] private float AirControlForce;             //The angular force exerted on the body by player input
+    [SerializeField] private AirControlModes PitchControlMode;  //Should the rotation around the sidewards axis be stabilized?
+    [SerializeField] private AirControlModes RollControlMode;   //Should the rotation around the forward axis be stabilized?
 
 
     [Header( "Physics Settings" )]
@@ -52,8 +55,11 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private Transform CenterOfMass;    //The location where the boards center of mass is shifted. This keeps the board from tipping over
     [SerializeField] private Transform ThrustMotor;     //The location where acceleration force is applied
     [SerializeField] private Transform TurnMotor;       //The location where turn force is applied
+    [SerializeField] private Animator CharacterAnimator;//FIXME: This is definitely not the responsibility of this class
 
-    private enum ThrustModes { Manual, Automatic }          //An enum for switching between types of input handling
+
+    private enum GroundThrustModes { Manual, Automatic }    //An enum for switching between types of thrust handling on the ground
+    private enum AirThrustModes { Manual, NoThrust, RetainGroundDirection } //An enum for switching between types of thrust handling in the air
     private enum AirControlModes { Manual, Stabilized }     //An enum for switching between types of rotational correction in the air
 
     //References
@@ -65,10 +71,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private Vector3 ThrustDirection;        //The direction thrust is applied to the rigidbody. I'm caching this value as a field for aerial movement
 
     //Input fields
-    private float ThrustInput;              //The amount of thrust input set in the SetInput method
-    private float TurnInput;                //The amount of thrust input set in the SetInput method
-    private float PitchInput;
-    private float RollInput;
+    private float ThrustInput;              //The amount of thrust input set in the SetMoveInput method
+    private float TurnInput;                //The amount of thrust input set in the SetMoveInput method
+    private float PitchInput;               //The amount of pitch input set in the Set AirControlInput method
+    private float RollInput;                //The amount of roll input set in the Set AirControlInput method
+
+    //Stupid fields FIXME:
+    private bool IsCrouching;
 
 
     private void Start()
@@ -87,7 +96,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private void Update()
     {
         //Calculate the maximum velocity based on the defined acceleration force and drag
-        MaxSpeed = Mathf.Sqrt( AccelerationForce / Drag ) * 10;   //TODO: this will later be in Start() when done tuning
+        MaxSpeed = Mathf.Sqrt( GroundAccelerationForce / Drag ) * 10;   //TODO: this will later be in Start() when done tuning
 
         //update the gains of each PID controller TODO: this will be removed when done tuning
         foreach ( PIDController pid in PIDs )
@@ -148,57 +157,72 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     }
     private void Thrust()
     {
-        if ( ThrustMode == ThrustModes.Manual )
+        if ( IsGrounded() )
         {
-            ThrustManual();
-        }
-        else if ( ThrustMode == ThrustModes.Automatic )
-        {
-            ThrustAutomatic();
-        }
-    }
-    private void ThrustManual() //TODO: Seperate grounded and aerial code into two methods
-    {
-        RaycastHit hit;
-
-        //If the board is 'grounded'
-        if ( IsGrounded( out hit ) )
-        {
-            //Project the board's forward direction onto the ground
-            Vector3 groundForward = Vector3.ProjectOnPlane( transform.forward, hit.normal );
-
-            //Set the direction thrust is applied in to the ground projected direction
-            ThrustDirection = groundForward;
+            //Handle grounded thrust
+            if ( GroundThrustMode == GroundThrustModes.Manual )
+            {
+                //Add thrust to the body multiplying the force with thrust input
+                GroundThrust( ThrustInput );
+            }
+            else if ( GroundThrustMode == GroundThrustModes.Automatic )
+            {
+                //Add thrust to the body multiplying the force by one (not modifying it)
+                GroundThrust( 1.0f );
+            }
         }
 
-        //Calculate thrust force
-        Vector3 thrustForce = ThrustDirection * AccelerationForce * ThrustInput;
-        //Apply calculated thrust to the rigidbody at the thrust motor position
-        RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
-    }
-
-    private void ThrustAutomatic()  //TODO: Seperate grounded and aerial code into two methods
-    {
-        RaycastHit hit;
-
-        //If the board is 'grounded'
-        if ( IsGrounded( out hit ) )
-        {
-            //Project the board's forward direction onto the ground
-            Vector3 groundForward = Vector3.ProjectOnPlane( transform.forward, hit.normal );
-
-            //Set the direction thrust is applied in to the ground projected direction
-            ThrustDirection = groundForward;
-        }
         else if ( !IsGrounded() )
         {
-            ThrustDirection = Vector3.zero;
+            //Handle aerial thrust
+            if ( AirThrustMode == AirThrustModes.Manual )
+            {
+                //project the boards forward direction on world xz-plane
+                Vector3 thrustDirection = Vector3.ProjectOnPlane( transform.forward, Vector3.up );
+
+                //Add thrust to the body in its projected forward direction multiplying the force with thrust input
+                AirThrust( ThrustInput, transform.forward );
+            }
+            else if ( AirThrustMode == AirThrustModes.NoThrust )
+            {
+                //Add no thrust to the body
+                AirThrust( 0.0f, Vector3.zero );
+            }
+            else if ( AirThrustMode == AirThrustModes.RetainGroundDirection )
+            {
+                //Add thrust to the body in its thrust direction before it left the ground multiplying the force with thrust input
+                AirThrust( ThrustInput, ThrustDirection );
+            }
         }
+    }
+
+    private void GroundThrust(float _thrustInput)
+    {
+        RaycastHit hit;
+
+        //Shoot a ray down to get the hit ground normal
+        IsGrounded( out hit );
+
+        //Project the board's forward direction onto the ground
+        Vector3 groundForward = Vector3.ProjectOnPlane( transform.forward, hit.normal );
+
+        //Set the direction thrust is applied in to the ground projected direction
+        ThrustDirection = groundForward;
 
         //Calculate thrust force
-        Vector3 thrustForce = ThrustDirection * AccelerationForce;
+        Vector3 thrustForce = ThrustDirection * GroundAccelerationForce * _thrustInput;
         //Apply calculated thrust to the rigidbody at the thrust motor position
         RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
+    }
+
+    private void AirThrust(float _thrustInput, Vector3 _thrustDirection)
+    {
+        Vector3 thrustDirection = _thrustDirection;
+
+        //Calculate thrust force
+        Vector3 thrustForce = thrustDirection * AirAccelerationForce * _thrustInput;
+        //Apply calculated thrust to the rigidbody at its center of mass
+        RB.AddForce( thrustForce, ForceMode.Acceleration );
     }
 
     private void Turn()
@@ -221,12 +245,30 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         Vector3 upDirection = Vector3.up;
 
         if ( PitchControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( pitchAxis, upDirection ); }
-        if ( PitchControlMode == AirControlModes.Manual ) { ControlPitch(); }
-        //FIXME: Way too hacky, we need clean seperation of aerial and grounded turning but ok for prototyping
+        if ( PitchControlMode == AirControlModes.Manual ) { ControlAngularMotion( pitchAxis, PitchInput ); }
+        //FIXME: the turn method call is way too hacky, we need clean seperation of aerial and grounded turning but ok for prototyping
         if ( RollControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( rollAxis, upDirection ); Turn(); } //FIXME:
-        if ( RollControlMode == AirControlModes.Manual ) { ControlRoll(); }
+        if ( RollControlMode == AirControlModes.Manual ) { ControlAngularMotion( -rollAxis, RollInput ); }
     }
 
+    //Is called by a unity event set in the inspector. Super evil! FIXME: refactor this out of existence
+    public void Jump()
+    {
+        if ( !IsCrouching )
+        {
+            IsCrouching = true;
+            CharacterAnimator.SetBool( "IsCrouching", true );
+        }
+        else if ( IsCrouching )
+        {
+            IsCrouching = false;
+            CharacterAnimator.SetBool( "IsCrouching", false );
+            if ( IsGrounded() )
+            {
+                RB.AddForce( Vector3.up * JumpForce, ForceMode.VelocityChange );
+            }
+        }
+    }
     //Adds torque to the rigidbody to make it return to a upright position.
     //Takes an axis to rotate around as well as the up direction as arguments
     private void StabilizeAngularMotion(Vector3 _rotationAxis, Vector3 _upDirection)
@@ -244,13 +286,11 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RB.AddTorque( torqueVector * StabilizationSpeed * StabilizationSpeed, ForceMode.Acceleration );
     }
 
-    private void ControlPitch()
+    //Adds torque to the rigidbody based on the player Input
+    private void ControlAngularMotion(Vector3 _rotationAxis, float _controlInput)
     {
-        RB.AddTorque( transform.right * AirControlForce * PitchInput, ForceMode.Acceleration );
-    }
-    private void ControlRoll()
-    {
-        RB.AddTorque( -transform.forward * AirControlForce * RollInput, ForceMode.Acceleration );
+        Vector3 controlForce = _rotationAxis * AirControlForce * _controlInput;
+        RB.AddTorque( controlForce, ForceMode.Acceleration );
     }
 
     private void ApplySidewaysFriction()

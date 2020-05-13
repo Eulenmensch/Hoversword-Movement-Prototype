@@ -6663,7 +6663,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5980199474981844263}
-  m_LocalRotation: {x: 0.000915194, y: -0.9983326, z: 0.022790605, w: 0.053025726}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 149.30275, y: 4.5485077, z: -165.88216}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6729,15 +6729,18 @@ MonoBehaviour:
   ProportionalGain: 0.75
   IntegralGain: 0
   DerivativeGain: 0.015
-  ThrustMode: 0
-  AccelerationForce: 32.76
+  GroundThrustMode: 0
+  GroundAccelerationForce: 37
   TurnForce: 15
   SidewaysFriction: 2
+  AirThrustMode: 1
+  AirAccelerationForce: 37
+  JumpForce: 15
   StabilizationForce: 3
   StabilizationSpeed: 10
-  AirControlForce: 3
+  AirControlForce: 5
   PitchControlMode: 0
-  RollControlMode: 0
+  RollControlMode: 1
   Drag: 0.01
   AngularDrag: 3
   GroundGravity: 30
@@ -6748,6 +6751,7 @@ MonoBehaviour:
   CenterOfMass: {fileID: 5980199473946035634}
   ThrustMotor: {fileID: 5980199474829587318}
   TurnMotor: {fileID: 2269696694737051485}
+  CharacterAnimator: {fileID: 8722725581663006261}
 --- !u!114 &5980199474981844257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6864,11 +6868,22 @@ MonoBehaviour:
     m_ActionId: d14697a1-f1e1-46e7-afb4-3a857bdd3fe1
     m_ActionName: Player/Crouch/Jump[/XInputControllerWindows/buttonSouth,/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8401968234058044255}
+        m_MethodName: GetCrouchJumpInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 4a145a25-e1ba-404a-9045-4dc5e7dbcedd
     m_ActionName: Player/Crouch/Jump[/XInputControllerWindows/buttonSouth,/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: Gamepad
+  m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -6903,6 +6918,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91cdf7fab0272eb428855b905b525bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnJump:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5980199474981844262}
+        m_MethodName: Jump
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5980199475006382659
 GameObject:
   m_ObjectHideFlags: 0
