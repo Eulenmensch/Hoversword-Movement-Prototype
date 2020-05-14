@@ -57,6 +57,30 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Carve"",
+                    ""type"": ""Button"",
+                    ""id"": ""b56134be-c1ec-4bff-b232-22ee9a23b7fd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""SideShiftLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""24614919-5fc2-4eb8-aa4d-12f7441c7fa0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SideShiftRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""f74cde5e-fb9d-4860-bb86-168142375a3c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -444,6 +468,72 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""action"": ""Pitch&Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3448664e-2700-4d32-a5b1-f030dc00c259"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Carve"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82362ef6-5105-43ee-af10-4972e635eb29"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Carve"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce0fc592-5782-42dc-927a-32c6a48a4520"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SideShiftLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f2503293-8109-4027-bf91-a452fc5355b4"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SideShiftLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5cb5f4b2-f8da-4d3c-a046-421f83e9e0cb"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SideShiftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5c0c2ad-f81b-4e8c-9f87-0e1dc749898d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SideShiftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1024,6 +1114,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         m_Player_LightAttack = m_Player.FindAction("LightAttack", throwIfNotFound: true);
         m_Player_CrouchJump = m_Player.FindAction("Crouch/Jump", throwIfNotFound: true);
         m_Player_PitchRoll = m_Player.FindAction("Pitch&Roll", throwIfNotFound: true);
+        m_Player_Carve = m_Player.FindAction("Carve", throwIfNotFound: true);
+        m_Player_SideShiftLeft = m_Player.FindAction("SideShiftLeft", throwIfNotFound: true);
+        m_Player_SideShiftRight = m_Player.FindAction("SideShiftRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1090,6 +1183,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LightAttack;
     private readonly InputAction m_Player_CrouchJump;
     private readonly InputAction m_Player_PitchRoll;
+    private readonly InputAction m_Player_Carve;
+    private readonly InputAction m_Player_SideShiftLeft;
+    private readonly InputAction m_Player_SideShiftRight;
     public struct PlayerActions
     {
         private @InputActionsAsset m_Wrapper;
@@ -1099,6 +1195,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         public InputAction @LightAttack => m_Wrapper.m_Player_LightAttack;
         public InputAction @CrouchJump => m_Wrapper.m_Player_CrouchJump;
         public InputAction @PitchRoll => m_Wrapper.m_Player_PitchRoll;
+        public InputAction @Carve => m_Wrapper.m_Player_Carve;
+        public InputAction @SideShiftLeft => m_Wrapper.m_Player_SideShiftLeft;
+        public InputAction @SideShiftRight => m_Wrapper.m_Player_SideShiftRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1123,6 +1222,15 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 @PitchRoll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPitchRoll;
                 @PitchRoll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPitchRoll;
                 @PitchRoll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPitchRoll;
+                @Carve.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCarve;
+                @Carve.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCarve;
+                @Carve.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCarve;
+                @SideShiftLeft.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftLeft;
+                @SideShiftLeft.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftLeft;
+                @SideShiftLeft.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftLeft;
+                @SideShiftRight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftRight;
+                @SideShiftRight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftRight;
+                @SideShiftRight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftRight;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1142,6 +1250,15 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 @PitchRoll.started += instance.OnPitchRoll;
                 @PitchRoll.performed += instance.OnPitchRoll;
                 @PitchRoll.canceled += instance.OnPitchRoll;
+                @Carve.started += instance.OnCarve;
+                @Carve.performed += instance.OnCarve;
+                @Carve.canceled += instance.OnCarve;
+                @SideShiftLeft.started += instance.OnSideShiftLeft;
+                @SideShiftLeft.performed += instance.OnSideShiftLeft;
+                @SideShiftLeft.canceled += instance.OnSideShiftLeft;
+                @SideShiftRight.started += instance.OnSideShiftRight;
+                @SideShiftRight.performed += instance.OnSideShiftRight;
+                @SideShiftRight.canceled += instance.OnSideShiftRight;
             }
         }
     }
@@ -1303,6 +1420,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         void OnLightAttack(InputAction.CallbackContext context);
         void OnCrouchJump(InputAction.CallbackContext context);
         void OnPitchRoll(InputAction.CallbackContext context);
+        void OnCarve(InputAction.CallbackContext context);
+        void OnSideShiftLeft(InputAction.CallbackContext context);
+        void OnSideShiftRight(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

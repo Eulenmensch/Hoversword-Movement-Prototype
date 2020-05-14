@@ -8,6 +8,7 @@ using MinMaxSlider;
 
 public class HoverBoardControllerYoshi02 : MonoBehaviour
 {
+    #region Settings
     [Header( "Hover Settings" )]
     public float HoverForce;                //The force that pushes the board upwards
     //public float AnticipativeHoverForce;    //The force that smoothes out sudden changes in ground gradient
@@ -25,7 +26,12 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private GroundThrustModes GroundThrustMode;    //Dropdown to switch between thrust modes on the ground
     public float GroundAccelerationForce;                           //The force that accelerates the board in its forward direction, projected on the ground
     public float TurnForce;                                         //The force that makes the board turn
+    public float CarveForce;                                        //The additional force that makes the board carve
     public float SidewaysFriction;                                  //The force that keeps the board from sliding sideways
+    public float CarveFriction;                                     //The additional force that keeps the board from sliding sideways during a carve
+    [SerializeField] private float SideShiftForce;                  //The force that makes the body shift left and right
+    public float IdleFriction;                                      //The force that keeps the board from sliding when idle
+    public float IdleSpeed;                                         //The velocity at which the body is considered idle
     //[MinMaxSlider( -1, 1 )] public Vector2 ThrustMotorYFineTuning;     //Fine tuning for the thrust motor local y position
     //[MinMaxSlider( 0, 1 )] public Vector2 TurnMotorZFineTuning;        //Fine tuning for the turn motor local z position
 
@@ -55,13 +61,17 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private Transform CenterOfMass;    //The location where the boards center of mass is shifted. This keeps the board from tipping over
     [SerializeField] private Transform ThrustMotor;     //The location where acceleration force is applied
     [SerializeField] private Transform TurnMotor;       //The location where turn force is applied
+    [SerializeField] private Transform CarveMotor;       //The location where carve force is applied
     [SerializeField] private Animator CharacterAnimator;//FIXME: This is definitely not the responsibility of this class
+    #endregion
 
-
+    #region Enums
     private enum GroundThrustModes { Manual, Automatic }    //An enum for switching between types of thrust handling on the ground
     private enum AirThrustModes { Manual, NoThrust, RetainGroundDirection } //An enum for switching between types of thrust handling in the air
     private enum AirControlModes { Manual, Stabilized }     //An enum for switching between types of rotational correction in the air
+    #endregion
 
+    #region Private Fields
     //References
     private Rigidbody RB;                   //A reference to the board's rigidbody
     private PIDController[] PIDs;           //References to the PIDController class that handles error correction and smoothens out the hovering
@@ -73,12 +83,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //Input fields
     private float ThrustInput;              //The amount of thrust input set in the SetMoveInput method
     private float TurnInput;                //The amount of thrust input set in the SetMoveInput method
-    private float PitchInput;               //The amount of pitch input set in the Set AirControlInput method
-    private float RollInput;                //The amount of roll input set in the Set AirControlInput method
+    private float PitchInput;               //The amount of pitch input set in the SetAirControlInput method
+    private float RollInput;                //The amount of roll input set in the SetAirControlInput method
+    private bool IsGettingCarveInput;       //Whether the carve input is being triggered. Set in the SetCarveInput method
 
     //Stupid fields FIXME:
     private bool IsCrouching;
-
+    #endregion
 
     private void Start()
     {
@@ -146,15 +157,17 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     {
         if ( IsGrounded() )
         {
-            //Thrust(); //FIXME: The thrust methods currently have code for grounded and aerial stuff that should be seperated first
             Turn();
             ApplySidewaysFriction();    //FIXME: Not sure if this should also run in the air
+            ApplyIdleFriction();
+            Carve();
         }
         else
         {
             AirControl();
         }
     }
+
     private void Thrust()
     {
         if ( IsGrounded() )
@@ -235,6 +248,20 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RB.AddForceAtPosition( turnForce, TurnMotor.position, ForceMode.Acceleration );
     }
 
+    private void Carve()
+    {
+        if ( IsGettingCarveInput )
+        {
+            //Make the Turn Input scale exponentially to get more of a carving feel when steering
+            float scaledTurnInput = Mathf.Pow( TurnInput, 3 );
+            //Calculate turn force
+            Vector3 turnForce = -transform.right * CarveForce * scaledTurnInput;
+            //Apply calculated turn force to the rigidbody at the turn motor position
+            RB.AddForceAtPosition( turnForce, CarveMotor.position, ForceMode.Acceleration );
+            ApplyCarveFriction();
+        }
+    }
+
     private void AirControl()
     {
         //Define the axis we use for pitch rotation
@@ -265,10 +292,20 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
             CharacterAnimator.SetBool( "IsCrouching", false );
             if ( IsGrounded() )
             {
-                RB.AddForce( Vector3.up * JumpForce, ForceMode.VelocityChange );
+                AddImpulse( Vector3.up, JumpForce );
             }
         }
     }
+
+    public void SideShiftLeft()
+    {
+        AddImpulse( -transform.right, SideShiftForce );
+    }
+    public void SideShiftRight()
+    {
+        AddImpulse( transform.right, SideShiftForce );
+    }
+
     //Adds torque to the rigidbody to make it return to a upright position.
     //Takes an axis to rotate around as well as the up direction as arguments
     private void StabilizeAngularMotion(Vector3 _rotationAxis, Vector3 _upDirection)
@@ -298,7 +335,19 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         float sidewaysSpeed = Vector3.Dot( RB.velocity, -transform.right );
         RB.AddForce( transform.right * sidewaysSpeed * SidewaysFriction, ForceMode.Acceleration );
     }
-
+    private void ApplyCarveFriction()
+    {
+        float sidewaysSpeed = Vector3.Dot( RB.velocity, -transform.right );
+        RB.AddForce( transform.right * sidewaysSpeed * CarveFriction, ForceMode.Acceleration );
+    }
+    private void ApplyIdleFriction()
+    {
+        if ( ThrustInput <= 0.1 && RB.velocity.magnitude <= IdleSpeed )
+        {
+            float friction = Mathf.Lerp( IdleFriction, 0.0f, RB.velocity.magnitude / IdleSpeed );
+            RB.AddForce( -RB.velocity * friction, ForceMode.Acceleration );
+        }
+    }
     private void ApplyQuadraticDrag()
     {
         //Apply translational drag
@@ -307,6 +356,10 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RB.AddTorque( -AngularDrag * RB.angularVelocity.normalized * RB.angularVelocity.sqrMagnitude, ForceMode.Acceleration );
     }
 
+    private void AddImpulse(Vector3 direction, float force)
+    {
+        RB.AddForce( direction * force, ForceMode.VelocityChange );
+    }
     private void SetGravity() //TODO: If there are ever more physics objects in the scene, board gravity might need to be applied manually
     {
         //While the board is 'grounded'
@@ -348,5 +401,9 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     {
         PitchInput = _pitch;
         RollInput = _roll;
+    }
+    public void SetCarveInput(bool isGettingInput)
+    {
+        IsGettingCarveInput = isGettingInput;
     }
 }
