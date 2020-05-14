@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Machine : Obstacle, IAttackable
+public class Machine : Obstacle, IAttackable
 {
     [Header("Machine")]
     [SerializeField] private GameObject _machineModel;
@@ -20,10 +20,18 @@ public abstract class Machine : Obstacle, IAttackable
 
         foreach (var item in _parts)
         {
-            IShutOff shutOff = item.GetComponent<IShutOff>();
-            if (shutOff != null)
+            IShutOff[] shutOffs = item.GetComponents<IShutOff>();
+
+            if (shutOffs != null)
             {
-                _partsToShutOff.Add(shutOff);
+                foreach (var shutOff in shutOffs)
+                {
+                    _partsToShutOff.Add(shutOff);
+                }
+            }
+            else
+            {
+                Debug.Log("shutoffs is null");
             }
         }
     }
