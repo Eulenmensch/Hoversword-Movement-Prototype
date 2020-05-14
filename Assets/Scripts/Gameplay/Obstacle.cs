@@ -2,36 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obstacle : MonoBehaviour, ICollidable
+[SelectionBase]
+public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
 {
-    [SerializeField]
-    private bool _isActive = true;
+    [Header("Obstacle")]
+    [SerializeField] protected bool _isActive = true;
     //public bool isActive { get => _isActive; set => _isActive = value; }
 
-    [SerializeField]
-    protected int _damage;
-    [SerializeField]
-    protected DamageType _damageType;
+    [SerializeField] protected int _damage;
+    [SerializeField] protected DamageType _damageType;
 
-    [SerializeField]
-    protected float _forceMagnitude;
+    [SerializeField] protected float _forceMagnitude;
 
-    protected Collider _collider;
+    [SerializeField] protected DamageDirectionType _damageDirectionType;
+
+    protected Collider[] _colliders;
 
     protected virtual void Awake()
     {
-        _collider = GetComponent<Collider>();
-        _collider.enabled = _isActive;
+        _colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in _colliders)
+        {
+            col.enabled = _isActive;
+        }
     }
 
     public virtual DamageData Collide()
     {
-        return new DamageData(_damage, _damageType, _forceMagnitude, false, Vector3.zero);
+        return new DamageData(_damage, _damageType, _forceMagnitude, _damageDirectionType);
     }
 
-    public void SetActive(bool value)
+    public virtual void SetActive(bool value)
     {
         _isActive = value;
-        _collider.enabled = value;
+        //foreach (var col in _colliders)
+        //{
+        //    col.enabled = _isActive;
+        //}
+    }
+
+    public virtual void ShutOff()
+    {
+        SetActive(false);
     }
 }

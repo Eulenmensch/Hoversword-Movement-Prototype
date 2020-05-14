@@ -49,7 +49,7 @@ public class PlayerCollisionHandler : MonoBehaviour
         // Checks if layer is in layer mask
         if (((1 << other.gameObject.layer) & _collisionMask) != 0)
         {
-            ICollidable collidable = other.gameObject.GetComponent<ICollidable>();
+            ICollidable collidable = other.gameObject.GetComponentInParent<ICollidable>();
             if (collidable != null)
             {
                 if (!_collisionHistory.ContainsKey(collidable))
@@ -73,6 +73,15 @@ public class PlayerCollisionHandler : MonoBehaviour
         if (damageData.damageType == DamageType.Laser)
         {
             _playerEffects.LaserDamage();
+        }
+
+        if (damageData.damageDirectionType == DamageDirectionType.Velocity)
+        {
+            var rb = GetComponentInParent<Rigidbody>();
+            float magnitude = rb.velocity.magnitude;
+            Vector3 velocityDirection = rb.velocity.normalized;
+            rb.AddForce(-velocityDirection * damageData.forceMagnitude * magnitude, ForceMode.Impulse);
+            //rb.velocity = rb.velocity.normalized * rb.velocity.magnitude * 0.2f;
         }
     }
 }

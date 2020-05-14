@@ -20,6 +20,9 @@ public class PlayerHealth : MonoBehaviour
         private set { _health = Mathf.Clamp(value, 0, maxHealth); }
     }
 
+    [SerializeField]
+    private AudioSource _damageSound;
+
     private void Awake()
     {
         ResetHealth();
@@ -40,5 +43,7 @@ public class PlayerHealth : MonoBehaviour
     public void Damage(int value)
     {
         health -= value;
+
+        _damageSound?.Play();
     }
 }
