@@ -28,17 +28,23 @@ public class Shooter : MonoBehaviour, IShutOff
 
     private void Start()
     {
-        _target = FindObjectOfType<Player>().transform;
-        if (_target == null)
+        Player player = FindObjectOfType<Player>();
+        if (player == null)
         {
-            Debug.LogError("Shooter couldn't find Player");
+            Debug.Log("Shooter coudn't find player");
+            return;
         }
+
+        _target = FindObjectOfType<Player>().transform;
     }
+
     private void Update()
     {
-        if (Vector3.Distance(transform.position, _target.position) > _detectionRange)
+        if (_target == null)
             return;
 
+        if (Vector3.Distance(transform.position, _target.position) > _detectionRange)
+            return;
 
         Aim();
 

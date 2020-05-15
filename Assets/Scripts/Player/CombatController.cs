@@ -31,12 +31,18 @@ public class CombatController : MonoBehaviour
     private void Awake()
     {
         _playerHealth = GetComponent<PlayerHealth>();
-        _flipCollider = _flipColliderObject.GetComponent<CapsuleCollider>();
+        if (_flipColliderObject != null)
+        {
+            _flipCollider = _flipColliderObject?.GetComponent<CapsuleCollider>();
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (_flipCollider == null)
+            return;
+
         if (_isFlipping)
         {
             CheckCollision();
