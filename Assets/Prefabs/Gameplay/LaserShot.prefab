@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isActive: 1
+  _applyDamage: 1
   _damage: 1
   _damageType: 0
   _forceMagnitude: 20

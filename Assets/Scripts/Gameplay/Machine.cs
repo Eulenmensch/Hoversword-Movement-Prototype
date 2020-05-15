@@ -11,8 +11,13 @@ public class Machine : Obstacle, IAttackable
     [SerializeField] private List<GameObject> _parts = new List<GameObject>();
     private List<IShutOff> _partsToShutOff = new List<IShutOff>();
 
-    [SerializeField]
-    private AudioSource _destroySound;
+    [Header("Attack Interaction")]
+    [SerializeField] private int _healthGain;
+
+    [Header("Effects")]
+    [SerializeField] private AudioSource _destroySound;
+
+
 
     protected override void Awake()
     {
@@ -36,7 +41,7 @@ public class Machine : Obstacle, IAttackable
         }
     }
 
-    public override DamageData Collide()
+    public override CollisionInteraction Collide()
     {
         Destroy();
 
@@ -61,8 +66,11 @@ public class Machine : Obstacle, IAttackable
         _destroySound?.Play();
     }
 
-    public void GetAttacked()
+    public AttackInteraction GetAttacked()
     {
         Destroy();
+        AttackInteraction attackInteraction = new AttackInteraction(_healthGain);
+        //attackInteraction.SetHealth(_healthGain);
+        return attackInteraction;
     }
 }

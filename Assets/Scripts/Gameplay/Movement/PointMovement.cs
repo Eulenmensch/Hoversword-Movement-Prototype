@@ -14,6 +14,9 @@ public class PointMovement : MonoBehaviour
 
     private void Start()
     {
+        if (_points[_currentPoint] == null)
+            return;
+
         transform.position = _points[_currentPoint].position;
         MoveToNextPoint();
     }
@@ -25,5 +28,13 @@ public class PointMovement : MonoBehaviour
             _currentPoint = 0;
 
         transform.DOMove(_points[_currentPoint].position, _speed).SetSpeedBased().SetEase(ease).OnComplete(MoveToNextPoint);
+    }
+
+    private void OnValidate()
+    {
+        if (_points[_currentPoint] != null)
+        {
+            transform.position = _points[_currentPoint].position;
+        }
     }
 }

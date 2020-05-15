@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class CombatController : MonoBehaviour
 {
+    private PlayerHealth _playerHealth;
+
     [Header("Animators")]
     public Animator CharacterAnimator;
     public Animator BoardAnimator;
@@ -28,7 +30,7 @@ public class CombatController : MonoBehaviour
 
     private void Awake()
     {
-        //translate collider to points
+        _playerHealth = GetComponent<PlayerHealth>();
         _flipCollider = _flipColliderObject.GetComponent<CapsuleCollider>();
     }
 
@@ -65,7 +67,8 @@ public class CombatController : MonoBehaviour
                 IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
                 if (attackable != null)
                 {
-                    attackable.GetAttacked();
+                    AttackInteraction attackInteraction = attackable.GetAttacked();
+                    _playerHealth.AddHealth(attackInteraction.health);
                 }
             }
         }

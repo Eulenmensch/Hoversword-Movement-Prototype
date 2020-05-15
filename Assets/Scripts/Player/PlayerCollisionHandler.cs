@@ -56,14 +56,14 @@ public class PlayerCollisionHandler : MonoBehaviour
                 {
                     _collisionHistory.Add(collidable, Time.time);
 
-                    DamageData damageData = collidable.Collide();
+                    CollisionInteraction damageData = collidable.Collide();
                     ProcessDamage(damageData);
                 }
             }
         }
     }
 
-    private void ProcessDamage(DamageData damageData)
+    private void ProcessDamage(CollisionInteraction damageData)
     {
         if (damageData.damage > 0)
         {

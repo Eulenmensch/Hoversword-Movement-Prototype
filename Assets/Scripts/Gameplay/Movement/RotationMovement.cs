@@ -26,20 +26,7 @@ public class RotationMovement : MonoBehaviour
 
     private void Start()
     {
-        SetRotationAxis();
-        Quaternion startRot = Quaternion.AngleAxis(_startAngle, rotationAxis);
-        //Vector3 start = startRot * Vector3.up;
-        //Quaternion endRot = Quaternion.AngleAxis(_endAngle, rotationAxis);
-        //Vector3 end = endRot * Vector3.up;
-
-
-
-        transform.rotation = startRot;
-        _angle = _startAngle;
-
-        //Quaternion.EulerAngles()
-        //transform.DORotate(end, _speed).SetLoops(-1, LoopType.Incremental).SetSpeedBased().SetEase(ease);
-        //DOTween.To(() => transform.rotation, x => myFloat = x, 52, 1);
+        SetStartingPosition();
 
         if (_fullRotation)
         {
@@ -74,9 +61,23 @@ public class RotationMovement : MonoBehaviour
         transform.rotation = rot;
     }
 
+    private void SetStartingPosition()
+    {
+        SetRotationAxis();
+        Quaternion startRot = Quaternion.AngleAxis(_startAngle, rotationAxis);
+
+        transform.rotation = startRot;
+        _angle = _startAngle;
+    }
+
     private void SetRotationAxis()
     {
         rotationAxis = (_axis == RotationAxis.Z) ? transform.forward : (_axis == RotationAxis.Y) ? transform.up : transform.right;
+    }
+
+    private void OnValidate()
+    {
+        SetStartingPosition();
     }
 
     private void OnDrawGizmosSelected()

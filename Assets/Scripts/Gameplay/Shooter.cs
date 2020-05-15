@@ -53,7 +53,6 @@ public class Shooter : MonoBehaviour, IShutOff
 
     private void Shoot()
     {
-        Debug.Log("Shoot");
         _shotTimestamp = Time.time;
         Quaternion lookRotation = Quaternion.LookRotation(_target.position - _barrel.position);
         Instantiate(_projectile, _projectileSpawn.position, lookRotation);

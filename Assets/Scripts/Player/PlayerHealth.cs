@@ -35,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void AddHealth(int value)
     {
-        health += value;
+        health += Mathf.Max(0, value);
 
         // call visualization
     }
