@@ -1256,7 +1256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HoverForce: 80
   HoverHeight: 0.8
-  GroundStickForce: 40
+  GroundStickForce: 25
   StickToGround: 1
   GroundStickHeight: 3
   HoverPoints:
