@@ -361,7 +361,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
             Vector3 force = -hit.normal * GroundStickForce * ( RB.velocity.magnitude / MaxSpeed );
             RB.AddForce( force, ForceMode.Acceleration );
-            print( force );
+            //print( force );
         }
     }
     private void ApplySidewaysFriction()

@@ -44,6 +44,9 @@ public class PlayerHealth : MonoBehaviour
     {
         health -= value;
 
-        _damageSound?.Play();
+        if (_damageSound != null)
+        {
+            _damageSound.Play();
+        }
     }
 }
