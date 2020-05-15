@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3158549278448564565}
   - component: {fileID: 3158549278448564564}
   - component: {fileID: 3158549278448564563}
-  - component: {fileID: 8935051213515026967}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -59,10 +58,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 0.87, z: -1.2}
+  m_FollowOffset: {x: 0, y: 2.98, z: -1.03}
   m_XDamping: 1
-  m_YDamping: 0.2
-  m_ZDamping: 0.15
+  m_YDamping: 0.18
+  m_ZDamping: 0.13
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -127,23 +126,6 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
---- !u!114 &8935051213515026967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3158549278448564561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 8608ec81ee27a15488d33f9dad239e91, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0.4
-  m_FrequencyGain: 4
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &3158549278596856499
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,7 +378,6 @@ GameObject:
   - component: {fileID: 3158549279427192125}
   - component: {fileID: 3158549279427192124}
   - component: {fileID: 3158549279427192123}
-  - component: {fileID: 8935051213311578912}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -443,10 +424,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 0.87, z: -1.2}
+  m_FollowOffset: {x: 0, y: 2.98, z: -1.03}
   m_XDamping: 1
-  m_YDamping: 0.2
-  m_ZDamping: 0.15
+  m_YDamping: 0.18
+  m_ZDamping: 0.13
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -511,23 +492,6 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
---- !u!114 &8935051213311578912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3158549279427192121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 8608ec81ee27a15488d33f9dad239e91, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0.4
-  m_FrequencyGain: 4
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &3158549279541532949
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +504,6 @@ GameObject:
   - component: {fileID: 3158549279541533417}
   - component: {fileID: 3158549279541533416}
   - component: {fileID: 3158549279541532951}
-  - component: {fileID: 8935051213034037946}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -587,10 +550,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 0.87, z: -1.2}
+  m_FollowOffset: {x: 0, y: 2.98, z: -1.03}
   m_XDamping: 1
-  m_YDamping: 0.2
-  m_ZDamping: 0.15
+  m_YDamping: 0.18
+  m_ZDamping: 0.13
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -655,23 +618,6 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
---- !u!114 &8935051213034037946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3158549279541532949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 8608ec81ee27a15488d33f9dad239e91, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0.4
-  m_FrequencyGain: 4
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &3158549279734361679
 GameObject:
   m_ObjectHideFlags: 0

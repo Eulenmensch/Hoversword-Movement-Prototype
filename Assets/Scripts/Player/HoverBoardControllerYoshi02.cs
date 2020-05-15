@@ -13,7 +13,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     public float HoverForce;                //The force that pushes the board upwards
     //public float AnticipativeHoverForce;    //The force that smoothes out sudden changes in ground gradient
     public float HoverHeight;               //The ideal height at which the board wants to hover
-    //public float GroundStickForce;          //The force applied inverse to ground normal
+    public float GroundStickForce;          //The force applied inverse to ground normal
+    [SerializeField] private bool StickToGround;    //Whether the board should stick to the ground when grounded
     public float GroundStickHeight;         //The maximum height at which the acceleration force direction is projected on the ground and ground stick force is applied
     public Transform[] HoverPoints;         //The points from which ground distance is measured and where hover force is applied
 
@@ -61,7 +62,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private Transform CenterOfMass;    //The location where the boards center of mass is shifted. This keeps the board from tipping over
     [SerializeField] private Transform ThrustMotor;     //The location where acceleration force is applied
     [SerializeField] private Transform TurnMotor;       //The location where turn force is applied
-    [SerializeField] private Transform CarveMotor;       //The location where carve force is applied
+    [SerializeField] private Transform CarveMotor;      //The location where carve force is applied
+    [SerializeField] private Transform SideShiftMotor;  //The location where side shift force is applied 
     [SerializeField] private Animator CharacterAnimator;//FIXME: This is definitely not the responsibility of this class
     #endregion
 
@@ -107,7 +109,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private void Update()
     {
         //Calculate the maximum velocity based on the defined acceleration force and drag
-        MaxSpeed = Mathf.Sqrt( GroundAccelerationForce / Drag ) * 10;   //TODO: this will later be in Start() when done tuning
+        MaxSpeed = Mathf.Sqrt( GroundAccelerationForce / Drag );   //TODO: this will later be in Start() when done tuning
 
         //update the gains of each PID controller TODO: this will be removed when done tuning
         foreach ( PIDController pid in PIDs )
@@ -155,11 +157,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void Handling()
     {
-        if ( IsGrounded() )
+        RaycastHit hit;
+        if ( IsGrounded( out hit ) )
         {
             Turn();
             ApplySidewaysFriction();    //FIXME: Not sure if this should also run in the air
             ApplyIdleFriction();
+            ApplyGroundStickForce( hit );
             Carve();
         }
         else
@@ -292,18 +296,36 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
             CharacterAnimator.SetBool( "IsCrouching", false );
             if ( IsGrounded() )
             {
-                AddImpulse( Vector3.up, JumpForce );
+                RB.AddForce( transform.up * JumpForce, ForceMode.VelocityChange );
             }
         }
     }
 
     public void SideShiftLeft()
     {
-        AddImpulse( -transform.right, SideShiftForce );
+        RaycastHit hit;
+        if ( IsGrounded( out hit ) )
+        {
+            Vector3 forceDirection = Vector3.ProjectOnPlane( -transform.right, hit.normal ).normalized;
+            RB.AddForceAtPosition( forceDirection * SideShiftForce, SideShiftMotor.position, ForceMode.VelocityChange );
+        }
+        else
+        {
+            RB.AddForceAtPosition( -transform.right * SideShiftForce, ThrustMotor.position, ForceMode.VelocityChange );
+        }
     }
     public void SideShiftRight()
     {
-        AddImpulse( transform.right, SideShiftForce );
+        RaycastHit hit;
+        if ( IsGrounded( out hit ) )
+        {
+            Vector3 forceDirection = Vector3.ProjectOnPlane( transform.right, hit.normal ).normalized;
+            RB.AddForceAtPosition( forceDirection * SideShiftForce, SideShiftMotor.position, ForceMode.VelocityChange );
+        }
+        else
+        {
+            RB.AddForceAtPosition( transform.right * SideShiftForce, ThrustMotor.position, ForceMode.VelocityChange );
+        }
     }
 
     //Adds torque to the rigidbody to make it return to a upright position.
@@ -330,6 +352,18 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RB.AddTorque( controlForce, ForceMode.Acceleration );
     }
 
+    //Applies a force towards the ground, scaled by the body's velocity
+    private void ApplyGroundStickForce(RaycastHit _hit)
+    {
+        if ( StickToGround )
+        {
+            RaycastHit hit = _hit;
+
+            Vector3 force = -hit.normal * GroundStickForce * ( RB.velocity.magnitude / MaxSpeed );
+            RB.AddForce( force, ForceMode.Acceleration );
+            print( force );
+        }
+    }
     private void ApplySidewaysFriction()
     {
         float sidewaysSpeed = Vector3.Dot( RB.velocity, -transform.right );
@@ -356,10 +390,6 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RB.AddTorque( -AngularDrag * RB.angularVelocity.normalized * RB.angularVelocity.sqrMagnitude, ForceMode.Acceleration );
     }
 
-    private void AddImpulse(Vector3 direction, float force)
-    {
-        RB.AddForce( direction * force, ForceMode.VelocityChange );
-    }
     private void SetGravity() //TODO: If there are ever more physics objects in the scene, board gravity might need to be applied manually
     {
         //While the board is 'grounded'
