@@ -49,7 +49,7 @@ public class RotationMovement : MonoBehaviour
             {
                 _angle -= 360;
             }
-            else if(_angle <= 0)
+            else if (_angle <= 0)
             {
                 _angle += 360;
             }
@@ -77,7 +77,10 @@ public class RotationMovement : MonoBehaviour
 
     private void OnValidate()
     {
-        SetStartingPosition();
+        if (enabled)
+        {
+            SetStartingPosition();
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -86,10 +89,10 @@ public class RotationMovement : MonoBehaviour
 
         Quaternion startRot = Quaternion.AngleAxis(_startAngle, rotationAxis);
         Vector3 start = startRot * Vector3.up;
-        
+
         Gizmos.color = Color.black;
         Gizmos.DrawLine(transform.position, transform.position + start * 1.25f);
-        
+
         if (!_fullRotation)
         {
             Quaternion endRot = Quaternion.AngleAxis(_endAngle, rotationAxis);
