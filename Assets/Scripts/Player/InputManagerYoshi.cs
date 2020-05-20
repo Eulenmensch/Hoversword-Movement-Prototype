@@ -9,6 +9,7 @@ public class InputManagerYoshi : MonoBehaviour
     [SerializeField] UnityEvent OnLeftSideShift;
     [SerializeField] UnityEvent OnRightSideShift;
     private HoverBoardControllerYoshi02 ControllerYoshi02;
+    [SerializeField] PlayerEngineFX EngineFX;
     private bool IsCarving;
 
     private void Awake()
@@ -19,6 +20,7 @@ public class InputManagerYoshi : MonoBehaviour
     {
         Vector2 inputVector = context.ReadValue<Vector2>();
         ControllerYoshi02.SetMoveInput( inputVector.y, inputVector.x );
+        EngineFX.SetMoveInput( inputVector.y, inputVector.x );
     }
     public void GetAirControlInput(InputAction.CallbackContext context)
     {
@@ -33,6 +35,27 @@ public class InputManagerYoshi : MonoBehaviour
             OnJump.Invoke();
         }
     }
+
+    public void GetDashInput(InputAction.CallbackContext context)
+    {
+        if ( context.started )
+        {
+            EngineFX.SetDashing( true );
+            print( "started" );
+        }
+        if ( context.performed )
+        {
+            ControllerYoshi02.SetDashInput( true );
+            print( "performed" );
+        }
+        if ( context.canceled )
+        {
+            EngineFX.SetDashing( false );
+            ControllerYoshi02.SetDashInput( false );
+            print( "canceled" );
+        }
+    }
+
     public void GetLeftSideShiftInput(InputAction.CallbackContext context)
     {
         if ( context.performed )
@@ -47,7 +70,6 @@ public class InputManagerYoshi : MonoBehaviour
             OnRightSideShift.Invoke();
         }
     }
-
 
     public void GetCarveInput(InputAction.CallbackContext context)
     {

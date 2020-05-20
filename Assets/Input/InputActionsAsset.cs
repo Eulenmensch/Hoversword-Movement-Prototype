@@ -81,6 +81,14 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""5afc2fad-e445-471f-b3db-8ae51ca847ef"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=1)""
                 }
             ],
             ""bindings"": [
@@ -532,6 +540,28 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SideShiftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0531c6f-f657-43ac-a6d1-5629eea3eb2f"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba514dcf-6a08-42e9-99e1-7c41a09abb68"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1117,6 +1147,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         m_Player_Carve = m_Player.FindAction("Carve", throwIfNotFound: true);
         m_Player_SideShiftLeft = m_Player.FindAction("SideShiftLeft", throwIfNotFound: true);
         m_Player_SideShiftRight = m_Player.FindAction("SideShiftRight", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1186,6 +1217,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Carve;
     private readonly InputAction m_Player_SideShiftLeft;
     private readonly InputAction m_Player_SideShiftRight;
+    private readonly InputAction m_Player_Dash;
     public struct PlayerActions
     {
         private @InputActionsAsset m_Wrapper;
@@ -1198,6 +1230,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         public InputAction @Carve => m_Wrapper.m_Player_Carve;
         public InputAction @SideShiftLeft => m_Wrapper.m_Player_SideShiftLeft;
         public InputAction @SideShiftRight => m_Wrapper.m_Player_SideShiftRight;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1231,6 +1264,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 @SideShiftRight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftRight;
                 @SideShiftRight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftRight;
                 @SideShiftRight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSideShiftRight;
+                @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1259,6 +1295,9 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                 @SideShiftRight.started += instance.OnSideShiftRight;
                 @SideShiftRight.performed += instance.OnSideShiftRight;
                 @SideShiftRight.canceled += instance.OnSideShiftRight;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
             }
         }
     }
@@ -1423,6 +1462,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
         void OnCarve(InputAction.CallbackContext context);
         void OnSideShiftLeft(InputAction.CallbackContext context);
         void OnSideShiftRight(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -3,6 +3,7 @@
 //Note: When I talk about the board being 'grounded', I mean the height range in which I consider the board to not be flying/aerial
 
 using System;
+using System.Collections;
 using UnityEngine;
 using MinMaxSlider;
 
@@ -28,6 +29,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     public float GroundAccelerationForce;                           //The force that accelerates the board in its forward direction, projected on the ground
     public float TurnForce;                                         //The force that makes the board turn
     public float CarveForce;                                        //The additional force that makes the board carve
+    [SerializeField] private float BoostForce;                      //The additional force applied to the body while boosting
+    [SerializeField] private float BoostTime;                       //The time boost force is applied to the body
     public float SidewaysFriction;                                  //The force that keeps the board from sliding sideways
     public float CarveFriction;                                     //The additional force that keeps the board from sliding sideways during a carve
     [SerializeField] private float SideShiftForce;                  //The force that makes the body shift left and right
@@ -73,13 +76,14 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private enum AirControlModes { Manual, Stabilized }     //An enum for switching between types of rotational correction in the air
     #endregion
 
-    #region Private Fields
+    #region Fields
     //References
     private Rigidbody RB;                   //A reference to the board's rigidbody
     private PIDController[] PIDs;           //References to the PIDController class that handles error correction and smoothens out the hovering
 
     //Physics fields
-    private float MaxSpeed;                 //The maximum velocity the board can have on a flat surface given the defined parameters
+    [HideInInspector]
+    public float MaxSpeed;                 //The maximum velocity the board can have on a flat surface given the defined parameters
     private Vector3 ThrustDirection;        //The direction thrust is applied to the rigidbody. I'm caching this value as a field for aerial movement
 
     //Input fields
@@ -91,6 +95,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     //Stupid fields FIXME:
     private bool IsCrouching;
+    private bool IsDashing;
     #endregion
 
     private void Start()
@@ -126,6 +131,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         Hover();
         Thrust();               //TODO: Integrate in the Handling method once cleaned up
         Handling();
+        Moves();
         ApplyQuadraticDrag();
     }
 
@@ -172,6 +178,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         }
     }
 
+    #region Thrust
     private void Thrust()
     {
         if ( IsGrounded() )
@@ -198,7 +205,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
                 Vector3 thrustDirection = Vector3.ProjectOnPlane( transform.forward, Vector3.up );
 
                 //Add thrust to the body in its projected forward direction multiplying the force with thrust input
-                AirThrust( ThrustInput, transform.forward );
+                AirThrust( ThrustInput, thrustDirection );
             }
             else if ( AirThrustMode == AirThrustModes.NoThrust )
             {
@@ -241,7 +248,9 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Apply calculated thrust to the rigidbody at its center of mass
         RB.AddForce( thrustForce, ForceMode.Acceleration );
     }
+    #endregion
 
+    #region Turning
     private void Turn()
     {
         //Make the Turn Input scale exponentially to get more of a carving feel when steering
@@ -265,23 +274,20 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
             ApplyCarveFriction();
         }
     }
+    #endregion
 
-    private void AirControl()
+    #region Moves
+    private void Moves()
     {
-        //Define the axis we use for pitch rotation
-        Vector3 pitchAxis = transform.right;
-        //Define the axis we use for roll rotation
-        Vector3 rollAxis = transform.forward;
-        //Define the up rotation the body is rotated to
-        Vector3 upDirection = Vector3.up;
-
-        if ( PitchControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( pitchAxis, upDirection ); }
-        if ( PitchControlMode == AirControlModes.Manual ) { ControlAngularMotion( pitchAxis, PitchInput ); }
-        //FIXME: the turn method call is way too hacky, we need clean seperation of aerial and grounded turning but ok for prototyping
-        if ( RollControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( rollAxis, upDirection ); Turn(); } //FIXME:
-        if ( RollControlMode == AirControlModes.Manual ) { ControlAngularMotion( -rollAxis, RollInput ); }
+        if ( IsGrounded() )
+        {
+            GroundDash();
+        }
+        else if ( !IsGrounded() )
+        {
+            AirDash();
+        }
     }
-
     //Is called by a unity event set in the inspector. Super evil! FIXME: refactor this out of existence
     public void Jump()
     {
@@ -328,6 +334,51 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         }
     }
 
+    void GroundDash()
+    {
+        if ( IsDashing )
+        {
+            //TODO: This is where the logic that checks if the player has enough energy would go
+            Boost( BoostForce, ThrustDirection );
+        }
+    }
+    void AirDash()
+    {
+        if ( IsDashing )
+        {
+            //project the boards forward direction on world xz-plane
+            Vector3 thrustDirection = Vector3.ProjectOnPlane( transform.forward, Vector3.up );
+            //TODO: This is where the logic that checks if the player has enough energy would go
+            Boost( BoostForce, thrustDirection );
+        }
+    }
+    public void Boost(float _boostForce, Vector3 _thrustDirection)
+    {
+        Vector3 thrustDirection = _thrustDirection;
+
+        //Calculate thrust force
+        Vector3 thrustForce = thrustDirection * _boostForce;
+        //Apply calculated thrust to the rigidbody at the thrust motor position
+        RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
+    }
+    #endregion
+
+    #region AirControl
+    private void AirControl()
+    {
+        //Define the axis we use for pitch rotation
+        Vector3 pitchAxis = transform.right;
+        //Define the axis we use for roll rotation
+        Vector3 rollAxis = transform.forward;
+        //Define the up rotation the body is rotated to
+        Vector3 upDirection = Vector3.up;
+
+        if ( PitchControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( pitchAxis, upDirection ); }
+        if ( PitchControlMode == AirControlModes.Manual ) { ControlAngularMotion( pitchAxis, PitchInput ); }
+        //FIXME: the turn method call is way too hacky, we need clean seperation of aerial and grounded turning but ok for prototyping
+        if ( RollControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( rollAxis, upDirection ); Turn(); } //FIXME:
+        if ( RollControlMode == AirControlModes.Manual ) { ControlAngularMotion( -rollAxis, RollInput ); }
+    }
     //Adds torque to the rigidbody to make it return to a upright position.
     //Takes an axis to rotate around as well as the up direction as arguments
     private void StabilizeAngularMotion(Vector3 _rotationAxis, Vector3 _upDirection)
@@ -351,7 +402,9 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         Vector3 controlForce = _rotationAxis * AirControlForce * _controlInput;
         RB.AddTorque( controlForce, ForceMode.Acceleration );
     }
+    #endregion
 
+    #region ExternalForces
     //Applies a force towards the ground, scaled by the body's velocity
     private void ApplyGroundStickForce(RaycastHit _hit)
     {
@@ -389,6 +442,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Apply rotational drag
         RB.AddTorque( -AngularDrag * RB.angularVelocity.normalized * RB.angularVelocity.sqrMagnitude, ForceMode.Acceleration );
     }
+    #endregion
 
     private void SetGravity() //TODO: If there are ever more physics objects in the scene, board gravity might need to be applied manually
     {
@@ -406,6 +460,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         }
     }
 
+    #region Ground Checks
     //Checks downwards for Ground TODO: maybe using Vector3.down and a custom ground check ray length would give cleaner
     //                                  results? E.g. this version would return true when driving on a wall
     private bool IsGrounded()
@@ -420,7 +475,9 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         _hit = hit;
         return ray;
     }
+    #endregion
 
+    #region Input Setters
     //Sets the thrust and turn input
     public void SetMoveInput(float _thrust, float _turn)
     {
@@ -432,8 +489,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         PitchInput = _pitch;
         RollInput = _roll;
     }
-    public void SetCarveInput(bool isGettingInput)
+    public void SetCarveInput(bool _isGettingInput)
     {
-        IsGettingCarveInput = isGettingInput;
+        IsGettingCarveInput = _isGettingInput;
     }
+    public void SetDashInput(bool _isDashing)
+    {
+        IsDashing = _isDashing;
+    }
+    #endregion
 }

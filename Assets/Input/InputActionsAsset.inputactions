@@ -68,6 +68,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "5afc2fad-e445-471f-b3db-8ae51ca847ef",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold(duration=1)"
                 }
             ],
             "bindings": [
@@ -519,6 +527,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "SideShiftRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0531c6f-f657-43ac-a6d1-5629eea3eb2f",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba514dcf-6a08-42e9-99e1-7c41a09abb68",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
