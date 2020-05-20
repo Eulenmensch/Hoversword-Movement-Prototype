@@ -16,6 +16,12 @@ public class GUIHealth : MonoBehaviour
 
     private void Awake()
     {
+        if (_playerHealth == null)
+        {
+            Debug.LogError("GUI has no reference to player health!");
+            return;
+        }
+
         for (int i = 0; i < _playerHealth.maxHealth; i++)
         {
             _healthGraphicList.Add(AddBar());
@@ -25,6 +31,9 @@ public class GUIHealth : MonoBehaviour
 
     private void Update()
     {
+        if (_playerHealth == null)
+            return;
+
         if (_playerHealth.health != _health)
         {
             UpdateHealthBar();

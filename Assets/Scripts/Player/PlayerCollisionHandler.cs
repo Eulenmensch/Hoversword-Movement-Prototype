@@ -25,23 +25,6 @@ public class PlayerCollisionHandler : MonoBehaviour
         _playerEffects = transform.parent.GetComponentInChildren<PlayerEffects>();
     }
 
-    private void UpdateHistory()
-    {
-        List<ICollidable> toDelete = new List<ICollidable>();
-        foreach (var item in _collisionHistory)
-        {
-            if (item.Value + _cooldownDuration < Time.time)
-            {
-                toDelete.Add(item.Key);
-            }
-        }
-        foreach (var item in toDelete)
-        {
-            _collisionHistory.Remove(item);
-        }
-        //toDelete.ForEach(k => _collisionHistory.Remove(k));
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         UpdateHistory();
@@ -54,13 +37,21 @@ public class PlayerCollisionHandler : MonoBehaviour
             {
                 if (!_collisionHistory.ContainsKey(collidable))
                 {
+                    Debug.Log("Collided with: " + other.gameObject.name);
+
                     _collisionHistory.Add(collidable, Time.time);
 
-                    CollisionInteraction damageData = collidable.Collide();
-                    ProcessDamage(damageData);
+                    CollisionInteraction collisionInteraction = collidable.Collide();
+                    if (collisionInteraction.applyDamage) ProcessDamage(collisionInteraction);
+                    if (collisionInteraction.teleport) Teleport(collisionInteraction.teleportTarget);
                 }
             }
         }
+    }
+
+    private void Teleport(Vector3 target)
+    {
+        transform.parent.position = target;
     }
 
     private void ProcessDamage(CollisionInteraction damageData)
@@ -83,5 +74,22 @@ public class PlayerCollisionHandler : MonoBehaviour
             rb.AddForce(-velocityDirection * damageData.forceMagnitude * magnitude, ForceMode.Impulse);
             //rb.velocity = rb.velocity.normalized * rb.velocity.magnitude * 0.2f;
         }
+    }
+
+    private void UpdateHistory()
+    {
+        List<ICollidable> toDelete = new List<ICollidable>();
+        foreach (var item in _collisionHistory)
+        {
+            if (item.Value + _cooldownDuration < Time.time)
+            {
+                toDelete.Add(item.Key);
+            }
+        }
+        foreach (var item in toDelete)
+        {
+            _collisionHistory.Remove(item);
+        }
+        //toDelete.ForEach(k => _collisionHistory.Remove(k));
     }
 }

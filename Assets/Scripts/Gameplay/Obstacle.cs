@@ -32,8 +32,8 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
 
     public virtual CollisionInteraction Collide()
     {
-        CollisionInteraction interactionData = new CollisionInteraction(_applyDamage/*, false*/);
-        if (_applyDamage) interactionData.SetDamage(_damage, _damageType, _forceMagnitude, _damageDirectionType);
+        CollisionInteraction interactionData = new CollisionInteraction(true/*, false*/);
+        if (_applyDamage) interactionData.SetDamage(true, _damage, _damageType, _forceMagnitude, _damageDirectionType);
         //if (_applyHealth) interactionData.SetHealth(_health);
         return interactionData;
         //return new InteractionData(_damage, _damageType, _forceMagnitude, _damageDirectionType);

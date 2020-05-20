@@ -17,6 +17,9 @@ public struct CollisionInteraction
     public float forceMagnitude;
     public DamageDirectionType damageDirectionType;
 
+    public bool teleport;
+    public Vector3 teleportTarget;
+
     // Health
     //public bool applyHealth;
     //public int health;
@@ -30,18 +33,25 @@ public struct CollisionInteraction
     //    //this.forceDirection = forceDirection;
     //}
 
-    public CollisionInteraction(bool applyDamage/*, bool applyHealth*/) : this()
+    public CollisionInteraction(bool interaction/*, bool applyHealth*/) : this()
     {
-        this.applyDamage = applyDamage;
+        //this.applyDamage = applyDamage;
         //this.applyHealth = applyHealth;
     }
 
-    public void SetDamage(int damage, DamageType damageType, float forceMagnitude, DamageDirectionType damageDirectionType)
+    public void SetDamage(bool applyDamage, int damage, DamageType damageType, float forceMagnitude, DamageDirectionType damageDirectionType)
     {
+        this.applyDamage = applyDamage;
         this.damage = damage;
         this.damageType = damageType;
         this.forceMagnitude = forceMagnitude;
         this.damageDirectionType = damageDirectionType;
+    }
+
+    public void SetTeleport(bool teleport, Vector3 teleportTarget)
+    {
+        this.teleport = teleport;
+        this.teleportTarget = teleportTarget;
     }
 
     //internal void SetHealth(int health)
