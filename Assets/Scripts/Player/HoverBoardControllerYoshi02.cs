@@ -17,7 +17,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     public float GroundStickForce;          //The force applied inverse to ground normal
     [SerializeField] private bool StickToGround;    //Whether the board should stick to the ground when grounded
     public float GroundStickHeight;         //The maximum height at which the acceleration force direction is projected on the ground and ground stick force is applied
-    public Transform[] HoverPoints;         //The points from which ground distance is measured and where hover force is applied
+    //public Transform[] HoverPoints;         //The transforms from which ground distance is measured and where hover force is applied
+    [SerializeField] GameObject HoverPointPrefab;             //The hover point prefab
+    [SerializeField] GameObject HoverPointContainer;
+    [SerializeField] private GameObject[] HoverPoints;     //The points from which ground distance is measured and where hover force is applied
+    [SerializeField] private BoxCollider HoverArea;  //The area in which a hoverpoint array is generated
+    [SerializeField] private int HoverPointRows;  //how many hoverpoint rows are generated
+    [SerializeField] private int HoverPointColumns;   //how many hoverpoint columns are generated
 
     [Header( "PID Controller Settings" )]
     [Range( 0.0f, 1.0f )] public float ProportionalGain;  //A tuning value for the proportional error correction
@@ -27,10 +33,10 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [Header( "Handling Settings" )]
     [SerializeField] private GroundThrustModes GroundThrustMode;    //Dropdown to switch between thrust modes on the ground
     public float GroundAccelerationForce;                           //The force that accelerates the board in its forward direction, projected on the ground
-    public float TurnForce;                                         //The force that makes the board turn
+    [SerializeField] private float TurnForceMax;                    //The maximum force TurnForce can be
+    [SerializeField] float TurnForceMin;                            //The minimum force TurnForce can be
     public float CarveForce;                                        //The additional force that makes the board carve
     [SerializeField] private float BoostForce;                      //The additional force applied to the body while boosting
-    [SerializeField] private float BoostTime;                       //The time boost force is applied to the body
     public float SidewaysFriction;                                  //The force that keeps the board from sliding sideways
     public float CarveFriction;                                     //The additional force that keeps the board from sliding sideways during a carve
     [SerializeField] private float SideShiftForce;                  //The force that makes the body shift left and right
@@ -40,9 +46,11 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //[MinMaxSlider( 0, 1 )] public Vector2 TurnMotorZFineTuning;        //Fine tuning for the turn motor local z position
 
     [Header( "Aerial Handling Settings" )]
-    [SerializeField] private AirThrustModes AirThrustMode;     //Dropdown to switch between thrust modes in the air
+    [SerializeField] private AirThrustModes AirThrustMode;      //Dropdown to switch between thrust modes in the air
     [SerializeField] private float AirAccelerationForce;        //The force that accelerates the board in the air 
-    [SerializeField] private float JumpForce;                   //The impulse applied to the body upwards to make it jump
+    [SerializeField] private float JumpForceMax;                //The maximum force JumpForce can be
+    [SerializeField] private float JumpForceMin;                //The minimum force JumpForce can be
+    [SerializeField] private float JumpChargeTime;              //The time it takes to charge up the jump while crouching
     [SerializeField] private float StabilizationForce;          //The force exerted on the body to orient it upright
     [SerializeField] private float StabilizationSpeed;          //The time it takes for the board to return to an upright state
     [SerializeField] private float AirControlForce;             //The angular force exerted on the body by player input
@@ -61,13 +69,14 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //[MinMaxSlider( 0, 1 )] public Vector2Int FOV;                 //The Camera's FOV
 
     [Header( "General Settings" )]
-    [SerializeField] private LayerMask GroundMask;      //The layer mask that determines what counts as ground
-    [SerializeField] private Transform CenterOfMass;    //The location where the boards center of mass is shifted. This keeps the board from tipping over
-    [SerializeField] private Transform ThrustMotor;     //The location where acceleration force is applied
-    [SerializeField] private Transform TurnMotor;       //The location where turn force is applied
-    [SerializeField] private Transform CarveMotor;      //The location where carve force is applied
-    [SerializeField] private Transform SideShiftMotor;  //The location where side shift force is applied 
-    [SerializeField] private Animator CharacterAnimator;//FIXME: This is definitely not the responsibility of this class
+    [SerializeField] private LayerMask GroundMask;          //The layer mask that determines what counts as ground
+    [SerializeField] private Transform CenterOfMass;        //The location where the boards center of mass is shifted. This keeps the board from tipping over
+    [SerializeField] private Transform ThrustMotor;         //The location where acceleration force is applied
+    [SerializeField] private Transform TurnMotor;           //The location where turn force is applied
+    [SerializeField] private Transform CarveMotor;          //The location where carve force is applied
+    [SerializeField] private Transform SideShiftMotor;      //The location where side shift force is applied 
+    [SerializeField] private Transform CoyoteTime;  //The location from where the jump ground check is performed
+    [SerializeField] private Animator CharacterAnimator;    //FIXME: This is definitely not the responsibility of this class
     #endregion
 
     #region Enums
@@ -85,6 +94,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [HideInInspector]
     public float MaxSpeed;                 //The maximum velocity the board can have on a flat surface given the defined parameters
     private Vector3 ThrustDirection;        //The direction thrust is applied to the rigidbody. I'm caching this value as a field for aerial movement
+    private float TurnForce;                //The force that makes the board turn
+    private float JumpForce;                //The impulse applied to the body upwards to make it jump
 
     //Input fields
     private float ThrustInput;              //The amount of thrust input set in the SetMoveInput method
@@ -100,6 +111,9 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void Start()
     {
+        HoverPoints = new GameObject[HoverPointRows * HoverPointColumns];
+        GenerateHoverPoints( HoverArea, HoverPointColumns, HoverPointRows );
+
         RB = GetComponent<Rigidbody>();
         RB.centerOfMass = CenterOfMass.localPosition;
 
@@ -113,8 +127,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void Update()
     {
-        //Calculate the maximum velocity based on the defined acceleration force and drag
-        MaxSpeed = Mathf.Sqrt( GroundAccelerationForce / Drag );   //TODO: this will later be in Start() when done tuning
+        CalculateMaxSpeed();    //TODO: this will later be in Start() when done tuning
 
         //update the gains of each PID controller TODO: this will be removed when done tuning
         foreach ( PIDController pid in PIDs )
@@ -135,12 +148,59 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         ApplyQuadraticDrag();
     }
 
+    #region Hovering
+    private void GenerateHoverPoints(BoxCollider _area, int _columns, int _rows)
+    {
+        float columnSpacing = _area.size.x / ( _columns - 1 );
+        float rowSpacing = _area.size.z / ( _rows - 1 );
+        Vector3 rowOffset = new Vector3( 0, 0, rowSpacing );
+
+        for ( int i = 0; i < _columns; i++ )
+        {
+            Vector3 columnHead = new Vector3(
+                ( _area.center.x - _area.extents.x ) + ( columnSpacing * i ),
+                transform.position.y,
+                _area.center.z + _area.extents.z
+            );
+
+            for ( int j = 0; j < _rows; j++ )
+            {
+                Vector3 hoverPointPos = columnHead - ( rowOffset * j );
+                GameObject newHoverPoint = Instantiate( HoverPointPrefab, hoverPointPos, Quaternion.identity, HoverPointContainer.transform );
+                HoverPoints[( i * _rows ) + j] = newHoverPoint;
+            }
+        }
+    }
     private void Hover()
     {
-        foreach ( Transform hoverPoint in HoverPoints )
+        // foreach ( Transform hoverPoint in HoverPoints )
+        // {
+        //     //The ray used at each hover point down from the board
+        //     Ray hoverRay = new Ray( hoverPoint.position, -transform.up );
+        //     RaycastHit hit;
+
+        //     if ( Physics.Raycast( hoverRay, out hit, HoverHeight, GroundMask ) )
+        //     {
+        //         float actualHeight = hit.distance;
+        //         Vector3 groundNormal = hit.normal;
+
+        //         //Use the respective PID controller to calculate the percentage of hover force to be used
+        //         float forcePercent = PIDs[Array.IndexOf( HoverPoints, hoverPoint )].Control( HoverHeight, actualHeight );
+        //         //Grapher.Log( forcePercent, "PID" + Array.IndexOf( HoverPoints, hoverPoint ).ToString() );   //plots the PID value in an editor toolTODO: remove when done tuning 
+
+        //         //calculate the adjusted force in the direction of the ground normal
+        //         Vector3 adjustedForce = HoverForce * forcePercent * groundNormal;
+
+        //         //Add the force to the rigidbody at the respective hoverpoint's position
+        //         RB.AddForceAtPosition( adjustedForce, hoverPoint.position, ForceMode.Acceleration );
+        //     }
+        // }
+
+        foreach ( GameObject hoverPoint in HoverPoints )
         {
+            Vector3 hoverPointPos = hoverPoint.transform.position;
             //The ray used at each hover point down from the board
-            Ray hoverRay = new Ray( hoverPoint.position, -transform.up );
+            Ray hoverRay = new Ray( hoverPointPos, -transform.up );
             RaycastHit hit;
 
             if ( Physics.Raycast( hoverRay, out hit, HoverHeight, GroundMask ) )
@@ -150,19 +210,20 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
                 //Use the respective PID controller to calculate the percentage of hover force to be used
                 float forcePercent = PIDs[Array.IndexOf( HoverPoints, hoverPoint )].Control( HoverHeight, actualHeight );
-                //Grapher.Log( forcePercent, "PID" + Array.IndexOf( HoverPoints, hoverPoint ).ToString() );   //plots the PID value in an editor toolTODO: remove when done tuning 
 
                 //calculate the adjusted force in the direction of the ground normal
                 Vector3 adjustedForce = HoverForce * forcePercent * groundNormal;
 
                 //Add the force to the rigidbody at the respective hoverpoint's position
-                RB.AddForceAtPosition( adjustedForce, hoverPoint.position, ForceMode.Acceleration );
+                RB.AddForceAtPosition( adjustedForce, hoverPointPos, ForceMode.Acceleration );
             }
         }
     }
+    #endregion
 
     private void Handling()
     {
+        ScaleForceWithSpeedInverse( ref TurnForce, TurnForceMin, TurnForceMax );
         RaycastHit hit;
         if ( IsGrounded( out hit ) )
         {
@@ -279,6 +340,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     #region Moves
     private void Moves()
     {
+        ScaleForceWithSpeed( ref JumpForce, JumpForceMin, JumpForceMax );
         if ( IsGrounded() )
         {
             GroundDash();
@@ -300,7 +362,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         {
             IsCrouching = false;
             CharacterAnimator.SetBool( "IsCrouching", false );
-            if ( IsGrounded() )
+            if ( IsGrounded( CoyoteTime.position ) )
             {
                 RB.AddForce( transform.up * JumpForce, ForceMode.VelocityChange );
             }
@@ -414,7 +476,6 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
             Vector3 force = -hit.normal * GroundStickForce * ( RB.velocity.magnitude / MaxSpeed );
             RB.AddForce( force, ForceMode.Acceleration );
-            //print( force );
         }
     }
     private void ApplySidewaysFriction()
@@ -475,6 +536,19 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         _hit = hit;
         return ray;
     }
+    //overloaded function that takes a ray origin position as an argument
+    private bool IsGrounded(Vector3 _rayOrigin)
+    {
+        return ( Physics.Raycast( _rayOrigin, -transform.up, GroundStickHeight, GroundMask ) );
+    }
+    //overloaded function that takes a ray origin position as an argument and gives raycast hit info in an out parameter
+    private bool IsGrounded(Vector3 _rayOrigin, out RaycastHit _hit)
+    {
+        RaycastHit hit;
+        bool ray = Physics.Raycast( _rayOrigin, -transform.up, out hit, GroundStickHeight, GroundMask );
+        _hit = hit;
+        return ray;
+    }
     #endregion
 
     #region Input Setters
@@ -498,4 +572,54 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         IsDashing = _isDashing;
     }
     #endregion
+
+    #region Utility
+    private void ScaleForceWithSpeedInverse(ref float _force, float _forceMin, float _forceMax)
+    {
+        _force = _forceMax - ( ( _forceMax - _forceMin ) * ( RB.velocity.magnitude / MaxSpeed ) );
+    }
+    private void ScaleForceWithSpeed(ref float _force, float _forceMin, float _forceMax)
+    {
+        _force = _forceMin + ( ( _forceMax - _forceMin ) * ( RB.velocity.magnitude / MaxSpeed ) );
+    }
+    #endregion
+
+    private void CalculateMaxSpeed()
+    {
+        if ( IsGrounded() )
+        {
+            if ( !IsDashing )
+            {
+                //Calculate the maximum velocity based on the defined ground acceleration force and drag
+                MaxSpeed = Mathf.Sqrt( GroundAccelerationForce / Drag );
+            }
+            else if ( IsDashing )
+            {
+                //Calculate the maximum velocity based on the defined ground acceleration force, the boost force and drag
+                MaxSpeed = Mathf.Sqrt( ( GroundAccelerationForce + BoostForce ) / Drag );
+            }
+        }
+        else if ( !IsGrounded() )
+        {
+            if ( !IsDashing )
+            {
+                //Calculate the maximum velocity based on the defined air acceleration force and drag
+                MaxSpeed = Mathf.Sqrt( AirAccelerationForce / Drag );
+            }
+            else if ( IsDashing )
+            {
+                //Calculate the maximum velocity based on the defined air acceleration force, the boost force and drag
+                MaxSpeed = Mathf.Sqrt( ( AirAccelerationForce + BoostForce ) / Drag );
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        foreach ( var hoverPoint in HoverPoints )
+        {
+            Gizmos.DrawSphere( hoverPoint.transform.position, 0.05f );
+        }
+    }
+
 }
