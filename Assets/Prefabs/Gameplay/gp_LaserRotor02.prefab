@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f8450db5c5f88ad45a1627d11c0ce643, type: 2}
+  - {fileID: 2100000, guid: d8abe14dc4d33ce448640da3df3318d3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -370,7 +370,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f8450db5c5f88ad45a1627d11c0ce643, type: 2}
+  - {fileID: 2100000, guid: d8abe14dc4d33ce448640da3df3318d3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -680,7 +680,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f8450db5c5f88ad45a1627d11c0ce643, type: 2}
+  - {fileID: 2100000, guid: d8abe14dc4d33ce448640da3df3318d3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 1416371445803814592}
   - component: {fileID: 1416371445803814593}
   m_Layer: 12
-  m_Name: LaserRotor02
+  m_Name: gp_LaserRotor02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

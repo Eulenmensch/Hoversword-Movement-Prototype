@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 688212969331267382}
   - component: {fileID: 2514796142470143781}
   m_Layer: 8
-  m_Name: circle to low center
+  m_Name: env_Tunnel_Trans_Circle__LowCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3332771567229090895
 Transform:

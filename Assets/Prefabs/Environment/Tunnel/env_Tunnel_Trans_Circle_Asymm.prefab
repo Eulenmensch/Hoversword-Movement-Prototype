@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 4229044332849406876}
   - component: {fileID: 8940880720008438081}
   m_Layer: 8
-  m_Name: circle to asymm
+  m_Name: env_Tunnel_Trans_Circle_Asymm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7082613874683327307
 Transform:

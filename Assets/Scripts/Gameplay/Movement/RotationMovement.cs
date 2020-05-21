@@ -21,12 +21,15 @@ public class RotationMovement : MonoBehaviour
     public enum RotationDirection { clockwise, antiClockwise }
     [SerializeField] private RotationDirection _rotationDirection;
 
+    [SerializeField] private bool _useEuler = true;
+
     private float _angle;
     private Vector3 rotationAxis = Vector3.zero;
 
     private void Start()
     {
         SetStartingPosition();
+        SetRotationAxis();
 
         if (_fullRotation)
         {
@@ -55,10 +58,28 @@ public class RotationMovement : MonoBehaviour
             }
         }
 
-        SetRotationAxis();
-        Quaternion rot = Quaternion.AngleAxis(_angle, rotationAxis);
+        if (_useEuler)
+        {
+            if (_axis == RotationAxis.X)
+                transform.localEulerAngles = new Vector3(_angle, 0, 0);
+            else if (_axis == RotationAxis.Y)
+                transform.localEulerAngles = new Vector3(0, _angle, 0);
+            else
+                transform.localEulerAngles = new Vector3(0, 0, _angle);
+        }
+        else
+        {
+            SetRotationAxis();
+            Quaternion rot = Quaternion.AngleAxis(_angle, rotationAxis);
 
-        transform.rotation = rot;
+            //if (_rotatedParent != null)
+            //{
+            //    rot = rot * Quaternion.Inverse(_rotatedParent.rotation);
+            //}
+
+            transform.rotation = rot;
+        }
+        Debug.DrawLine(transform.position, transform.position + rotationAxis, Color.red);
     }
 
     private void SetStartingPosition()
@@ -66,13 +87,14 @@ public class RotationMovement : MonoBehaviour
         SetRotationAxis();
         Quaternion startRot = Quaternion.AngleAxis(_startAngle, rotationAxis);
 
-        transform.rotation = startRot;
+        transform.localRotation = startRot;
         _angle = _startAngle;
     }
 
     private void SetRotationAxis()
     {
         rotationAxis = (_axis == RotationAxis.Z) ? transform.forward : (_axis == RotationAxis.Y) ? transform.up : transform.right;
+        Debug.DrawLine(transform.position, transform.position + rotationAxis, Color.red);
     }
 
     private void OnValidate()
