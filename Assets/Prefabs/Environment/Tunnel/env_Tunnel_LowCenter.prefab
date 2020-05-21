@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 2189696308059160837}
   - component: {fileID: 8406034573452781783}
   m_Layer: 8
-  m_Name: low center
+  m_Name: env_Tunnel_LowCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1588905310625434781
 Transform:

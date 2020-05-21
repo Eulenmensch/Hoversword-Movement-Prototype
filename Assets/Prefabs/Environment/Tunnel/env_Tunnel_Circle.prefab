@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 54949974905073171}
   - component: {fileID: 155225510470456846}
   m_Layer: 8
-  m_Name: circle
+  m_Name: env_Tunnel_Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8641375346298257756
 Transform:

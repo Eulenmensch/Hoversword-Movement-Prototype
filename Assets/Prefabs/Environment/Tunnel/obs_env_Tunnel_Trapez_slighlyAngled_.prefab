@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 5641473090991496256}
   - component: {fileID: 7219398824369652878}
   m_Layer: 8
-  m_Name: Tunnel_v_empty
+  m_Name: obs_env_Tunnel_Trapez_slighlyAngled_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6930202233619208847
 Transform:

@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 3727926192596877874}
   - component: {fileID: 9011384244712161173}
   m_Layer: 8
-  m_Name: circle to trapezoid
+  m_Name: env_Tunnel_Trans_Circle_Trapez
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7599745359524271351
 Transform:
