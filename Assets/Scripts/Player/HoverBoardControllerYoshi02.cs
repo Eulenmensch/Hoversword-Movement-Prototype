@@ -155,17 +155,23 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         float rowSpacing = _area.size.z / ( _rows - 1 );
         Vector3 rowOffset = new Vector3( 0, 0, rowSpacing );
 
+        //_area.center = transform.TransformPoint( _area.center );
+        Vector3 areaCenter = _area.center;
+        // areaCenter = transform.TransformPoint( areaCenter );
+
         for ( int i = 0; i < _columns; i++ )
         {
             Vector3 columnHead = new Vector3(
-                ( _area.center.x - _area.extents.x ) + ( columnSpacing * i ),
-                transform.position.y,
-                _area.center.z + _area.extents.z
+                ( areaCenter.x - _area.extents.x ) + ( columnSpacing * i ),
+                areaCenter.y,
+                areaCenter.z + _area.extents.z
             );
+            //columnHead = transform.TransformPoint( columnHead );
 
             for ( int j = 0; j < _rows; j++ )
             {
                 Vector3 hoverPointPos = columnHead - ( rowOffset * j );
+                hoverPointPos = transform.TransformPoint( hoverPointPos );
                 GameObject newHoverPoint = Instantiate( HoverPointPrefab, hoverPointPos, Quaternion.identity, HoverPointContainer.transform );
                 HoverPoints[( i * _rows ) + j] = newHoverPoint;
             }

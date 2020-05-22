@@ -87,17 +87,17 @@ PrefabInstance:
     - target: {fileID: 3158549278596856501, guid: 006a765124de6ee4aa69a67b1a2597a6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.2162229
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3158549278596856501, guid: 006a765124de6ee4aa69a67b1a2597a6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.98
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3158549278596856501, guid: 006a765124de6ee4aa69a67b1a2597a6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.7119585
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3158549278596856501, guid: 006a765124de6ee4aa69a67b1a2597a6,
         type: 3}
@@ -168,6 +168,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.00000047683716
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158549279427192123, guid: 006a765124de6ee4aa69a67b1a2597a6,
+        type: 3}
+      propertyPath: m_LookaheadSmoothing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158549279427192123, guid: 006a765124de6ee4aa69a67b1a2597a6,
+        type: 3}
+      propertyPath: m_HorizontalDamping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158549279427192123, guid: 006a765124de6ee4aa69a67b1a2597a6,
+        type: 3}
+      propertyPath: m_SoftZoneWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158549279427192123, guid: 006a765124de6ee4aa69a67b1a2597a6,
+        type: 3}
+      propertyPath: m_SoftZoneHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158549279427192123, guid: 006a765124de6ee4aa69a67b1a2597a6,
+        type: 3}
+      propertyPath: m_CenterOnActivate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3158549279427192124, guid: 006a765124de6ee4aa69a67b1a2597a6,
         type: 3}

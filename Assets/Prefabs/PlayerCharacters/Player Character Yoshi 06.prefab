@@ -10830,6 +10830,8 @@ MonoBehaviour:
   - {fileID: 7818098885228686504}
   DashChargeParticles: {fileID: 3001844471593465240}
   DashJetParticles: {fileID: 3001844469640939543}
+  JetDefaultColor: {r: 0.13456745, g: 0.6792453, b: 0.2539643, a: 1}
+  JetCarveColor: {r: 0.6784314, g: 0.13333333, b: 0.60982835, a: 1}
 --- !u!114 &2990576164873742972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16106,7 +16108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4854320875896113773}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -1.2}
+  m_LocalPosition: {x: -0, y: 0, z: -2.045}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7217804582171357080}

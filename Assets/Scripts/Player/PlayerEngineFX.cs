@@ -14,12 +14,16 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private ParticleSystem[] JetParticles;
     [SerializeField] private ParticleSystem DashChargeParticles;
     [SerializeField] private ParticleSystem DashJetParticles;
+    [SerializeField] private Color JetDefaultColor;
+    [SerializeField] private Color JetCarveColor;
 
     private CinemachineImpulseSource CameraShake;
 
     private float RPM;
     private float Thrust;
     private float Turn;
+
+    private bool IsCarving;
 
     private bool IsDashing;
     private bool HasCharged;
@@ -37,7 +41,7 @@ public class PlayerEngineFX : MonoBehaviour
         SetRPMParameter();
         SetThrustParameter();
         SetTurnParameter();
-        SetParticleParameters();
+        SetJetParticleParameters();
         PlayDashParticles();
     }
 
@@ -64,11 +68,19 @@ public class PlayerEngineFX : MonoBehaviour
         }
     }
 
-    void SetParticleParameters()
+    void SetJetParticleParameters()
     {
         foreach ( var jetParticle in JetParticles )
         {
             jetParticle.startLifetime = DefaultStartLifetime * Thrust;
+            if ( IsCarving )
+            {
+                jetParticle.startColor = JetCarveColor;
+            }
+            else if ( !IsCarving )
+            {
+                jetParticle.startColor = JetDefaultColor;
+            }
         }
     }
 
@@ -89,6 +101,8 @@ public class PlayerEngineFX : MonoBehaviour
         // EngineEmitter.SetParameter( "Turn", Turn );
     }
 
+
+
     public void SetMoveInput(float _thrust, float _turn)
     {
         Thrust = _thrust;
@@ -98,5 +112,10 @@ public class PlayerEngineFX : MonoBehaviour
     public void SetDashing(bool _dashing)
     {
         IsDashing = _dashing;
+    }
+
+    public void SetCarving(bool _carving)
+    {
+        IsCarving = _carving;
     }
 }

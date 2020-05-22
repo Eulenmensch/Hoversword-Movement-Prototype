@@ -77,11 +77,13 @@ public class InputManagerYoshi : MonoBehaviour
         {
             IsCarving = true;
             ControllerYoshi02.SetCarveInput( IsCarving );
+            EngineFX.SetCarving( IsCarving );
         }
         else if ( context.performed && IsCarving )
         {
             IsCarving = false;
             ControllerYoshi02.SetCarveInput( IsCarving );
+            EngineFX.SetCarving( IsCarving );
         }
     }
 }
