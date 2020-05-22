@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5306139848893018291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8451177914683640441}
+  m_Layer: 0
+  m_Name: Tunnel Trapez Section 1x
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8451177914683640441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5306139848893018291}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 73.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3020984454720314793}
+  - {fileID: 2512144473257085589}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &217964800693881406
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8451177914683640441}
+    m_Modifications:
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3800529560254833056, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+        type: 3}
+      propertyPath: m_Name
+      value: Tunnel Trapez Deco 1x
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8fdf35b1874e8a643b0bb79c2272c29f, type: 3}
+--- !u!4 &2512144473257085589 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2439459796094992555, guid: 8fdf35b1874e8a643b0bb79c2272c29f,
+    type: 3}
+  m_PrefabInstance: {fileID: 217964800693881406}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2522129178326734583
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8451177914683640441}
+    m_Modifications:
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5886974
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7072302
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7069834
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 99.999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505004400232062007, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_Name
+      value: env_Tunnel_Trapez
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 734d37a09e0ac1f49a1d5b80e6c0af45, type: 3}
+--- !u!4 &3020984454720314793 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 787239626594372446, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+    type: 3}
+  m_PrefabInstance: {fileID: 2522129178326734583}
+  m_PrefabAsset: {fileID: 0}
