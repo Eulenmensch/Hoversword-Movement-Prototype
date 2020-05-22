@@ -11,6 +11,7 @@ public class InputManagerYoshi : MonoBehaviour
     private HoverBoardControllerYoshi02 ControllerYoshi02;
     [SerializeField] PlayerEngineFX EngineFX;
     private bool IsCarving;
+    private bool IsCrouching;
 
     private void Awake()
     {
@@ -28,11 +29,19 @@ public class InputManagerYoshi : MonoBehaviour
         ControllerYoshi02.SetAirControlInput( inputVector.y, inputVector.x );
     }
 
-    public void GetCrouchJumpInput(InputAction.CallbackContext context)
+    public void GetCrouchJumpInput(InputAction.CallbackContext context) //FIXME: Refactor with a press and release modifier in the input asset
     {
         if ( context.performed )
         {
             OnJump.Invoke();
+        }
+        if ( context.started )
+        {
+            EngineFX.SetCrouching( true );
+        }
+        if ( context.canceled )
+        {
+            EngineFX.SetCrouching( false );
         }
     }
 
@@ -41,18 +50,15 @@ public class InputManagerYoshi : MonoBehaviour
         if ( context.started )
         {
             EngineFX.SetDashing( true );
-            print( "started" );
         }
         if ( context.performed )
         {
             ControllerYoshi02.SetDashInput( true );
-            print( "performed" );
         }
         if ( context.canceled )
         {
             EngineFX.SetDashing( false );
             ControllerYoshi02.SetDashInput( false );
-            print( "canceled" );
         }
     }
 

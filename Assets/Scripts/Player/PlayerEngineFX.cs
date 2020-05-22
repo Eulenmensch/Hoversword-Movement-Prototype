@@ -11,9 +11,17 @@ public class PlayerEngineFX : MonoBehaviour
     // [SerializeField] private StudioEventEmitter ThrustersEmitter;
     [SerializeField] private Rigidbody RB;
     [SerializeField] private HoverBoardControllerYoshi02 ControllerYoshi02;
+    [SerializeField] private Renderer SwordRenderer;
+    [SerializeField, ColorUsage( true, true )] private Color JumpMinChargeColor;
+    [SerializeField, ColorUsage( true, true )] private Color JumpMaxChargeColor;
+    [SerializeField, ColorUsage( true, true )] private Color JumpFullChargeFeedbackColor;
     [SerializeField] private ParticleSystem[] JetParticles;
     [SerializeField] private ParticleSystem DashChargeParticles;
     [SerializeField] private ParticleSystem DashJetParticles;
+    [SerializeField] private ParticleSystem JumpChargeParticles;
+    [SerializeField] private ParticleSystem JumpJetParticles;
+    [SerializeField] private ParticleSystemRenderer JumpChargeParticleRenderer;
+    [SerializeField] private ParticleSystemRenderer JumpJetParticleRenderer;
     [SerializeField] private Color JetDefaultColor;
     [SerializeField] private Color JetCarveColor;
 
@@ -26,7 +34,10 @@ public class PlayerEngineFX : MonoBehaviour
     private bool IsCarving;
 
     private bool IsDashing;
-    private bool HasCharged;
+    private bool DashHasCharged;
+
+    private bool IsCrouching;
+    private bool JumpHasCharged;
 
     private float DefaultStartLifetime;
 
@@ -42,17 +53,19 @@ public class PlayerEngineFX : MonoBehaviour
         SetThrustParameter();
         SetTurnParameter();
         SetJetParticleParameters();
+        SetJumpChargeColor();
         PlayDashParticles();
+        PlayJumpChargeParticles();
     }
 
     void PlayDashParticles()
     {
         if ( IsDashing )
         {
-            if ( !HasCharged )
+            if ( !DashHasCharged )
             {
                 DashChargeParticles.Play();
-                HasCharged = true;
+                DashHasCharged = true;
             }
             if ( DashChargeParticles.isStopped )
             {
@@ -64,8 +77,26 @@ public class PlayerEngineFX : MonoBehaviour
         {
             DashChargeParticles.Clear();
             DashJetParticles.Stop();
-            HasCharged = false;
+            DashHasCharged = false;
         }
+    }
+    void PlayJumpChargeParticles()
+    {
+        if ( IsCrouching )
+        {
+            JumpChargeParticles.Play();
+        }
+        else if ( !IsCrouching )
+        {
+            JumpChargeParticles.Clear();
+        }
+    }
+
+    //FIXME: This subscribes to a unity event via editor. These weird dependencies would be solved if Groundchecks were their own class
+    //that this class could implement
+    public void PlayJumpJetParticles()
+    {
+        JumpJetParticles.Play();
     }
 
     void SetJetParticleParameters()
@@ -101,6 +132,19 @@ public class PlayerEngineFX : MonoBehaviour
         // EngineEmitter.SetParameter( "Turn", Turn );
     }
 
+    void SetJumpChargeColor()
+    {
+        Color chargeColor = Color.Lerp( JumpMinChargeColor, JumpMaxChargeColor, ControllerYoshi02.JumpForceCharge );
+        SwordRenderer.materials[1].SetColor( "_EmissionColor", chargeColor );
+        JumpChargeParticleRenderer.trailMaterial.SetColor( "_EmissionColor", chargeColor );
+        JumpJetParticleRenderer.trailMaterial.SetColor( "_EmissionColor", chargeColor );
+        if ( ControllerYoshi02.JumpForceCharge >= 1 )
+        {
+            SwordRenderer.materials[1].SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+            JumpChargeParticleRenderer.trailMaterial.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+            JumpJetParticleRenderer.trailMaterial.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+        }
+    }
 
 
     public void SetMoveInput(float _thrust, float _turn)
@@ -117,5 +161,10 @@ public class PlayerEngineFX : MonoBehaviour
     public void SetCarving(bool _carving)
     {
         IsCarving = _carving;
+    }
+
+    public void SetCrouching(bool _crouching)
+    {
+        IsCrouching = _crouching;
     }
 }

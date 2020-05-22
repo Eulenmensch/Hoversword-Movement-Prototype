@@ -305,6 +305,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7066588755970459457}
     m_Modifications:
+    - target: {fileID: 3001844471593465241, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7e3b735112178f048b2ef5443c2e5e75, type: 2}
     - target: {fileID: 7217804582171357080, guid: 48be77ea75b13ac4c8740324109e50a2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -360,6 +365,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: OnJump.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: JumpChargeTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: JumpForceChargeMin
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: OnJump.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7737842259081333031}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: OnJump.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayJumpJetParticles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: OnJump.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: OnJump.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217804582171357082, guid: 48be77ea75b13ac4c8740324109e50a2,
+        type: 3}
+      propertyPath: OnJump.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7217804582171357083, guid: 48be77ea75b13ac4c8740324109e50a2,
         type: 3}
       propertyPath: m_Name
@@ -373,3 +418,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4812913335893461491}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7737842259081333031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3001844471523901652, guid: 48be77ea75b13ac4c8740324109e50a2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4812913335893461491}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e410efe6cc72e4abc68392b3769d43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

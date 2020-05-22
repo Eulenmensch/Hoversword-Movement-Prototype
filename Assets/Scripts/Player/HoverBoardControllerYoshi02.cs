@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using MinMaxSlider;
 
 public class HoverBoardControllerYoshi02 : MonoBehaviour
@@ -50,7 +51,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private float AirAccelerationForce;        //The force that accelerates the board in the air 
     [SerializeField] private float JumpForceMax;                //The maximum force JumpForce can be
     [SerializeField] private float JumpForceMin;                //The minimum force JumpForce can be
-    [SerializeField] private float JumpChargeTime;              //The time it takes to charge up the jump while crouching
+    [SerializeField] private float JumpChargeTime;              //The time in seconds it takes to charge up the jump while crouching
+    [SerializeField] private float JumpForceChargeMin;          //The minumum factor the jump is scaled by when jumping with no charge    
     [SerializeField] private float StabilizationForce;          //The force exerted on the body to orient it upright
     [SerializeField] private float StabilizationSpeed;          //The time it takes for the board to return to an upright state
     [SerializeField] private float AirControlForce;             //The angular force exerted on the body by player input
@@ -79,6 +81,10 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private Animator CharacterAnimator;    //FIXME: This is definitely not the responsibility of this class
     #endregion
 
+    #region Events
+    [SerializeField] private UnityEvent OnJump;//FIXME: This makes me want to make a proper event system
+    #endregion
+
     #region Enums
     private enum GroundThrustModes { Manual, Automatic }    //An enum for switching between types of thrust handling on the ground
     private enum AirThrustModes { Manual, NoThrust, RetainGroundDirection } //An enum for switching between types of thrust handling in the air
@@ -96,6 +102,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private Vector3 ThrustDirection;        //The direction thrust is applied to the rigidbody. I'm caching this value as a field for aerial movement
     private float TurnForce;                //The force that makes the board turn
     private float JumpForce;                //The impulse applied to the body upwards to make it jump
+    [HideInInspector]
+    public float JumpForceCharge;           //A value that goes up from 0 to 1 while crouching, impacting how much jump force will be exerted on the body
 
     //Input fields
     private float ThrustInput;              //The amount of thrust input set in the SetMoveInput method
@@ -111,6 +119,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void Start()
     {
+        JumpForceCharge = JumpForceChargeMin;
+
         HoverPoints = new GameObject[HoverPointRows * HoverPointColumns];
         GenerateHoverPoints( HoverArea, HoverPointColumns, HoverPointRows );
 
@@ -155,18 +165,13 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         float rowSpacing = _area.size.z / ( _rows - 1 );
         Vector3 rowOffset = new Vector3( 0, 0, rowSpacing );
 
-        //_area.center = transform.TransformPoint( _area.center );
-        Vector3 areaCenter = _area.center;
-        // areaCenter = transform.TransformPoint( areaCenter );
-
         for ( int i = 0; i < _columns; i++ )
         {
             Vector3 columnHead = new Vector3(
-                ( areaCenter.x - _area.extents.x ) + ( columnSpacing * i ),
-                areaCenter.y,
-                areaCenter.z + _area.extents.z
+                ( _area.center.x - _area.extents.x ) + ( columnSpacing * i ),
+                _area.center.y,
+                _area.center.z + _area.extents.z
             );
-            //columnHead = transform.TransformPoint( columnHead );
 
             for ( int j = 0; j < _rows; j++ )
             {
@@ -347,6 +352,15 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private void Moves()
     {
         ScaleForceWithSpeed( ref JumpForce, JumpForceMin, JumpForceMax );
+
+        if ( IsCrouching )
+        {
+            if ( JumpForceCharge <= 1 )
+            {
+                JumpForceCharge += Time.deltaTime / JumpChargeTime;
+            }
+        }
+
         if ( IsGrounded() )
         {
             GroundDash();
@@ -370,8 +384,10 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
             CharacterAnimator.SetBool( "IsCrouching", false );
             if ( IsGrounded( CoyoteTime.position ) )
             {
-                RB.AddForce( transform.up * JumpForce, ForceMode.VelocityChange );
+                RB.AddForce( transform.up * JumpForce * JumpForceCharge, ForceMode.VelocityChange );
+                OnJump.Invoke();
             }
+            JumpForceCharge = JumpForceChargeMin;
         }
     }
 
