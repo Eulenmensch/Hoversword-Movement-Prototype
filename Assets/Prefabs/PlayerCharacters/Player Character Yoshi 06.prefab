@@ -10823,8 +10823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1e410efe6cc72e4abc68392b3769d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EngineEmitter: {fileID: 0}
-  ThrustersEmitter: {fileID: 0}
   RB: {fileID: 7217804582171357084}
   ControllerYoshi02: {fileID: 7217804582171357082}
   JetParticles:
@@ -16744,11 +16742,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7217804582171357083}
   m_Material: {fileID: 13400000, guid: 8300fb1dbcbadd843b1c55b2400e9541, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_IsTrigger: 1
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.7, y: 0.33, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.48, y: 0.03, z: 5.32}
+  m_Center: {x: 0, y: 0, z: 1.08}
 --- !u!114 &7217804582171357082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16771,7 +16769,7 @@ MonoBehaviour:
   HoverPointContainer: {fileID: 4854320876027751589}
   HoverPoints:
   - {fileID: 5366422921861148621, guid: d582abf63e2e1334e85841b0e80189e3, type: 3}
-  HoverArea: {fileID: 0}
+  HoverArea: {fileID: 7217804582171357087}
   HoverPointRows: 10
   HoverPointColumns: 4
   ProportionalGain: 0.75
@@ -16788,9 +16786,9 @@ MonoBehaviour:
   SideShiftForce: 35
   IdleFriction: 10
   IdleSpeed: 10
-  AirThrustMode: 1
+  AirThrustMode: 0
   AirAccelerationForce: 37
-  JumpForceMax: 20
+  JumpForceMax: 30
   JumpForceMin: 10
   JumpChargeTime: 0
   StabilizationForce: 3
