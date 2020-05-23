@@ -114,6 +114,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: env_Tunnel_Trapez
       objectReference: {fileID: 0}
+    - target: {fileID: 9029553445569249736, guid: 734d37a09e0ac1f49a1d5b80e6c0af45,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fe4e61222b903b438916d808e8f321d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 734d37a09e0ac1f49a1d5b80e6c0af45, type: 3}
 --- !u!4 &391357086394097271 stripped
