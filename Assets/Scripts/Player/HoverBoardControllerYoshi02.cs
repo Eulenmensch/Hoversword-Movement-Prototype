@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using MinMaxSlider;
+//using MinMaxSlider;
 
 public class HoverBoardControllerYoshi02 : MonoBehaviour
 {
@@ -137,8 +137,6 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void Update()
     {
-        CalculateMaxSpeed();    //TODO: this will later be in Start() when done tuning
-
         //update the gains of each PID controller TODO: this will be removed when done tuning
         foreach ( PIDController pid in PIDs )
         {
@@ -150,6 +148,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void FixedUpdate()
     {
+        CalculateMaxSpeed();
         SetGravity();
         Hover();
         Thrust();               //TODO: Integrate in the Handling method once cleaned up

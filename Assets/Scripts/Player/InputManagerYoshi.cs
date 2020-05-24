@@ -10,6 +10,7 @@ public class InputManagerYoshi : MonoBehaviour
     [SerializeField] UnityEvent OnRightSideShift;
     private HoverBoardControllerYoshi02 ControllerYoshi02;
     [SerializeField] PlayerEngineFX EngineFX;
+    [SerializeField] CharacterRigController RigController;
     private bool IsCarving;
     private bool IsCrouching;
 
@@ -22,6 +23,7 @@ public class InputManagerYoshi : MonoBehaviour
         Vector2 inputVector = context.ReadValue<Vector2>();
         ControllerYoshi02.SetMoveInput( inputVector.y, inputVector.x );
         EngineFX.SetMoveInput( inputVector.y, inputVector.x );
+        RigController.SetMoveInput( inputVector );
     }
     public void GetAirControlInput(InputAction.CallbackContext context)
     {

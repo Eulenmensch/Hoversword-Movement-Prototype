@@ -88,6 +88,7 @@ public class PlayerEngineFX : MonoBehaviour
         }
         else if ( !IsCrouching )
         {
+            JumpChargeParticles.Stop();
             JumpChargeParticles.Clear();
         }
     }

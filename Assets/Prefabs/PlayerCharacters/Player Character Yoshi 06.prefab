@@ -22070,7 +22070,7 @@ MonoBehaviour:
   IdleSpeed: 10
   AirThrustMode: 0
   AirAccelerationForce: 37
-  JumpForceMax: 30
+  JumpForceMax: 35
   JumpForceMin: 10
   JumpChargeTime: 0
   JumpForceChargeMin: 0
@@ -22244,33 +22244,11 @@ MonoBehaviour:
     m_ActionId: b56134be-c1ec-4bff-b232-22ee9a23b7fd
     m_ActionName: Player/Carve[/XInputControllerWindows/rightShoulder,/Keyboard/leftShift]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4778017035301079523}
-        m_MethodName: GetLeftSideShiftInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 24614919-5fc2-4eb8-aa4d-12f7441c7fa0
     m_ActionName: Player/SideShiftLeft[/XInputControllerWindows/leftShoulder,/Keyboard/q]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4778017035301079523}
-        m_MethodName: GetRightSideShiftInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: f74cde5e-fb9d-4860-bb86-168142375a3c
     m_ActionName: Player/SideShiftRight[/XInputControllerWindows/rightShoulder,/Keyboard/e]
   - m_PersistentCalls:
