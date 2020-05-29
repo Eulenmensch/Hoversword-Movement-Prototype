@@ -21231,6 +21231,7 @@ GameObject:
   - component: {fileID: 6991337554466681137}
   - component: {fileID: 4167908211440479834}
   - component: {fileID: 4167908211440479835}
+  - component: {fileID: 182472020661547404}
   m_Layer: 0
   m_Name: Josi Blockout
   m_TagString: Untagged
@@ -21333,6 +21334,19 @@ MonoBehaviour:
   - {fileID: 2607569929143517955}
   - {fileID: 2653250035198020758}
   - {fileID: 60859670094745676}
+--- !u!114 &182472020661547404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4167908211440479832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c859d29be538643a137416eb72fdff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveDuration: 0.8
 --- !u!1 &4260342889384430052
 GameObject:
   m_ObjectHideFlags: 0
@@ -21955,6 +21969,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7217804582171357080}
   - component: {fileID: 7217804582171357084}
+  - component: {fileID: 4854320877773087051}
   - component: {fileID: 7217804582171357087}
   - component: {fileID: 7217804582171357082}
   - component: {fileID: 7217804582171357085}
@@ -21962,7 +21977,6 @@ GameObject:
   - component: {fileID: 4778017035301079523}
   - component: {fileID: 1211895086629203982}
   - component: {fileID: 1211895086629203977}
-  - component: {fileID: 4854320877773087051}
   m_Layer: 0
   m_Name: Player Character Yoshi 06
   m_TagString: Player
@@ -22016,6 +22030,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!64 &4854320877773087051
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7217804582171357083}
+  m_Material: {fileID: 13400000, guid: 8300fb1dbcbadd843b1c55b2400e9541, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: 48f00e6c27a58f04bb53ad445c4221b0, type: 3}
 --- !u!65 &7217804582171357087
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22345,6 +22373,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   EngineFX: {fileID: 3001844471523901652}
+  RigController: {fileID: 182472020661547404}
 --- !u!114 &1211895086629203982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22373,20 +22402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468355d09db91f545904edaeec24fc2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!64 &4854320877773087051
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7217804582171357083}
-  m_Material: {fileID: 13400000, guid: 8300fb1dbcbadd843b1c55b2400e9541, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5495902117074765545, guid: 48f00e6c27a58f04bb53ad445c4221b0, type: 3}
 --- !u!1 &7217804582187710719
 GameObject:
   m_ObjectHideFlags: 0
