@@ -6,6 +6,7 @@ public class NavMeshTowBehaviour : MonoBehaviour
     public GameObject TowBoat;
     public Transform Player;
     public float ForceMultiplier;
+    [SerializeField] private Transform GroundCastOrigin;
     [SerializeField] private float FlickerTimer;
 
     private Vector3 _nextCorner;
@@ -33,7 +34,7 @@ public class NavMeshTowBehaviour : MonoBehaviour
         _coroutineRunning = true;
 
         RaycastHit hit;
-        Physics.Raycast( transform.position, -transform.up, out hit );
+        Physics.Raycast( GroundCastOrigin.position, -transform.up, out hit );
         var towBoat = Instantiate( TowBoat, hit.point, Quaternion.identity );
 
         if ( towBoat.GetComponent<NavMeshMoveTo>().Player == null )

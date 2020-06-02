@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FootIKTargetPredictions : MonoBehaviour
+public class FootIKTargetPrediction : MonoBehaviour
 {
     public float castHeight;
     public float offset;
