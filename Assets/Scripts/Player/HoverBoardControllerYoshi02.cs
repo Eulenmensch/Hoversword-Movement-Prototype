@@ -11,7 +11,7 @@ using UnityEngine.Events;
 public class HoverBoardControllerYoshi02 : MonoBehaviour
 {
     #region Settings
-    [Header( "Hover Settings" )]
+    [Header("Hover Settings")]
     public float HoverForce;                //The force that pushes the board upwards
     //public float AnticipativeHoverForce;    //The force that smoothes out sudden changes in ground gradient
     public float HoverHeight;               //The ideal height at which the board wants to hover
@@ -26,12 +26,12 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private int HoverPointRows;  //how many hoverpoint rows are generated
     [SerializeField] private int HoverPointColumns;   //how many hoverpoint columns are generated
 
-    [Header( "PID Controller Settings" )]
-    [Range( 0.0f, 1.0f )] public float ProportionalGain;  //A tuning value for the proportional error correction
-    [Range( 0.0f, 1.0f )] public float IntegralGain;      //A tuning value for the integral error correction
-    [Range( 0.0f, 1.0f )] public float DerivativeGain;    //A tuning value for the derivative error correction
+    [Header("PID Controller Settings")]
+    [Range(0.0f, 1.0f)] public float ProportionalGain;  //A tuning value for the proportional error correction
+    [Range(0.0f, 1.0f)] public float IntegralGain;      //A tuning value for the integral error correction
+    [Range(0.0f, 1.0f)] public float DerivativeGain;    //A tuning value for the derivative error correction
 
-    [Header( "Handling Settings" )]
+    [Header("Handling Settings")]
     [SerializeField] private GroundThrustModes GroundThrustMode;    //Dropdown to switch between thrust modes on the ground
     public float GroundAccelerationForce;                           //The force that accelerates the board in its forward direction, projected on the ground
     [SerializeField] private float TurnForceMax;                    //The maximum force TurnForce can be
@@ -46,7 +46,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //[MinMaxSlider( -1, 1 )] public Vector2 ThrustMotorYFineTuning;     //Fine tuning for the thrust motor local y position
     //[MinMaxSlider( 0, 1 )] public Vector2 TurnMotorZFineTuning;        //Fine tuning for the turn motor local z position
 
-    [Header( "Aerial Handling Settings" )]
+    [Header("Aerial Handling Settings")]
     [SerializeField] private AirThrustModes AirThrustMode;      //Dropdown to switch between thrust modes in the air
     [SerializeField] private float AirAccelerationForce;        //The force that accelerates the board in the air 
     [SerializeField] private float JumpForceMax;                //The maximum force JumpForce can be
@@ -60,17 +60,17 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     [SerializeField] private AirControlModes RollControlMode;   //Should the rotation around the forward axis be stabilized?
 
 
-    [Header( "Physics Settings" )]
+    [Header("Physics Settings")]
     public float Drag;                      //Quadratic force applied counter the board's velocity
     public float AngularDrag;               //Quadratic force applied counter the board's angular velocity
     public float GroundGravity;             //The gravity applied when 'grounded'
     public float AirGravity;                //The gravity applied when 'airborne'
 
-    [Header( "Camera Settings" )]
+    [Header("Camera Settings")]
     //[MinMaxSlider( 0, 1 )] public Vector2 CameraLookAtZOffset;    //The offset of the camera look at which influences how much the camera leans into turns
     //[MinMaxSlider( 0, 1 )] public Vector2Int FOV;                 //The Camera's FOV
 
-    [Header( "General Settings" )]
+    [Header("General Settings")]
     [SerializeField] private LayerMask GroundMask;          //The layer mask that determines what counts as ground
     [SerializeField] private Transform CenterOfMass;        //The location where the boards center of mass is shifted. This keeps the board from tipping over
     [SerializeField] private Transform ThrustMotor;         //The location where acceleration force is applied
@@ -96,6 +96,8 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private Rigidbody RB;                   //A reference to the board's rigidbody
     private PIDController[] PIDs;           //References to the PIDController class that handles error correction and smoothens out the hovering
 
+    private CombatController CombatController; // SUGGESTION: Do we need to control states in a higher place?
+
     //Physics fields
     [HideInInspector]
     public float MaxSpeed;                 //The maximum velocity the board can have on a flat surface given the defined parameters
@@ -117,28 +119,33 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private bool IsDashing;
     #endregion
 
+    public bool isGrounded { get { return IsGrounded(); } }
+    // SUGGESTION: Use property for outside access. Maybe set this once per update to not call IsGrounded so often
+
     private void Start()
     {
+        CombatController = GetComponent<CombatController>();
+
         JumpForceCharge = JumpForceChargeMin;
 
         HoverPoints = new GameObject[HoverPointRows * HoverPointColumns];
-        GenerateHoverPoints( HoverArea, HoverPointColumns, HoverPointRows );
+        GenerateHoverPoints(HoverArea, HoverPointColumns, HoverPointRows);
 
         RB = GetComponent<Rigidbody>();
         RB.centerOfMass = CenterOfMass.localPosition;
 
         //Create an instance of the PIDController class for each hover point
         PIDs = new PIDController[HoverPoints.Length];
-        for ( int i = 0; i < HoverPoints.Length; i++ )
+        for (int i = 0; i < HoverPoints.Length; i++)
         {
-            PIDs[i] = new PIDController( ProportionalGain, IntegralGain, DerivativeGain );
+            PIDs[i] = new PIDController(ProportionalGain, IntegralGain, DerivativeGain);
         }
     }
 
     private void Update()
     {
         //update the gains of each PID controller TODO: this will be removed when done tuning
-        foreach ( PIDController pid in PIDs )
+        foreach (PIDController pid in PIDs)
         {
             pid.Kp = ProportionalGain;
             pid.Ki = IntegralGain;
@@ -160,24 +167,24 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     #region Hovering
     private void GenerateHoverPoints(BoxCollider _area, int _columns, int _rows)
     {
-        float columnSpacing = _area.size.x / ( _columns - 1 );
-        float rowSpacing = _area.size.z / ( _rows - 1 );
-        Vector3 rowOffset = new Vector3( 0, 0, rowSpacing );
+        float columnSpacing = _area.size.x / (_columns - 1);
+        float rowSpacing = _area.size.z / (_rows - 1);
+        Vector3 rowOffset = new Vector3(0, 0, rowSpacing);
 
-        for ( int i = 0; i < _columns; i++ )
+        for (int i = 0; i < _columns; i++)
         {
             Vector3 columnHead = new Vector3(
-                ( _area.center.x - _area.extents.x ) + ( columnSpacing * i ),
+                (_area.center.x - _area.extents.x) + (columnSpacing * i),
                 _area.center.y,
                 _area.center.z + _area.extents.z
             );
 
-            for ( int j = 0; j < _rows; j++ )
+            for (int j = 0; j < _rows; j++)
             {
-                Vector3 hoverPointPos = columnHead - ( rowOffset * j );
-                hoverPointPos = transform.TransformPoint( hoverPointPos );
-                GameObject newHoverPoint = Instantiate( HoverPointPrefab, hoverPointPos, Quaternion.identity, HoverPointContainer.transform );
-                HoverPoints[( i * _rows ) + j] = newHoverPoint;
+                Vector3 hoverPointPos = columnHead - (rowOffset * j);
+                hoverPointPos = transform.TransformPoint(hoverPointPos);
+                GameObject newHoverPoint = Instantiate(HoverPointPrefab, hoverPointPos, Quaternion.identity, HoverPointContainer.transform);
+                HoverPoints[(i * _rows) + j] = newHoverPoint;
             }
         }
     }
@@ -206,26 +213,26 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //     }
         // }
 
-        foreach ( GameObject hoverPoint in HoverPoints )
+        foreach (GameObject hoverPoint in HoverPoints)
         {
             Vector3 hoverPointPos = hoverPoint.transform.position;
             //The ray used at each hover point down from the board
-            Ray hoverRay = new Ray( hoverPointPos, -transform.up );
+            Ray hoverRay = new Ray(hoverPointPos, -transform.up);
             RaycastHit hit;
 
-            if ( Physics.Raycast( hoverRay, out hit, HoverHeight, GroundMask ) )
+            if (Physics.Raycast(hoverRay, out hit, HoverHeight, GroundMask))
             {
                 float actualHeight = hit.distance;
                 Vector3 groundNormal = hit.normal;
 
                 //Use the respective PID controller to calculate the percentage of hover force to be used
-                float forcePercent = PIDs[Array.IndexOf( HoverPoints, hoverPoint )].Control( HoverHeight, actualHeight );
+                float forcePercent = PIDs[Array.IndexOf(HoverPoints, hoverPoint)].Control(HoverHeight, actualHeight);
 
                 //calculate the adjusted force in the direction of the ground normal
                 Vector3 adjustedForce = HoverForce * forcePercent * groundNormal;
 
                 //Add the force to the rigidbody at the respective hoverpoint's position
-                RB.AddForceAtPosition( adjustedForce, hoverPointPos, ForceMode.Acceleration );
+                RB.AddForceAtPosition(adjustedForce, hoverPointPos, ForceMode.Acceleration);
             }
         }
     }
@@ -233,14 +240,14 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
 
     private void Handling()
     {
-        ScaleForceWithSpeedInverse( ref TurnForce, TurnForceMin, TurnForceMax );
+        ScaleForceWithSpeedInverse(ref TurnForce, TurnForceMin, TurnForceMax);
         RaycastHit hit;
-        if ( IsGrounded( out hit ) )
+        if (IsGrounded(out hit))
         {
             Turn();
             ApplySidewaysFriction();    //FIXME: Not sure if this should also run in the air
             ApplyIdleFriction();
-            ApplyGroundStickForce( hit );
+            ApplyGroundStickForce(hit);
             Carve();
         }
         else
@@ -252,41 +259,41 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     #region Thrust
     private void Thrust()
     {
-        if ( IsGrounded() )
+        if (IsGrounded())
         {
             //Handle grounded thrust
-            if ( GroundThrustMode == GroundThrustModes.Manual )
+            if (GroundThrustMode == GroundThrustModes.Manual)
             {
                 //Add thrust to the body multiplying the force with thrust input
-                GroundThrust( ThrustInput );
+                GroundThrust(ThrustInput);
             }
-            else if ( GroundThrustMode == GroundThrustModes.Automatic )
+            else if (GroundThrustMode == GroundThrustModes.Automatic)
             {
                 //Add thrust to the body multiplying the force by one (not modifying it)
-                GroundThrust( 1.0f );
+                GroundThrust(1.0f);
             }
         }
 
-        else if ( !IsGrounded() )
+        else if (!IsGrounded())
         {
             //Handle aerial thrust
-            if ( AirThrustMode == AirThrustModes.Manual )
+            if (AirThrustMode == AirThrustModes.Manual)
             {
                 //project the boards forward direction on world xz-plane
-                Vector3 thrustDirection = Vector3.ProjectOnPlane( transform.forward, Vector3.up );
+                Vector3 thrustDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
 
                 //Add thrust to the body in its projected forward direction multiplying the force with thrust input
-                AirThrust( ThrustInput, thrustDirection );
+                AirThrust(ThrustInput, thrustDirection);
             }
-            else if ( AirThrustMode == AirThrustModes.NoThrust )
+            else if (AirThrustMode == AirThrustModes.NoThrust)
             {
                 //Add no thrust to the body
-                AirThrust( 0.0f, Vector3.zero );
+                AirThrust(0.0f, Vector3.zero);
             }
-            else if ( AirThrustMode == AirThrustModes.RetainGroundDirection )
+            else if (AirThrustMode == AirThrustModes.RetainGroundDirection)
             {
                 //Add thrust to the body in its thrust direction before it left the ground multiplying the force with thrust input
-                AirThrust( ThrustInput, ThrustDirection );
+                AirThrust(ThrustInput, ThrustDirection);
             }
         }
     }
@@ -296,10 +303,10 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         RaycastHit hit;
 
         //Shoot a ray down to get the hit ground normal
-        IsGrounded( out hit );
+        IsGrounded(out hit);
 
         //Project the board's forward direction onto the ground
-        Vector3 groundForward = Vector3.ProjectOnPlane( transform.forward, hit.normal );
+        Vector3 groundForward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
 
         //Set the direction thrust is applied in to the ground projected direction
         ThrustDirection = groundForward;
@@ -307,7 +314,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Calculate thrust force
         Vector3 thrustForce = ThrustDirection * GroundAccelerationForce * _thrustInput;
         //Apply calculated thrust to the rigidbody at the thrust motor position
-        RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
+        RB.AddForceAtPosition(thrustForce, ThrustMotor.position, ForceMode.Acceleration);
     }
 
     private void AirThrust(float _thrustInput, Vector3 _thrustDirection)
@@ -317,7 +324,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Calculate thrust force
         Vector3 thrustForce = thrustDirection * AirAccelerationForce * _thrustInput;
         //Apply calculated thrust to the rigidbody at its center of mass
-        RB.AddForce( thrustForce, ForceMode.Acceleration );
+        RB.AddForce(thrustForce, ForceMode.Acceleration);
     }
     #endregion
 
@@ -325,23 +332,23 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     private void Turn()
     {
         //Make the Turn Input scale exponentially to get more of a carving feel when steering
-        float scaledTurnInput = Mathf.Pow( TurnInput, 3 );
+        float scaledTurnInput = Mathf.Pow(TurnInput, 3);
         //Calculate turn force
         Vector3 turnForce = -transform.right * TurnForce * scaledTurnInput;
         //Apply calculated turn force to the rigidbody at the turn motor position
-        RB.AddForceAtPosition( turnForce, TurnMotor.position, ForceMode.Acceleration );
+        RB.AddForceAtPosition(turnForce, TurnMotor.position, ForceMode.Acceleration);
     }
 
     private void Carve()
     {
-        if ( IsGettingCarveInput )
+        if (IsGettingCarveInput)
         {
             //Make the Turn Input scale exponentially to get more of a carving feel when steering
-            float scaledTurnInput = Mathf.Pow( TurnInput, 3 );
+            float scaledTurnInput = Mathf.Pow(TurnInput, 3);
             //Calculate turn force
             Vector3 turnForce = -transform.right * CarveForce * scaledTurnInput;
             //Apply calculated turn force to the rigidbody at the turn motor position
-            RB.AddForceAtPosition( turnForce, CarveMotor.position, ForceMode.Acceleration );
+            RB.AddForceAtPosition(turnForce, CarveMotor.position, ForceMode.Acceleration);
             ApplyCarveFriction();
         }
     }
@@ -350,40 +357,44 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     #region Moves
     private void Moves()
     {
-        ScaleForceWithSpeed( ref JumpForce, JumpForceMin, JumpForceMax );
+        ScaleForceWithSpeed(ref JumpForce, JumpForceMin, JumpForceMax);
 
-        if ( IsCrouching )
+        if (IsCrouching)
         {
-            if ( JumpForceCharge <= 1 )
+            if (JumpForceCharge <= 1)
             {
                 JumpForceCharge += Time.deltaTime / JumpChargeTime;
             }
         }
 
-        if ( IsGrounded() )
+        if (IsGrounded())
         {
             GroundDash();
         }
-        else if ( !IsGrounded() )
+        else if (!IsGrounded())
         {
             AirDash();
         }
+
+        // SUGGESTION: I'd try to do the ground check once per update
+        // Either way, this could just be a if-else without the second check
+        // SUGGESTION: I would check if (isDashing) first and then call Dash
     }
     //Is called by a unity event set in the inspector. Super evil! FIXME: refactor this out of existence
     public void Jump()
     {
-        if ( !IsCrouching )
+        if (!IsCrouching)
         {
             IsCrouching = true;
-            CharacterAnimator.SetBool( "IsCrouching", true );
+            CharacterAnimator.SetBool("IsCrouching", true);
         }
-        else if ( IsCrouching )
+        else if (IsCrouching)
         {
             IsCrouching = false;
-            CharacterAnimator.SetBool( "IsCrouching", false );
-            if ( IsGrounded( CoyoteTime.position ) )
+            CharacterAnimator.SetBool("IsCrouching", false);
+            if (IsGrounded(CoyoteTime.position))
             {
-                RB.AddForce( transform.up * JumpForce * JumpForceCharge, ForceMode.VelocityChange );
+                RB.AddForce(transform.up * JumpForce * JumpForceCharge, ForceMode.VelocityChange);
                 OnJump.Invoke();
             }
             JumpForceCharge = JumpForceChargeMin;
@@ -393,46 +404,46 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     public void SideShiftLeft()
     {
         RaycastHit hit;
-        if ( IsGrounded( out hit ) )
+        if (IsGrounded(out hit))
         {
-            Vector3 forceDirection = Vector3.ProjectOnPlane( -transform.right, hit.normal ).normalized;
-            RB.AddForceAtPosition( forceDirection * SideShiftForce, SideShiftMotor.position, ForceMode.VelocityChange );
+            Vector3 forceDirection = Vector3.ProjectOnPlane(-transform.right, hit.normal).normalized;
+            RB.AddForceAtPosition(forceDirection * SideShiftForce, SideShiftMotor.position, ForceMode.VelocityChange);
         }
         else
         {
-            RB.AddForceAtPosition( -transform.right * SideShiftForce, ThrustMotor.position, ForceMode.VelocityChange );
+            RB.AddForceAtPosition(-transform.right * SideShiftForce, ThrustMotor.position, ForceMode.VelocityChange);
         }
     }
     public void SideShiftRight()
     {
         RaycastHit hit;
-        if ( IsGrounded( out hit ) )
+        if (IsGrounded(out hit))
         {
-            Vector3 forceDirection = Vector3.ProjectOnPlane( transform.right, hit.normal ).normalized;
-            RB.AddForceAtPosition( forceDirection * SideShiftForce, SideShiftMotor.position, ForceMode.VelocityChange );
+            Vector3 forceDirection = Vector3.ProjectOnPlane(transform.right, hit.normal).normalized;
+            RB.AddForceAtPosition(forceDirection * SideShiftForce, SideShiftMotor.position, ForceMode.VelocityChange);
         }
         else
         {
-            RB.AddForceAtPosition( transform.right * SideShiftForce, ThrustMotor.position, ForceMode.VelocityChange );
+            RB.AddForceAtPosition(transform.right * SideShiftForce, ThrustMotor.position, ForceMode.VelocityChange);
         }
     }
 
     void GroundDash()
     {
-        if ( IsDashing )
+        if (IsDashing)
         {
             //TODO: This is where the logic that checks if the player has enough energy would go
-            Boost( BoostForce, ThrustDirection );
+            Boost(BoostForce, ThrustDirection);
         }
     }
     void AirDash()
     {
-        if ( IsDashing )
+        if (IsDashing)
         {
             //project the boards forward direction on world xz-plane
-            Vector3 thrustDirection = Vector3.ProjectOnPlane( transform.forward, Vector3.up );
+            Vector3 thrustDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
             //TODO: This is where the logic that checks if the player has enough energy would go
-            Boost( BoostForce, thrustDirection );
+            Boost(BoostForce, thrustDirection);
         }
     }
     public void Boost(float _boostForce, Vector3 _thrustDirection)
@@ -442,7 +453,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Calculate thrust force
         Vector3 thrustForce = thrustDirection * _boostForce;
         //Apply calculated thrust to the rigidbody at the thrust motor position
-        RB.AddForceAtPosition( thrustForce, ThrustMotor.position, ForceMode.Acceleration );
+        RB.AddForceAtPosition(thrustForce, ThrustMotor.position, ForceMode.Acceleration);
     }
     #endregion
 
@@ -456,11 +467,11 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Define the up rotation the body is rotated to
         Vector3 upDirection = Vector3.up;
 
-        if ( PitchControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( pitchAxis, upDirection ); }
-        if ( PitchControlMode == AirControlModes.Manual ) { ControlAngularMotion( pitchAxis, PitchInput ); }
+        if (PitchControlMode == AirControlModes.Stabilized) { StabilizeAngularMotion(pitchAxis, upDirection); }
+        if (PitchControlMode == AirControlModes.Manual) { ControlAngularMotion(pitchAxis, PitchInput); }
         //FIXME: the turn method call is way too hacky, we need clean seperation of aerial and grounded turning but ok for prototyping
-        if ( RollControlMode == AirControlModes.Stabilized ) { StabilizeAngularMotion( rollAxis, upDirection ); Turn(); } //FIXME:
-        if ( RollControlMode == AirControlModes.Manual ) { ControlAngularMotion( -rollAxis, RollInput ); }
+        if (RollControlMode == AirControlModes.Stabilized) { StabilizeAngularMotion(rollAxis, upDirection); Turn(); } //FIXME:
+        if (RollControlMode == AirControlModes.Manual) { ControlAngularMotion(-rollAxis, RollInput); }
     }
     //Adds torque to the rigidbody to make it return to a upright position.
     //Takes an axis to rotate around as well as the up direction as arguments
@@ -469,21 +480,21 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
         //Do some spooky voodoo shit http://answers.unity.com/answers/10426/view.html
         float predictedUpAngle = RB.angularVelocity.magnitude * Mathf.Rad2Deg * StabilizationForce / StabilizationSpeed;
         //Calculate the necessary rotation
-        Vector3 predictedUp = Quaternion.AngleAxis( predictedUpAngle, RB.angularVelocity ) * transform.up;
+        Vector3 predictedUp = Quaternion.AngleAxis(predictedUpAngle, RB.angularVelocity) * transform.up;
         //Do we need to rotate cw or ccw? In which plane?
-        Vector3 torqueVector = Vector3.Cross( predictedUp, _upDirection );
+        Vector3 torqueVector = Vector3.Cross(predictedUp, _upDirection);
         //Only affect the axis given by the attribute
-        torqueVector = Vector3.Project( torqueVector, _rotationAxis );
+        torqueVector = Vector3.Project(torqueVector, _rotationAxis);
 
         //Add the torque force to the body
-        RB.AddTorque( torqueVector * StabilizationSpeed * StabilizationSpeed, ForceMode.Acceleration );
+        RB.AddTorque(torqueVector * StabilizationSpeed * StabilizationSpeed, ForceMode.Acceleration);
     }
 
     //Adds torque to the rigidbody based on the player Input
     private void ControlAngularMotion(Vector3 _rotationAxis, float _controlInput)
     {
         Vector3 controlForce = _rotationAxis * AirControlForce * _controlInput;
-        RB.AddTorque( controlForce, ForceMode.Acceleration );
+        RB.AddTorque(controlForce, ForceMode.Acceleration);
     }
     #endregion
 
@@ -491,54 +502,54 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //Applies a force towards the ground, scaled by the body's velocity
     private void ApplyGroundStickForce(RaycastHit _hit)
     {
-        if ( StickToGround )
+        if (StickToGround)
         {
             RaycastHit hit = _hit;
 
-            Vector3 force = -hit.normal * GroundStickForce * ( RB.velocity.magnitude / MaxSpeed );
-            RB.AddForce( force, ForceMode.Acceleration );
+            Vector3 force = -hit.normal * GroundStickForce * (RB.velocity.magnitude / MaxSpeed);
+            RB.AddForce(force, ForceMode.Acceleration);
         }
     }
     private void ApplySidewaysFriction()
     {
-        float sidewaysSpeed = Vector3.Dot( RB.velocity, -transform.right );
-        RB.AddForce( transform.right * sidewaysSpeed * SidewaysFriction, ForceMode.Acceleration );
+        float sidewaysSpeed = Vector3.Dot(RB.velocity, -transform.right);
+        RB.AddForce(transform.right * sidewaysSpeed * SidewaysFriction, ForceMode.Acceleration);
     }
     private void ApplyCarveFriction()
     {
-        float sidewaysSpeed = Vector3.Dot( RB.velocity, -transform.right );
-        RB.AddForce( transform.right * sidewaysSpeed * CarveFriction, ForceMode.Acceleration );
+        float sidewaysSpeed = Vector3.Dot(RB.velocity, -transform.right);
+        RB.AddForce(transform.right * sidewaysSpeed * CarveFriction, ForceMode.Acceleration);
     }
     private void ApplyIdleFriction()
     {
-        if ( ThrustInput <= 0.1 && RB.velocity.magnitude <= IdleSpeed )
+        if (ThrustInput <= 0.1 && RB.velocity.magnitude <= IdleSpeed)
         {
-            float friction = Mathf.Lerp( IdleFriction, 0.0f, RB.velocity.magnitude / IdleSpeed );
-            RB.AddForce( -RB.velocity * friction, ForceMode.Acceleration );
+            float friction = Mathf.Lerp(IdleFriction, 0.0f, RB.velocity.magnitude / IdleSpeed);
+            RB.AddForce(-RB.velocity * friction, ForceMode.Acceleration);
         }
     }
     private void ApplyQuadraticDrag()
     {
         //Apply translational drag
-        RB.AddForce( -Drag * RB.velocity.normalized * RB.velocity.sqrMagnitude, ForceMode.Acceleration );
+        RB.AddForce(-Drag * RB.velocity.normalized * RB.velocity.sqrMagnitude, ForceMode.Acceleration);
         //Apply rotational drag
-        RB.AddTorque( -AngularDrag * RB.angularVelocity.normalized * RB.angularVelocity.sqrMagnitude, ForceMode.Acceleration );
+        RB.AddTorque(-AngularDrag * RB.angularVelocity.normalized * RB.angularVelocity.sqrMagnitude, ForceMode.Acceleration);
     }
     #endregion
 
     private void SetGravity() //TODO: If there are ever more physics objects in the scene, board gravity might need to be applied manually
     {
         //While the board is 'grounded'
-        if ( IsGrounded() )
+        if (IsGrounded())
         {
             //Set the gravity to the defined ground gravity
-            Physics.gravity = new Vector3( 0, -GroundGravity, 0 );
+            Physics.gravity = new Vector3(0, -GroundGravity, 0);
         }
         //While the board is 'airborne'
         else
         {
             //Set the gravity to the defined air gravity
-            Physics.gravity = new Vector3( 0, -AirGravity, 0 );
+            Physics.gravity = new Vector3(0, -AirGravity, 0);
         }
     }
 
@@ -547,26 +558,29 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //                                  results? E.g. this version would return true when driving on a wall
     private bool IsGrounded()
     {
-        return ( Physics.Raycast( transform.position, -transform.up, GroundStickHeight, GroundMask ) );
+        return (Physics.Raycast(transform.position, -transform.up, GroundStickHeight, GroundMask));
     }
     //overloaded function that also gives raycast hit info in an out parameter
     private bool IsGrounded(out RaycastHit _hit)
     {
         RaycastHit hit;
-        bool ray = Physics.Raycast( transform.position, -transform.up, out hit, GroundStickHeight, GroundMask );
+        bool ray = Physics.Raycast(transform.position, -transform.up, out hit, GroundStickHeight, GroundMask);
         _hit = hit;
         return ray;
+
+        // SUGGESTION: Could write in one line
+        // return Physics.Raycast( transform.position, -transform.up, out _hit, GroundStickHeight, GroundMask );
     }
     //overloaded function that takes a ray origin position as an argument
     private bool IsGrounded(Vector3 _rayOrigin)
     {
-        return ( Physics.Raycast( _rayOrigin, -transform.up, GroundStickHeight, GroundMask ) );
+        return (Physics.Raycast(_rayOrigin, -transform.up, GroundStickHeight, GroundMask));
     }
     //overloaded function that takes a ray origin position as an argument and gives raycast hit info in an out parameter
     private bool IsGrounded(Vector3 _rayOrigin, out RaycastHit _hit)
     {
         RaycastHit hit;
-        bool ray = Physics.Raycast( _rayOrigin, -transform.up, out hit, GroundStickHeight, GroundMask );
+        bool ray = Physics.Raycast(_rayOrigin, -transform.up, out hit, GroundStickHeight, GroundMask);
         _hit = hit;
         return ray;
     }
@@ -576,7 +590,7 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     //Sets the thrust and turn input
     public void SetMoveInput(float _thrust, float _turn)
     {
-        ThrustInput = _thrust;
+        ThrustInput = CombatController.isAiming ? 0 : _thrust; // NOTE: Did this to disable thrust when aiming
         TurnInput = _turn;
     }
     public void SetAirControlInput(float _pitch, float _roll)
@@ -597,49 +611,49 @@ public class HoverBoardControllerYoshi02 : MonoBehaviour
     #region Utility
     private void ScaleForceWithSpeedInverse(ref float _force, float _forceMin, float _forceMax)
     {
-        _force = _forceMax - ( ( _forceMax - _forceMin ) * ( RB.velocity.magnitude / MaxSpeed ) );
+        _force = _forceMax - ((_forceMax - _forceMin) * (RB.velocity.magnitude / MaxSpeed));
     }
     private void ScaleForceWithSpeed(ref float _force, float _forceMin, float _forceMax)
     {
-        _force = _forceMin + ( ( _forceMax - _forceMin ) * ( RB.velocity.magnitude / MaxSpeed ) );
+        _force = _forceMin + ((_forceMax - _forceMin) * (RB.velocity.magnitude / MaxSpeed));
     }
     #endregion
 
     private void CalculateMaxSpeed()
     {
-        if ( IsGrounded() )
+        if (IsGrounded())
         {
-            if ( !IsDashing )
+            if (!IsDashing)
             {
                 //Calculate the maximum velocity based on the defined ground acceleration force and drag
-                MaxSpeed = Mathf.Sqrt( GroundAccelerationForce / Drag );
+                MaxSpeed = Mathf.Sqrt(GroundAccelerationForce / Drag);
             }
-            else if ( IsDashing )
+            else if (IsDashing)
             {
                 //Calculate the maximum velocity based on the defined ground acceleration force, the boost force and drag
-                MaxSpeed = Mathf.Sqrt( ( GroundAccelerationForce + BoostForce ) / Drag );
+                MaxSpeed = Mathf.Sqrt((GroundAccelerationForce + BoostForce) / Drag);
             }
         }
-        else if ( !IsGrounded() )
+        else if (!IsGrounded())
         {
-            if ( !IsDashing )
+            if (!IsDashing)
             {
                 //Calculate the maximum velocity based on the defined air acceleration force and drag
-                MaxSpeed = Mathf.Sqrt( AirAccelerationForce / Drag );
+                MaxSpeed = Mathf.Sqrt(AirAccelerationForce / Drag);
             }
-            else if ( IsDashing )
+            else if (IsDashing)
             {
                 //Calculate the maximum velocity based on the defined air acceleration force, the boost force and drag
-                MaxSpeed = Mathf.Sqrt( ( AirAccelerationForce + BoostForce ) / Drag );
+                MaxSpeed = Mathf.Sqrt((AirAccelerationForce + BoostForce) / Drag);
             }
         }
     }
 
     private void OnDrawGizmosSelected()
     {
-        foreach ( var hoverPoint in HoverPoints )
+        foreach (var hoverPoint in HoverPoints)
         {
-            Gizmos.DrawSphere( hoverPoint.transform.position, 0.05f );
+            Gizmos.DrawSphere(hoverPoint.transform.position, 0.05f);
         }
     }
 

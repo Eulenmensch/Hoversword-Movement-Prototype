@@ -7,7 +7,7 @@ public class GUIHealth : MonoBehaviour
 {
     [SerializeField]
     private GameObject _healthGraphic;
-    [SerializeField]
+    //[SerializeField]
     private PlayerHealth _playerHealth;
 
     private List<GameObject> _healthGraphicList = new List<GameObject>();
@@ -16,6 +16,8 @@ public class GUIHealth : MonoBehaviour
 
     private void Awake()
     {
+        _playerHealth = FindObjectOfType<PlayerHealth>();
+        
         if (_playerHealth == null)
         {
             Debug.LogError("GUI has no reference to player health!");

@@ -214,17 +214,6 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""down"",
-                    ""id"": ""e1617848-58b8-4911-8acd-4413a36f9f17"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""left"",
                     ""id"": ""b949bde3-53f7-4ebd-b5c9-e0462bda19ec"",
                     ""path"": ""<Gamepad>/leftStick/left"",

@@ -18,7 +18,6 @@ public class Machine : Obstacle, IAttackable
     [SerializeField] private AudioSource _destroySound;
 
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -66,7 +65,7 @@ public class Machine : Obstacle, IAttackable
         _destroySound?.Play();
     }
 
-    public AttackInteraction GetAttacked()
+    public AttackInteraction GetAttacked(int attackID)
     {
         Destroy();
         AttackInteraction attackInteraction = new AttackInteraction(_healthGain);
