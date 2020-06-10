@@ -13,6 +13,14 @@ public class CameraManager : MonoBehaviour
     private void OnEnable() => inputActions.Player.Enable();
     private void OnDisable() => inputActions.Player.Disable();
 
+    [SerializeField] private string _xAxisName = "Mouse X";
+    [SerializeField] private string _yAxisName = "Mouse Y";
+
+    [SerializeField, Range(0,1)] private float _xAxisDead = 0.05f;
+    [SerializeField, Range(0, 1)] private float _yAxisDead = 0.05f;
+
+
+
     private void Update()
     {
         CinemachineCore.GetInputAxis = GetAxisCustom;
@@ -20,16 +28,24 @@ public class CameraManager : MonoBehaviour
 
     public float GetAxisCustom(string axisName)
     {
-        LookDelta = inputActions.Player.Look.ReadValue<Vector2>(); // reads theavailable camera values and uses them.
+        LookDelta = inputActions.Player.Look.ReadValue<Vector2>(); // reads the available camera values and uses them.
         //LookDelta.Normalize();
 
-        if (axisName == "Mouse X")
+        if (axisName == _xAxisName)
         {
-            return LookDelta.x;
+            float ret = LookDelta.x;
+            if ((ret > 0 && ret < _xAxisDead) || (ret < 0 && ret > -_xAxisDead))
+                ret = 0;
+
+            return ret;
         }
-        else if (axisName == "Mouse Y")
+        else if (axisName == _yAxisName)
         {
-            return LookDelta.y;
+            float ret = LookDelta.y;
+            if ((ret > 0 && ret < _yAxisDead) || (ret < 0 && ret > -_yAxisDead))
+                ret = 0;
+
+            return ret;
         }
         return 0;
     }

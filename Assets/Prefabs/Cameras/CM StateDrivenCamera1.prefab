@@ -56,7 +56,9 @@ MonoBehaviour:
   m_AnimatedTarget: {fileID: 0}
   m_LayerIndex: 0
   m_ShowDebugText: 0
-  m_ChildCameras: []
+  m_ChildCameras:
+  - {fileID: 1030398699307558071}
+  - {fileID: 4196357447519516223}
   m_Instructions:
   - m_FullHash: -1192906254
     m_VirtualCamera: {fileID: 4196357447519516223}
@@ -76,15 +78,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   m_CustomBlends: {fileID: 11400000, guid: be81c1047fe96434c8f4ac22c32ac22e, type: 2}
-  m_ParentHash:
-  - m_Hash: -1817436067
-    m_ParentHash: 756556552
-  - m_Hash: -1192906254
-    m_ParentHash: 756556552
-  - m_Hash: 1459142704
-    m_ParentHash: 756556552
-  - m_Hash: 969208110
-    m_ParentHash: 756556552
+  m_ParentHash: []
 --- !u!1001 &1983204263570647159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,6 +183,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1030398697897464847}
     m_Modifications:
+    - target: {fileID: 4494920559822707072, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494920559822707072, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494920560384418667, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494920560384418667, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -4
+      objectReference: {fileID: 0}
     - target: {fileID: 4494920560903411888, guid: 653320d9d0407294e895f2805c18dccc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -258,6 +272,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CM FreeLook Aim
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494920561182981153, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494920561182981153, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494920561182981153, guid: 653320d9d0407294e895f2805c18dccc,
+        type: 3}
+      propertyPath: m_XAxis.Value
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 653320d9d0407294e895f2805c18dccc, type: 3}

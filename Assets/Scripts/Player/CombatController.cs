@@ -21,6 +21,7 @@ public class CombatController : MonoBehaviour
     [Header("Aiming")]
     [SerializeField, ShowOnly] private bool _isAiming;
     public bool isAiming { get; private set; }
+    [SerializeField] private bool _aimOnGround;
 
     [Header("Flip Attack")]
     [SerializeField] private GameObject _flipColliderObject;
@@ -62,13 +63,15 @@ public class CombatController : MonoBehaviour
         // Process aiming input TODO: Do this with the new input system
         bool aimingInput = Input.GetAxis("Left Trigger") > 0.15;
 
-        if (aimingInput && !isAiming && !_hoverBoardController.isGrounded)
+        if (aimingInput && !isAiming && (!_hoverBoardController.isGrounded || _aimOnGround))
         {
+            print("start");
             StartAim();
         }
 
-        if (isAiming && (_hoverBoardController.isGrounded || !aimingInput))
+        if (isAiming && ((_hoverBoardController.isGrounded && !_aimOnGround) || !aimingInput))
         {
+            print("stop");
             StopAim();
         }
     }
@@ -213,7 +216,7 @@ public class CombatController : MonoBehaviour
 
         DebugExtension.DebugCapsule(capsuleBottomPoint - capsuleDirection * collider.radius, capsuleTopPoint + capsuleDirection * collider.radius,
             Color.black, collider.radius, 3f);
-        
+
         //DebugExtension.DebugPoint(colliderGameObject.transform.position + collider.center, Color.green, 1f, 5f);
         //DebugExtension.DebugPoint(capsuleBottomPoint, Color.green);
         //DebugExtension.DebugPoint(capsuleTopPoint, Color.red);
