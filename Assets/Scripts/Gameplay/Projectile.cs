@@ -7,7 +7,7 @@ public abstract class Projectile : MonoBehaviour
     [SerializeField] private float _lifespan = 10f;
     private float _startTimestamp;
 
-    private void Start()
+    protected virtual void Start()
     {
         _startTimestamp = Time.time;
     }

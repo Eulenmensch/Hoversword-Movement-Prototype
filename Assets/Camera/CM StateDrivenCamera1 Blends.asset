@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CM StateDrivenCamera1 Blends
   m_EditorClassIdentifier: 
   m_CustomBlends:
-  - m_From: CM Hover VCAM
-    m_To: CM Aim VCAM
+  - m_From: CM FreeLook 02 90FOV AS
+    m_To: CM FreeLook Aim
     m_Blend:
       m_Style: 1
       m_Time: 0.1
@@ -24,8 +24,8 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - m_From: CM Aim VCAM
-    m_To: CM Hover VCAM
+  - m_From: CM FreeLook Aim
+    m_To: CM FreeLook 02 90FOV AS
     m_Blend:
       m_Style: 1
       m_Time: 0.2

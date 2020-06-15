@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour, IShutOff
 {
+    private Transform _target;
     //private bool _isActive = true;
-
     //[SerializeField] private bool _targetPlayer;
+
     [Header("Scene References")]
     [SerializeField] private Transform _barrel;
 
@@ -23,19 +24,13 @@ public class Shooter : MonoBehaviour, IShutOff
     private float _shotTimestamp;
 
 
-
-    private Transform _target;
-
     private void Start()
     {
-        Player player = FindObjectOfType<Player>();
-        if (player == null)
+        _target = FindObjectOfType<Player>().transform;
+        if (_target == null)
         {
             Debug.Log("Shooter coudn't find player");
-            return;
         }
-
-        _target = FindObjectOfType<Player>().transform;
     }
 
     private void Update()

@@ -15,6 +15,7 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
     [SerializeField] protected DamageType _damageType;
     [SerializeField] protected float _forceMagnitude;
     [SerializeField] protected DamageDirectionType _damageDirectionType;
+    [SerializeField] protected bool _destroy;
     //[Space(10)]
     //[SerializeField] protected bool _applyHealth;
     //[SerializeField] protected int _health;
@@ -34,6 +35,10 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
     {
         CollisionInteraction interactionData = new CollisionInteraction(true/*, false*/);
         if (_applyDamage) interactionData.SetDamage(true, _damage, _damageType, _forceMagnitude, _damageDirectionType);
+
+        if (_destroy)
+            Destroy(gameObject);
+
         //if (_applyHealth) interactionData.SetHealth(_health);
         return interactionData;
         //return new InteractionData(_damage, _damageType, _forceMagnitude, _damageDirectionType);

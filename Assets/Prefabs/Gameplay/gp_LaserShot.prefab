@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 3837738197268316715}
   - component: {fileID: 2031519086605965661}
   m_Layer: 0
-  m_Name: LaserShot
+  m_Name: gp_LaserShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,6 +141,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lifespan: 10
   _speed: 50
+  _steerToPlayer: 0
+  _maxSteerAnglePerSecond: 1
 --- !u!114 &2031519086605965661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,4 +161,5 @@ MonoBehaviour:
   _damageType: 0
   _forceMagnitude: 20
   _damageDirectionType: 0
+  _destroy: 1
   _laserModel: {fileID: 6582992137304145207}

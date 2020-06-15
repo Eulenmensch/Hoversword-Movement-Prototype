@@ -8,9 +8,6 @@ public class PointMovement : MonoBehaviour
     [SerializeField] float _speed = 1;
     [SerializeField] Ease ease = Ease.Linear;
 
-
-
-
     [SerializeField] private List<Transform> _points;
     [SerializeField] private int _startingPoint;
     private int _currentPoint;
