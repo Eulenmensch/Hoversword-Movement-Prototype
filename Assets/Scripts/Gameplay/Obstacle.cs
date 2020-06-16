@@ -5,7 +5,6 @@ using UnityEngine;
 [SelectionBase]
 public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
 {
-    
     [SerializeField] protected bool _isActive = true;
     //public bool isActive { get => _isActive; set => _isActive = value; }
 
@@ -21,6 +20,8 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
     //[SerializeField] protected int _health;
 
     protected Collider[] _colliders;
+
+    public List<Machine> energySources { get; set; }
 
     protected virtual void Awake()
     {
@@ -53,8 +54,40 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
         //}
     }
 
-    public virtual void ShutOff()
+    public virtual void ShutOff(Machine machine)
     {
-        SetActive(false);
+
+        //SetActive(false);
+        if (energySources.Contains(machine))
+        {
+            energySources.Remove(machine);
+        }
+        else
+        {
+            Debug.Log("Energy Source wasn't register!");
+        }
+
+        if (energySources.Count == 0)
+        {
+            SetActive(false);
+        }
+    }
+
+    public void Register(Machine machine)
+    {
+        if (energySources == null)
+        {
+            energySources = new List<Machine>();
+        }
+
+        if (!energySources.Contains(machine))
+        {
+            energySources.Add(machine);
+            Debug.Log("Registered: " + energySources.Count);
+        }
+        else
+        {
+            Debug.Log("Energy Source tried to register twice!");
+        }
     }
 }

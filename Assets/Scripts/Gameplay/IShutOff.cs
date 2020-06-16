@@ -4,5 +4,9 @@ using UnityEngine;
 
 public interface IShutOff
 {
-    void ShutOff();
+    void ShutOff(Machine machine);
+
+    void Register(Machine machine);
+
+    List<Machine> energySources { get; set; }
 }

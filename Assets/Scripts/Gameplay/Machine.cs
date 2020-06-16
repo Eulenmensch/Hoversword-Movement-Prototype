@@ -31,6 +31,7 @@ public class Machine : Obstacle, IAttackable
                 foreach (var shutOff in shutOffs)
                 {
                     _partsToShutOff.Add(shutOff);
+                    shutOff.Register(this);
                 }
             }
             else
@@ -59,7 +60,7 @@ public class Machine : Obstacle, IAttackable
 
         foreach (var item in _partsToShutOff)
         {
-            item.ShutOff();
+            item.ShutOff(this);
         }
 
         _destroySound?.Play();
