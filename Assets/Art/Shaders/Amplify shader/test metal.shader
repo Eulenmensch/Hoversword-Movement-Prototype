@@ -4,8 +4,8 @@ Shader "test metal"
 {
 	Properties
 	{
-		_TopTexture0("Top Texture 0", 2D) = "white" {}
 		_TopTexture1("Top Texture 1", 2D) = "white" {}
+		_TexturesCom_BuildingsIndustrial0136_2_M("TexturesCom_BuildingsIndustrial0136_2_M", 2D) = "white" {}
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
@@ -30,13 +30,14 @@ Shader "test metal"
 		#endif
 		struct Input
 		{
+			float2 uv_texcoord;
 			float3 worldPos;
 			float3 worldNormal;
 			INTERNAL_DATA
-			float2 uv_texcoord;
 		};
 
-		uniform sampler2D _TopTexture0;
+		uniform sampler2D _TexturesCom_BuildingsIndustrial0136_2_M;
+		uniform float4 _TexturesCom_BuildingsIndustrial0136_2_M_ST;
 		uniform sampler2D _TopTexture1;
 
 
@@ -56,15 +57,14 @@ Shader "test metal"
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{
 			o.Normal = float3(0,0,1);
-			float2 temp_cast_0 = (0.1).xx;
-			float2 uv_TexCoord2 = i.uv_texcoord * temp_cast_0;
+			float2 uv_TexturesCom_BuildingsIndustrial0136_2_M = i.uv_texcoord * _TexturesCom_BuildingsIndustrial0136_2_M_ST.xy + _TexturesCom_BuildingsIndustrial0136_2_M_ST.zw;
+			o.Albedo = tex2D( _TexturesCom_BuildingsIndustrial0136_2_M, uv_TexturesCom_BuildingsIndustrial0136_2_M ).rgb;
+			float2 temp_cast_1 = (0.1).xx;
+			float2 uv_TexCoord2 = i.uv_texcoord * temp_cast_1;
 			float3 ase_worldPos = i.worldPos;
 			float3 ase_worldNormal = WorldNormalVector( i, float3( 0, 0, 1 ) );
-			float4 triplanar5 = TriplanarSamplingSF( _TopTexture0, ase_worldPos, ase_worldNormal, 1.0, uv_TexCoord2, 1.0, 0 );
-			float4 temp_output_5_0 = triplanar5;
-			o.Albedo = temp_output_5_0.xyz;
 			float4 triplanar13 = TriplanarSamplingSF( _TopTexture1, ase_worldPos, ase_worldNormal, 1.0, uv_TexCoord2, 1.0, 0 );
-			float4 temp_cast_2 = (0.1).xxxx;
+			float4 temp_cast_2 = (0.05).xxxx;
 			float4 clampResult14 = clamp( triplanar13 , temp_cast_2 , float4( 1,0,0,0 ) );
 			o.Smoothness = clampResult14.x;
 			o.Alpha = 1;
@@ -158,27 +158,27 @@ Shader "test metal"
 }
 /*ASEBEGIN
 Version=18100
--1769;246;1626;844;1491.571;225.4832;1.3;True;True
+-1730;261;1589;839;1583.78;371.4326;1.338124;True;True
 Node;AmplifyShaderEditor.RangedFloatNode;3;-1308.019,196.8691;Inherit;False;Constant;_Float0;Float 0;1;0;Create;True;0;0;False;0;False;0.1;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;2;-1090.094,273.5688;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.WorldPosInputsNode;4;-1117.587,56.6264;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
-Node;AmplifyShaderEditor.TriplanarNode;13;-762.8008,363.4171;Inherit;True;Spherical;World;False;Top Texture 1;_TopTexture1;white;1;None;Mid Texture 0;_MidTexture0;white;-1;None;Bot Texture 0;_BotTexture0;white;-1;None;Triplanar Sampler;False;10;0;SAMPLER2D;;False;5;FLOAT;1;False;1;SAMPLER2D;;False;6;FLOAT;0;False;2;SAMPLER2D;;False;7;FLOAT;0;False;9;FLOAT3;0,0,0;False;8;FLOAT;1;False;3;FLOAT2;1,1;False;4;FLOAT;1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;15;-510.5277,580.1323;Inherit;False;Constant;_Float1;Float 1;1;0;Create;True;0;0;False;0;False;0.1;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;1;-816.0509,-75.89111;Inherit;True;Property;_TexturesCom_BuildingsIndustrial0136_2_M;TexturesCom_BuildingsIndustrial0136_2_M;2;0;Create;True;0;0;False;0;False;-1;3a450013f1d3f234da4217a9d03b2a6e;3a450013f1d3f234da4217a9d03b2a6e;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.TriplanarNode;5;-808.5874,124.6264;Inherit;True;Spherical;World;False;Top Texture 0;_TopTexture0;white;0;None;Mid Texture 1;_MidTexture1;white;-1;None;Bot Texture 1;_BotTexture1;white;-1;None;Triplanar Sampler;False;10;0;SAMPLER2D;;False;5;FLOAT;1;False;1;SAMPLER2D;;False;6;FLOAT;0;False;2;SAMPLER2D;;False;7;FLOAT;0;False;9;FLOAT3;0,0,0;False;8;FLOAT;1;False;3;FLOAT2;1,1;False;4;FLOAT;1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;15;-510.5277,580.1323;Inherit;False;Constant;_Float1;Float 1;1;0;Create;True;0;0;False;0;False;0.05;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TriplanarNode;13;-806.7299,354.0884;Inherit;True;Spherical;World;False;Top Texture 1;_TopTexture1;white;1;None;Mid Texture 0;_MidTexture0;white;-1;None;Bot Texture 0;_BotTexture0;white;-1;None;Triplanar Sampler;False;10;0;SAMPLER2D;;False;5;FLOAT;1;False;1;SAMPLER2D;;False;6;FLOAT;0;False;2;SAMPLER2D;;False;7;FLOAT;0;False;9;FLOAT3;0,0,0;False;8;FLOAT;1;False;3;FLOAT2;1,1;False;4;FLOAT;1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.VoronoiNode;17;410.9311,-22.94305;Inherit;False;0;0;1;0;1;False;1;False;False;4;0;FLOAT2;0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;0;False;2;FLOAT;0;FLOAT2;1
-Node;AmplifyShaderEditor.FunctionNode;11;-325.8008,175.4171;Inherit;False;Inverse Lerp;-1;;2;09cbe79402f023141a4dc1fddd4c9511;0;3;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.ClampOpNode;14;-305.4901,456.3805;Inherit;False;3;0;FLOAT4;0,0,0,0;False;1;FLOAT4;0,0,0,0;False;2;FLOAT4;1,0,0,0;False;1;FLOAT4;0
+Node;AmplifyShaderEditor.TriplanarNode;5;-808.5874,124.6264;Inherit;True;Spherical;World;False;Top Texture 0;_TopTexture0;white;0;None;Mid Texture 1;_MidTexture1;white;-1;None;Bot Texture 1;_BotTexture1;white;-1;None;Triplanar Sampler;False;10;0;SAMPLER2D;;False;5;FLOAT;1;False;1;SAMPLER2D;;False;6;FLOAT;0;False;2;SAMPLER2D;;False;7;FLOAT;0;False;9;FLOAT3;0,0,0;False;8;FLOAT;1;False;3;FLOAT2;1,1;False;4;FLOAT;1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.FunctionNode;11;-388.6927,117.8778;Inherit;False;Inverse Lerp;-1;;2;09cbe79402f023141a4dc1fddd4c9511;0;3;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SamplerNode;1;-719.7059,-129.4161;Inherit;True;Property;_TexturesCom_BuildingsIndustrial0136_2_M;TexturesCom_BuildingsIndustrial0136_2_M;2;0;Create;True;0;0;False;0;False;-1;3a450013f1d3f234da4217a9d03b2a6e;3a450013f1d3f234da4217a9d03b2a6e;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;0,0;Float;False;True;-1;2;ASEMaterialInspector;0;0;Standard;test metal;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;Back;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Opaque;0.5;True;True;0;False;Opaque;;Geometry;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;0;0;False;-1;0;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;-1;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;16;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
 WireConnection;2;0;3;0
 WireConnection;13;9;4;0
 WireConnection;13;3;2;0
+WireConnection;14;0;13;0
+WireConnection;14;1;15;0
 WireConnection;5;9;4;0
 WireConnection;5;3;2;0
 WireConnection;11;1;5;0
-WireConnection;14;0;13;0
-WireConnection;14;1;15;0
-WireConnection;0;0;5;0
+WireConnection;0;0;1;0
 WireConnection;0;4;14;0
 ASEEND*/
-//CHKSM=1E0E9B8892CBA152436CC5AB96E3266F749E93B0
+//CHKSM=3DA160BB1AACA1FBEBDF216A82D11727AB3F4BC9

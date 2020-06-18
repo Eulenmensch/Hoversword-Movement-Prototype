@@ -2,7 +2,9 @@ fileFormatVersion: 2
 guid: 470e9c3a9318d424baf157d298bdb91b
 ShaderImporter:
   externalObjects: {}
-  defaultTextures: []
+  defaultTextures:
+  - _TexturesCom_BuildingsIndustrial0136_2_M: {fileID: 2800000, guid: 3a450013f1d3f234da4217a9d03b2a6e,
+      type: 3}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 
