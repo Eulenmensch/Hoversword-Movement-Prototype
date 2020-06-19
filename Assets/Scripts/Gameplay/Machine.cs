@@ -17,6 +17,8 @@ public class Machine : Obstacle, IAttackable
     [Header("Effects")]
     [SerializeField] private AudioSource _destroySound;
 
+    private Wreckage[] _wreckages;
+
 
     protected override void Awake()
     {
@@ -24,6 +26,8 @@ public class Machine : Obstacle, IAttackable
 
         foreach (var item in _parts)
         {
+            if (item == null) continue;
+
             IShutOff[] shutOffs = item.GetComponents<IShutOff>();
 
             if (shutOffs != null)
@@ -39,6 +43,8 @@ public class Machine : Obstacle, IAttackable
                 Debug.Log("shutoffs is null");
             }
         }
+
+        _wreckages = GetComponentsInChildren<Wreckage>(true);
     }
 
     public override CollisionInteraction Collide()
@@ -61,6 +67,11 @@ public class Machine : Obstacle, IAttackable
         foreach (var item in _partsToShutOff)
         {
             item.ShutOff(this);
+        }
+
+        foreach (var item in _wreckages)
+        {
+            item.Push();
         }
 
         _destroySound?.Play();

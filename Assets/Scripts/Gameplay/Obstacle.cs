@@ -83,7 +83,6 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
         if (!energySources.Contains(machine))
         {
             energySources.Add(machine);
-            Debug.Log("Registered: " + energySources.Count);
         }
         else
         {
