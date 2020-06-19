@@ -13,6 +13,9 @@ public class CombatController : MonoBehaviour
     [Header("Animators")]
     public Animator _characterAnimator;
     public Animator _boardAnimator;
+
+    
+
     public enum AttackStates { None, Flip, Slash }
     [Header("States")]
     [SerializeField] private AttackStates _attackState = AttackStates.None;
@@ -38,6 +41,11 @@ public class CombatController : MonoBehaviour
     [SerializeField] private float _slashDuration;
     private float _slashTimestamp;
 
+    [Header("Slash Visuals")]
+    [SerializeField] private GameObject _boardExtension;
+    [SerializeField] private TrailRenderer _boardTrail;
+
+    [Header("Collision")]
     [SerializeField] private LayerMask _hitMask;
     private Collider[] _colliderCache;
 
@@ -56,6 +64,8 @@ public class CombatController : MonoBehaviour
             _flipCollider = _flipColliderObject?.GetComponent<CapsuleCollider>();
         if (_slashColliderObject != null)
             _slashCollider = _slashColliderObject?.GetComponent<CapsuleCollider>();
+        _boardExtension.SetActive(false);
+        _boardTrail.emitting = false;
     }
 
     private void Update()
@@ -65,13 +75,13 @@ public class CombatController : MonoBehaviour
 
         if (aimingInput && !isAiming && (!_hoverBoardController.isGrounded || _aimOnGround))
         {
-            print("start");
+            //print("start");
             StartAim();
         }
 
         if (isAiming && ((_hoverBoardController.isGrounded && !_aimOnGround) || !aimingInput))
         {
-            print("stop");
+            //print("stop");
             StopAim();
         }
     }
@@ -124,6 +134,7 @@ public class CombatController : MonoBehaviour
     {
         isAiming = true;
         _boardAnimator.SetBool("Aim", true);
+        _boardExtension.SetActive(true);
 
         //_aimCharacterModel.isAiming = true;
 
@@ -141,7 +152,7 @@ public class CombatController : MonoBehaviour
     {
         isAiming = false;
         _boardAnimator.SetBool("Aim", false);
-
+        _boardExtension.SetActive(false);
 
 
         //_aimCharacterModel.isAiming = false;
@@ -160,6 +171,9 @@ public class CombatController : MonoBehaviour
         _slashTimestamp = Time.unscaledTime;
         _attackID++;
         _boardAnimator.SetBool("Slash", true);
+        _boardTrail.emitting = true;
+
+
 
         //TimeManager.Instance.stopFrame = true;
 
@@ -171,6 +185,7 @@ public class CombatController : MonoBehaviour
     {
         _attackState = AttackStates.None;
         _boardAnimator.SetBool("Slash", false);
+        _boardTrail.emitting = false;
 
         //TimeManager.Instance.stopFrame = false;
 

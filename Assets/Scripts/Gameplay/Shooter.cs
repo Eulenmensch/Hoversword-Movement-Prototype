@@ -23,7 +23,7 @@ public class Shooter : MonoBehaviour, IShutOff
     [SerializeField] private float _coolDownDuration = 1f;
     private float _shotTimestamp;
 
-    public List<Machine> energySources { get; set; }
+    public List<Machine> energySources { get; set; } = new List<Machine>();
 
     private void Start()
     {
