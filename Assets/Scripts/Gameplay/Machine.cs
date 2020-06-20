@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Machine : Obstacle, IAttackable
 {
-    [Header("Machine")]
+    [Header( "Machine" )]
     [SerializeField] private GameObject _machineModel;
     [SerializeField] private GameObject _machineBrokenModel;
 
     [SerializeField] private List<GameObject> _parts = new List<GameObject>();
     private List<IShutOff> _partsToShutOff = new List<IShutOff>();
 
-    [Header("Attack Interaction")]
+    [Header( "Attack Interaction" )]
     [SerializeField] private int _healthGain;
 
-    [Header("Effects")]
+    [Header( "Effects" )]
     [SerializeField] private AudioSource _destroySound;
 
     private Wreckage[] _wreckages;
@@ -24,23 +24,23 @@ public class Machine : Obstacle, IAttackable
     {
         base.Awake();
 
-        foreach (var item in _parts)
+        foreach ( var item in _parts )
         {
             if (item == null) continue;
 
             IShutOff[] shutOffs = item.GetComponents<IShutOff>();
 
-            if (shutOffs != null)
+            if ( shutOffs != null )
             {
-                foreach (var shutOff in shutOffs)
+                foreach ( var shutOff in shutOffs )
                 {
-                    _partsToShutOff.Add(shutOff);
-                    shutOff.Register(this);
+                    _partsToShutOff.Add( shutOff );
+                    shutOff.Register( this );
                 }
             }
             else
             {
-                Debug.Log("shutoffs is null");
+                Debug.Log( "shutoffs is null" );
             }
         }
 
@@ -56,17 +56,17 @@ public class Machine : Obstacle, IAttackable
 
     private void Destroy()
     {
-        if (!_isActive)
+        if ( !_isActive )
             return;
 
-        SetActive(false);
+        SetActive( false );
 
-        _machineModel.SetActive(false);
-        _machineBrokenModel.SetActive(true);
+        _machineModel.SetActive( false );
+        _machineBrokenModel.SetActive( true );
 
-        foreach (var item in _partsToShutOff)
+        foreach ( var item in _partsToShutOff )
         {
-            item.ShutOff(this);
+            item.ShutOff( this );
         }
 
         foreach (var item in _wreckages)
@@ -80,8 +80,10 @@ public class Machine : Obstacle, IAttackable
     public AttackInteraction GetAttacked(int attackID)
     {
         Destroy();
-        AttackInteraction attackInteraction = new AttackInteraction(_healthGain);
+        AttackInteraction attackInteraction = new AttackInteraction( _healthGain );
         //attackInteraction.SetHealth(_healthGain);
         return attackInteraction;
     }
+
+    public void ExitAttacked() { }
 }

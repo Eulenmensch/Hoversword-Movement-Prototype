@@ -8,7 +8,10 @@ public class InputManagerYoshi : MonoBehaviour
     [SerializeField] UnityEvent OnJump;
     [SerializeField] UnityEvent OnLeftSideShift;
     [SerializeField] UnityEvent OnRightSideShift;
+    [SerializeField] UnityEvent OnSeismicChargeFire;
+
     private HoverBoardControllerYoshi02 ControllerYoshi02;
+    [SerializeField] ProjectileController Projectiles;
     [SerializeField] PlayerEngineFX EngineFX;
     [SerializeField] CharacterRigController RigController;
     private bool IsCarving;
@@ -76,6 +79,19 @@ public class InputManagerYoshi : MonoBehaviour
         if ( context.performed )
         {
             OnRightSideShift.Invoke();
+        }
+    }
+
+    public void GetSeismicChargeInput(InputAction.CallbackContext context)
+    {
+        if ( context.started )
+        {
+            Projectiles.SetPreviewing( true );
+        }
+        else if ( context.canceled )
+        {
+            Projectiles.SetPreviewing( false );
+            OnSeismicChargeFire.Invoke();
         }
     }
 

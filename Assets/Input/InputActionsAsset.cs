@@ -80,7 +80,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""id"": ""f74cde5e-fb9d-4860-bb86-168142375a3c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=2)""
                 },
                 {
                     ""name"": ""Dash"",

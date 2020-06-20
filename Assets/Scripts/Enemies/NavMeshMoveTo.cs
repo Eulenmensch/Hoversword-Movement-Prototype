@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class NavMeshMoveTo : MonoBehaviour
 {
 
-    public Transform Player { get; set; }
+    public Transform Target { get; set; }
 
     private NavMeshAgent agent;
 
@@ -15,7 +15,18 @@ public class NavMeshMoveTo : MonoBehaviour
 
     void Update()
     {
-        agent.destination = Player.position;
+        if ( Target != null )
+        {
+            agent.destination = Target.position;
+            if ( Vector3.Distance( transform.position, Target.position ) <= 0.5f ) //FIXME: Hardcoded balancing value
+            {
+                agent.velocity = Vector3.zero;
+            }
+        }
+        else
+        {
+            agent.velocity = Vector3.zero;
+        }
     }
 
 #if UNITY_EDITOR
