@@ -14,7 +14,7 @@ public class CombatController : MonoBehaviour
     public Animator _characterAnimator;
     public Animator _boardAnimator;
 
-    
+
 
     public enum AttackStates { None, Flip, Slash }
     [Header( "States" )]
@@ -29,7 +29,6 @@ public class CombatController : MonoBehaviour
     [Header( "Flip Attack" )]
     [SerializeField] private GameObject _flipColliderObject;
     private CapsuleCollider _flipCollider;
-    [SerializeField] private float _flipRepulsionForce;
 
     //private bool _isFlipping;
     [SerializeField] private float _flipDuration;
@@ -41,11 +40,11 @@ public class CombatController : MonoBehaviour
     [SerializeField] private float _slashDuration;
     private float _slashTimestamp;
 
-    [Header("Slash Visuals")]
+    [Header( "Slash Visuals" )]
     [SerializeField] private GameObject _boardExtension;
     [SerializeField] private TrailRenderer _boardTrail;
 
-    [Header("Collision")]
+    [Header( "Collision" )]
     [SerializeField] private LayerMask _hitMask;
     private Collider[] _colliderCache;
 
@@ -64,7 +63,7 @@ public class CombatController : MonoBehaviour
             _flipCollider = _flipColliderObject?.GetComponent<CapsuleCollider>();
         if ( _slashColliderObject != null )
             _slashCollider = _slashColliderObject?.GetComponent<CapsuleCollider>();
-        _boardExtension.SetActive(false);
+        _boardExtension.SetActive( false );
         _boardTrail.emitting = false;
     }
 
@@ -92,7 +91,7 @@ public class CombatController : MonoBehaviour
         {
             //CheckCollision();
             _colliderCache = CapsuleCollisionCheck( _flipColliderObject.transform, _flipCollider );
-            ProcessCollisions();
+            ProcessCollisions( AttackType.Flip );
 
             if ( _flipTimestamp + _flipDuration < Time.unscaledTime )
             {
@@ -118,7 +117,7 @@ public class CombatController : MonoBehaviour
             //collision check
             //CheckForCollisions();
             _colliderCache = CapsuleCollisionCheck( _slashColliderObject.transform, _slashCollider );
-            ProcessCollisions();
+            ProcessCollisions( AttackType.Slash );
 
             if ( _slashTimestamp + _slashDuration < Time.unscaledTime )
             {
@@ -147,7 +146,7 @@ public class CombatController : MonoBehaviour
     {
         isAiming = true;
         _boardAnimator.SetBool( "Aim", true );
-        _boardExtension.SetActive(true);
+        _boardExtension.SetActive( true );
 
         //_aimCharacterModel.isAiming = true;
 
@@ -165,7 +164,7 @@ public class CombatController : MonoBehaviour
     {
         isAiming = false;
         _boardAnimator.SetBool( "Aim", false );
-        _boardExtension.SetActive(false);
+        _boardExtension.SetActive( false );
 
 
         //_aimCharacterModel.isAiming = false;
@@ -253,7 +252,7 @@ public class CombatController : MonoBehaviour
         return Physics.OverlapCapsule( capsuleBottomPoint, capsuleTopPoint, collider.radius, _hitMask, QueryTriggerInteraction.Collide );
     }
 
-    private void ProcessCollisions()
+    private void ProcessCollisions(AttackType _attackType)
     {
         if ( _colliderCache.Length > 0 )
         {
@@ -262,15 +261,8 @@ public class CombatController : MonoBehaviour
                 IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
                 if ( attackable != null )
                 {
-                    AttackInteraction attackInteraction = attackable.GetAttacked( _attackID );
+                    AttackInteraction attackInteraction = attackable.GetAttacked( _attackID, _attackType );
                     _playerHealth.AddHealth( attackInteraction.health );
-                }
-
-                // -> Refactor to responsible class
-                Rigidbody rigidbody = item.gameObject.GetComponent<Rigidbody>();
-                if ( rigidbody != null )
-                {
-                    RepellEnemies( rigidbody );
                 }
             }
         }
@@ -306,9 +298,4 @@ public class CombatController : MonoBehaviour
     //        }
     //    }
     //}
-
-    private void RepellEnemies(Rigidbody _rigidBody)
-    {
-        _rigidBody.AddForce( Vector3.ProjectOnPlane( ( _rigidBody.gameObject.transform.position - transform.position ), Vector3.up ).normalized * _flipRepulsionForce, ForceMode.Acceleration );
-    }
 }
