@@ -159,7 +159,7 @@ Shader "test metal ADJ"
 }
 /*ASEBEGIN
 Version=18100
--1925;229;1871;893;1420.194;350.2955;1;True;False
+-1434;267;1323;778;1773.317;551.6314;1.740443;True;False
 Node;AmplifyShaderEditor.RangedFloatNode;3;-1308.019,196.8691;Inherit;False;Constant;_Float0;Float 0;1;0;Create;True;0;0;False;0;False;0.1;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;2;-1090.094,273.5688;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;15;-510.5277,580.1323;Inherit;False;Constant;_Float1;Float 1;1;0;Create;True;0;0;False;0;False;0.2;0;0;0;0;1;FLOAT;0
@@ -183,4 +183,4 @@ WireConnection;0;0;1;0
 WireConnection;0;3;1;1
 WireConnection;0;4;13;0
 ASEEND*/
-//CHKSM=481758FEDB47C4DFA91D59DFEA4BC0E481B8F300
+//CHKSM=B06014628901A72E3700F6B90266028C92FEA51F
