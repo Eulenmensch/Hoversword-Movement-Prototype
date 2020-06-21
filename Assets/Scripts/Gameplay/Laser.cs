@@ -6,12 +6,16 @@ public class Laser : Obstacle
 {
     [Header("Laser")]
     [SerializeField]
-    private GameObject _laserModel;
+    private GameObject[] _laserModel;
 
     public override void SetActive(bool value)
     {
         base.SetActive(value);
 
-        _laserModel.SetActive(value);
+        foreach (var item in _laserModel)
+        {
+            if (item != null)
+                item.SetActive(value);
+        }
     }
 }

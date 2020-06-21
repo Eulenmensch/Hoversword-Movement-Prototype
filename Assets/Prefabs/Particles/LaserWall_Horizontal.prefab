@@ -364,7 +364,10 @@ MonoBehaviour:
   _forceMagnitude: 100
   _damageDirectionType: 0
   _destroy: 0
-  _laserModel: {fileID: 7042673230553212542}
+  _laserModel:
+  - {fileID: 7042673230553212542}
+  - {fileID: 7658970601089233817}
+  - {fileID: 3632550119870503572}
 --- !u!1001 &1616353926947434524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -479,6 +482,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bed4cb89fccff8d4f8ab7d651d1d0c99, type: 3}
+--- !u!1 &3632550119870503572 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2596070389141301896, guid: bed4cb89fccff8d4f8ab7d651d1d0c99,
+    type: 3}
+  m_PrefabInstance: {fileID: 1616353926947434524}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3632550119870503561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2596070389141301909, guid: bed4cb89fccff8d4f8ab7d651d1d0c99,
@@ -599,6 +608,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bed4cb89fccff8d4f8ab7d651d1d0c99, type: 3}
+--- !u!1 &7658970601089233817 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2596070389141301896, guid: bed4cb89fccff8d4f8ab7d651d1d0c99,
+    type: 3}
+  m_PrefabInstance: {fileID: 5642229050286545169}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7658970601089233796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2596070389141301909, guid: bed4cb89fccff8d4f8ab7d651d1d0c99,

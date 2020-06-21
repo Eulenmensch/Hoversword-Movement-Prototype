@@ -363,7 +363,9 @@ MonoBehaviour:
   _forceMagnitude: 100
   _damageDirectionType: 0
   _destroy: 0
-  _laserModel: {fileID: 7197810429737328877}
+  _laserModel:
+  - {fileID: 7197810429737328877}
+  - {fileID: 3474019793444641799}
 --- !u!1001 &1454991275749865103
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -478,6 +480,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bed4cb89fccff8d4f8ab7d651d1d0c99, type: 3}
+--- !u!1 &3474019793444641799 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2596070389141301896, guid: bed4cb89fccff8d4f8ab7d651d1d0c99,
+    type: 3}
+  m_PrefabInstance: {fileID: 1454991275749865103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3474019793444641818 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2596070389141301909, guid: bed4cb89fccff8d4f8ab7d651d1d0c99,

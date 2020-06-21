@@ -6173,6 +6173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c028880ca15fc49bea414cb89245b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SeismicChargePrefab: {fileID: 0}
   HoverForce: 50
   HoverHeight: 0.8
   GroundStickForce: 25
@@ -6433,7 +6434,6 @@ MonoBehaviour:
   _isAiming: 0
   _aimOnGround: 1
   _flipColliderObject: {fileID: 6950517626842842739}
-  _flipRepulsionForce: 0
   _flipDuration: 0.6
   _slashColliderObject: {fileID: 3633932042422523877}
   _slashDuration: 0.18
@@ -6496,6 +6496,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnSeismicChargeFire:
+    m_PersistentCalls:
+      m_Calls: []
+  Projectiles: {fileID: 0}
   EngineFX: {fileID: 6416511788225866834}
   RigController: {fileID: 8227218401292098826}
 --- !u!114 &6950517626992532616
@@ -7791,7 +7795,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3633932040675455793}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7872,7 +7876,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3633932041120335434}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -14232,6 +14236,7 @@ MonoBehaviour:
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 1000
+    m_PropagationSpeed: 343
 --- !u!1 &6416511788485584775
 GameObject:
   m_ObjectHideFlags: 0
@@ -19669,6 +19674,7 @@ MonoBehaviour:
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 1000
+    m_PropagationSpeed: 343
 --- !u!114 &1616628792732518978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19710,6 +19716,7 @@ MonoBehaviour:
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 1000
+    m_PropagationSpeed: 343
 --- !u!1 &6950517626319950805
 GameObject:
   m_ObjectHideFlags: 0

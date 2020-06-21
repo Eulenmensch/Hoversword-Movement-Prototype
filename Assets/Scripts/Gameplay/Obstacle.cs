@@ -86,7 +86,7 @@ public abstract class Obstacle : MonoBehaviour, ICollidable, IShutOff
         }
         else
         {
-            Debug.Log("Energy Source tried to register twice!");
+            Debug.Log($"Energy Source tried to register twice! {gameObject.name} + {machine.gameObject.name}");
         }
     }
 }
