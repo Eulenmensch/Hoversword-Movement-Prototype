@@ -37,6 +37,7 @@ public class CombatController : MonoBehaviour
     [Header( "Slash" )]
     [SerializeField] private GameObject _slashColliderObject;
     private CapsuleCollider _slashCollider;
+    private List<IAttackable> _hitAttackableCache = new List<IAttackable>();
     [SerializeField] private float _slashDuration;
     private float _slashTimestamp;
 
@@ -191,7 +192,7 @@ public class CombatController : MonoBehaviour
         //StopSlashVisualization();
         // Debug.Log("stop slash");
 
-        AttackableExit( _colliderCache );
+        AttackableExit( ref _hitAttackableCache, _colliderCache );
     }
 
     private void StartFlip()
@@ -206,7 +207,7 @@ public class CombatController : MonoBehaviour
     {
         _attackState = AttackStates.None;
         _boardAnimator.SetBool( "Flip", false );
-        AttackableExit( _colliderCache );
+        AttackableExit( ref _hitAttackableCache, _colliderCache );
     }
 
     private Collider[] CapsuleCollisionCheck(Transform colliderGameObject, CapsuleCollider collider)
@@ -253,12 +254,13 @@ public class CombatController : MonoBehaviour
                 {
                     AttackInteraction attackInteraction = attackable.GetAttacked( _attackID, _attackType );
                     _playerHealth.AddHealth( attackInteraction.health );
+                    _hitAttackableCache.Add( attackable );
                 }
             }
         }
     }
 
-    private void AttackableExit(Collider[] _colliders)
+    private void AttackableExit(ref List<IAttackable> _attackables, Collider[] _colliders)
     {
         print( "attackable exit" );
         print( "collider amount = " + _colliders.Length );
@@ -275,6 +277,13 @@ public class CombatController : MonoBehaviour
                 }
             }
         }
+
+        // foreach ( var attackable in _attackables )
+        // {
+        //     print( "attackable exit" );
+        //     attackable.ExitAttacked();
+        // }
+        // _attackables.Clear();
     }
 
     //private void CheckCollision()
