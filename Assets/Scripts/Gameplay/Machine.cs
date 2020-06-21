@@ -26,7 +26,7 @@ public class Machine : Obstacle, IAttackable
 
         foreach ( var item in _parts )
         {
-            if (item == null) continue;
+            if ( item == null ) continue;
 
             IShutOff[] shutOffs = item.GetComponents<IShutOff>();
 
@@ -44,7 +44,7 @@ public class Machine : Obstacle, IAttackable
             }
         }
 
-        _wreckages = GetComponentsInChildren<Wreckage>(true);
+        _wreckages = GetComponentsInChildren<Wreckage>( true );
     }
 
     public override CollisionInteraction Collide()
@@ -69,7 +69,7 @@ public class Machine : Obstacle, IAttackable
             item.ShutOff( this );
         }
 
-        foreach (var item in _wreckages)
+        foreach ( var item in _wreckages )
         {
             item.Push();
         }
@@ -77,7 +77,7 @@ public class Machine : Obstacle, IAttackable
         _destroySound?.Play();
     }
 
-    public AttackInteraction GetAttacked(int attackID)
+    public AttackInteraction GetAttacked(int attackID, AttackType _attackType)
     {
         Destroy();
         AttackInteraction attackInteraction = new AttackInteraction( _healthGain );

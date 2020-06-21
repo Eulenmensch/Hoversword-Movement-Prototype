@@ -7,7 +7,6 @@ public class EnemyGetHitState : IEnemyState
     Enemy Owner;
     IEnemyState LastState;
     NavMeshTowBehaviour NavMeshTow;
-    RigBuilder Rig;
 
     bool HitStunEnded;
 
@@ -21,8 +20,6 @@ public class EnemyGetHitState : IEnemyState
     {
         NavMeshTow = Owner.GetComponent<NavMeshTowBehaviour>();
         NavMeshTow.enabled = false;
-        Rig = Owner.GetComponentInChildren<RigBuilder>();
-        //Rig.enabled = false;
         HitStunEnded = false;
         Owner.StartCoroutine( HitStunTimer( Owner.HitStunTime ) );
     }
@@ -33,8 +30,14 @@ public class EnemyGetHitState : IEnemyState
         {
             if ( Owner.gameObject.GetComponent<GroundCheck>().IsGrounded() )
             {
-                Debug.Log( "Grounded" );
-                Owner.StateMachine.ChangeState( LastState );
+                if ( Owner.Health <= 0 )
+                {
+                    Owner.StateMachine.ChangeState( new EnemyDeathState( Owner ) );
+                }
+                else
+                {
+                    Owner.StateMachine.ChangeState( LastState );
+                }
             }
         }
     }
@@ -42,7 +45,6 @@ public class EnemyGetHitState : IEnemyState
     public void Exit()
     {
         NavMeshTow.enabled = true;
-        Rig.enabled = true;
     }
 
     IEnumerator HitStunTimer(float _hitStunTime)

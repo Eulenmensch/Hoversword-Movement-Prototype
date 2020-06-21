@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//TODO: Put all of this into the enemyyoshi01 class or any other class that derives from enemy
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,7 +20,7 @@ public class ChasingEnemy : MonoBehaviour, IAttackable
     {
         RB = GetComponent<Rigidbody>();
     }
-    public AttackInteraction GetAttacked(int attackID)
+    public AttackInteraction GetAttacked(int attackID, AttackType _attackType)
     {
         OnHit.Invoke();
         GetSuckedInFront();

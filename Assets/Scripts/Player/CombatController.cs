@@ -95,19 +95,6 @@ public class CombatController : MonoBehaviour
 
             if ( _flipTimestamp + _flipDuration < Time.unscaledTime )
             {
-                if ( _colliderCache.Length > 0 )
-                {
-                    print( "collided" );
-                    foreach ( var item in _colliderCache )
-                    {
-                        IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
-                        if ( attackable != null )
-                        {
-                            print( "attackable found" );
-                            attackable.ExitAttacked();
-                        }
-                    }
-                }
                 StopFlip();
             }
         }
@@ -203,6 +190,8 @@ public class CombatController : MonoBehaviour
 
         //StopSlashVisualization();
         // Debug.Log("stop slash");
+
+        AttackableExit( _colliderCache );
     }
 
     private void StartFlip()
@@ -217,6 +206,7 @@ public class CombatController : MonoBehaviour
     {
         _attackState = AttackStates.None;
         _boardAnimator.SetBool( "Flip", false );
+        AttackableExit( _colliderCache );
     }
 
     private Collider[] CapsuleCollisionCheck(Transform colliderGameObject, CapsuleCollider collider)
@@ -263,6 +253,25 @@ public class CombatController : MonoBehaviour
                 {
                     AttackInteraction attackInteraction = attackable.GetAttacked( _attackID, _attackType );
                     _playerHealth.AddHealth( attackInteraction.health );
+                }
+            }
+        }
+    }
+
+    private void AttackableExit(Collider[] _colliders)
+    {
+        print( "attackable exit" );
+        print( "collider amount = " + _colliders.Length );
+        if ( _colliders.Length > 0 )
+        {
+            print( "collided" );
+            foreach ( var item in _colliders )
+            {
+                IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
+                if ( attackable != null )
+                {
+                    print( "attackable found" );
+                    attackable.ExitAttacked();
                 }
             }
         }
