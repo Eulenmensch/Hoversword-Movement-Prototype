@@ -23,6 +23,7 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private ParticleSystem DashJetParticles;
     [SerializeField] private ParticleSystem JumpChargeParticles;
     [SerializeField] private ParticleSystem JumpJetParticles;
+    [SerializeField] private GameObject SpeedLines;
     [SerializeField] private ParticleSystemRenderer JumpChargeParticleRenderer;
     [SerializeField] private ParticleSystemRenderer JumpJetParticleRenderer;
     [SerializeField] private Color JetDefaultColor;
@@ -66,6 +67,7 @@ public class PlayerEngineFX : MonoBehaviour
         SetJumpChargeColor();
         PlayDashParticles();
         PlayJumpChargeParticles();
+        SetSpeedlinePosition();
     }
 
     void PlayDashParticles()
@@ -177,6 +179,10 @@ public class PlayerEngineFX : MonoBehaviour
         }
     }
 
+    void SetSpeedlinePosition()
+    {
+        SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / ControllerYoshi02.MaxSpeed );
+    }
 
     public void SetMoveInput(float _thrust, float _turn)
     {

@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour, IAttackable
     public GameObject Player;
     public Transform IdlePosition;
     public Material DeathMaterial;
+    public GameObject ProjectilePrefab;
 
     public int Health { get; private set; }
 

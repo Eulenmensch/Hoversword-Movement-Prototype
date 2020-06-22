@@ -37,7 +37,7 @@ public class CombatController : MonoBehaviour
     [Header( "Slash" )]
     [SerializeField] private GameObject _slashColliderObject;
     private CapsuleCollider _slashCollider;
-    private List<IAttackable> _hitAttackableCache = new List<IAttackable>();
+    private HashSet<IAttackable> _hitAttackableCache = new HashSet<IAttackable>();
     [SerializeField] private float _slashDuration;
     private float _slashTimestamp;
 
@@ -192,7 +192,7 @@ public class CombatController : MonoBehaviour
         //StopSlashVisualization();
         // Debug.Log("stop slash");
 
-        AttackableExit( ref _hitAttackableCache, _colliderCache );
+        AttackableExit( ref _hitAttackableCache );
     }
 
     private void StartFlip()
@@ -207,7 +207,7 @@ public class CombatController : MonoBehaviour
     {
         _attackState = AttackStates.None;
         _boardAnimator.SetBool( "Flip", false );
-        AttackableExit( ref _hitAttackableCache, _colliderCache );
+        AttackableExit( ref _hitAttackableCache );
     }
 
     private Collider[] CapsuleCollisionCheck(Transform colliderGameObject, CapsuleCollider collider)
@@ -260,30 +260,15 @@ public class CombatController : MonoBehaviour
         }
     }
 
-    private void AttackableExit(ref List<IAttackable> _attackables, Collider[] _colliders)
+    private void AttackableExit(ref HashSet<IAttackable> _attackables)
     {
-        print( "attackable exit" );
-        print( "collider amount = " + _colliders.Length );
-        if ( _colliders.Length > 0 )
-        {
-            print( "collided" );
-            foreach ( var item in _colliders )
-            {
-                IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
-                if ( attackable != null )
-                {
-                    print( "attackable found" );
-                    attackable.ExitAttacked();
-                }
-            }
-        }
 
-        // foreach ( var attackable in _attackables )
-        // {
-        //     print( "attackable exit" );
-        //     attackable.ExitAttacked();
-        // }
-        // _attackables.Clear();
+        foreach ( var attackable in _attackables )
+        {
+            print( "attackable exit" );
+            attackable.ExitAttacked();
+        }
+        _attackables.Clear();
     }
 
     //private void CheckCollision()
