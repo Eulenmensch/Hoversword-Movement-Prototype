@@ -8,6 +8,7 @@ public class EnemyProjectile : Projectile, ICollidable
     [SerializeField] DamageType _damageType;
     [SerializeField] float _slowDownForce;
     [SerializeField] float _moveSpeed;
+    [SerializeField] GameObject ExplosionPrefab;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -39,5 +40,10 @@ public class EnemyProjectile : Projectile, ICollidable
         Destroy( gameObject );
 
         return interactionData;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Instantiate( ExplosionPrefab, transform.position, Quaternion.identity );
     }
 }

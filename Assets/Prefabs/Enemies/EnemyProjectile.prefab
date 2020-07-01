@@ -4834,4 +4834,6 @@ MonoBehaviour:
   _damage: 1
   _damageType: 0
   _slowDownForce: 0.2
-  _moveSpeed: 180
+  _moveSpeed: 300
+  ExplosionPrefab: {fileID: 8516415877589629476, guid: 1cb65caf3dd379a49a131dca7756f35b,
+    type: 3}

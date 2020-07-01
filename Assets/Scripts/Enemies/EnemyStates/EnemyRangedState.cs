@@ -8,9 +8,10 @@ public class EnemyRangedState : IEnemyState
 
     bool CoroutineRunning;
     float AimTimer = 0.0f;
-    float AimTime = 4.0f;
+    float AimTime = 2.5f;
     float ShootPauseTimer = 0.0f;
-    float ShootPauseTime = 1.5f;
+    float ShootPauseTime = 0.8f;
+    float RapidFirePauseTime = 0.2f;
 
     float DistanceToPlayer;
 
@@ -49,7 +50,7 @@ public class EnemyRangedState : IEnemyState
         while ( AimTimer <= AimTime )
         {
             Line.SetPosition( 0, new Vector3( 0, 8, 0 ) );
-            Line.SetPosition( 1, Owner.transform.InverseTransformPoint( Owner.Player.transform.position ) );
+            Line.SetPosition( 1, Owner.transform.InverseTransformPoint( Owner.Player.transform.position + Owner.Player.transform.up ) );
             Line.widthMultiplier = Mathf.Lerp( Line.widthMultiplier, 2.0f, 0.01f );
             AimTimer += Time.deltaTime;
             yield return null;
@@ -61,7 +62,12 @@ public class EnemyRangedState : IEnemyState
 
     IEnumerator Shoot()
     {
-        GameObject.Instantiate( Owner.ProjectilePrefab, Owner.transform.position, Quaternion.LookRotation( Owner.Player.transform.position - Owner.transform.position ) );
+        Line.widthMultiplier = 5.0f;
+        GameObject.Instantiate( Owner.ProjectilePrefab, Owner.transform.position, Quaternion.LookRotation( ( ( Owner.Player.transform.position + Owner.Player.transform.forward * 4 ) - Owner.transform.position ) + Vector3.up ) );
+        yield return new WaitForSeconds( RapidFirePauseTime );
+        GameObject.Instantiate( Owner.ProjectilePrefab, Owner.transform.position, Quaternion.LookRotation( ( ( Owner.Player.transform.position + Owner.Player.transform.forward * 4 ) - Owner.transform.position ) + Vector3.up ) );
+        yield return new WaitForSeconds( RapidFirePauseTime );
+        GameObject.Instantiate( Owner.ProjectilePrefab, Owner.transform.position, Quaternion.LookRotation( ( ( Owner.Player.transform.position + Owner.Player.transform.forward * 4 ) - Owner.transform.position ) + Vector3.up ) );
         Line.widthMultiplier = 5.0f;
         while ( ShootPauseTimer <= ShootPauseTime )
         {
@@ -79,10 +85,14 @@ public class EnemyRangedState : IEnemyState
     {
         if ( _distanceToPlayer <= Owner.ChaseRange )
         {
+            Line.positionCount = 0;
+            Owner.StopAllCoroutines();
             Owner.StateMachine.ChangeState( new EnemyChaseState( Owner ) );
         }
         else if ( _distanceToPlayer > Owner.RangedRange )
         {
+            Line.positionCount = 0;
+            Owner.StopAllCoroutines();
             Owner.StateMachine.ChangeState( new EnemyIdleState( Owner ) );
         }
     }

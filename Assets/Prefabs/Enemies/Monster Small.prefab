@@ -6139,11 +6139,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26519628da182874f8326762fdc1b46e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RangedRange: 80
+  RangedRange: 95
   ChaseRange: 30
   MeleeRange: 10
   HitStunTime: 1
-  DeathSpeed: 0.06
+  DeathSpeed: 0.12
   MaxHealth: 3
   FlipDamage: 1
   SlashDamage: 3
