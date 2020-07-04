@@ -181,7 +181,10 @@ public class PlayerEngineFX : MonoBehaviour
 
     void SetSpeedlinePosition()
     {
-        SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / ControllerYoshi02.MaxSpeed );
+        if ( SpeedLines != null )
+        {
+            SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / ControllerYoshi02.MaxSpeed );
+        }
     }
 
     public void SetMoveInput(float _thrust, float _turn)
