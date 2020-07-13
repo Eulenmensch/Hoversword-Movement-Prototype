@@ -21,7 +21,7 @@ public class PointMovement : MonoBehaviour
 
         //
         _currentPoint = _startingPoint;
-        GetStartPosition();
+        //GetStartPosition();
 
         transform.position = GetStartPosition();
         MoveToNextPoint();
