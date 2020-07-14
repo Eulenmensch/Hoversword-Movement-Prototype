@@ -2,88 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Machine : Obstacle, IAttackable
+//[SelectionBase]
+public abstract class Machine : MonoBehaviour, ICollidable, IShutOff
 {
-    [Header( "Machine" )]
-    [SerializeField] private GameObject _machineModel;
-    [SerializeField] private GameObject _machineBrokenModel;
+    [SerializeField] protected bool _isActive = true;
+    //public bool isActive { get => _isActive; set => _isActive = value; }
 
-    [SerializeField] private List<GameObject> _parts = new List<GameObject>();
-    private List<IShutOff> _partsToShutOff = new List<IShutOff>();
+    //[Header("Collision Interaction")]
+    //[SerializeField] protected bool _applyDamage;
+    //[SerializeField] protected int _damage;
+    //[SerializeField] protected DamageType _damageType;
+    //[SerializeField] protected float _forceMagnitude;
+    //[SerializeField] protected DamageDirectionType _damageDirectionType;
+    //[SerializeField] protected bool _destroy;
+    //[Space(10)]
+    //[SerializeField] protected bool _applyHealth;
+    //[SerializeField] protected int _health;
 
-    [Header( "Attack Interaction" )]
-    [SerializeField] private int _healthGain;
+    //protected Collider[] _colliders;
 
-    [Header( "Effects" )]
-    [SerializeField] private AudioSource _destroySound;
+    public List<Battery> energySources { get; set; }
 
-    private Wreckage[] _wreckages;
+    //protected virtual void Awake()
+    //{
+    //    _colliders = GetComponentsInChildren<Collider>();
+    //    foreach (var col in _colliders)
+    //    {
+    //        col.enabled = _isActive;
+    //    }
+    //}
 
+    //public virtual /*CollisionInteraction*/ void Collide()
+    //{
+    //    //CollisionInteraction interactionData = new CollisionInteraction(true/*, false*/);
+    //    //if (_applyDamage) interactionData.SetDamage(true, _damage, _damageType, _forceMagnitude, _damageDirectionType);
 
-    protected override void Awake()
+    //    //if (_destroy)
+    //    //    Destroy(gameObject);
+
+    //    ////if (_applyHealth) interactionData.SetHealth(_health);
+    //    //return interactionData;
+    //    //return new InteractionData(_damage, _damageType, _forceMagnitude, _damageDirectionType);
+    //}
+
+    public virtual void SetActive(bool value)
     {
-        base.Awake();
-
-        foreach ( var item in _parts )
-        {
-            if ( item == null ) continue;
-
-            IShutOff[] shutOffs = item.GetComponents<IShutOff>();
-
-            if ( shutOffs != null )
-            {
-                foreach ( var shutOff in shutOffs )
-                {
-                    _partsToShutOff.Add( shutOff );
-                    shutOff.Register( this );
-                }
-            }
-            else
-            {
-                Debug.Log( "shutoffs is null" );
-            }
-        }
-
-        _wreckages = GetComponentsInChildren<Wreckage>( true );
+        _isActive = value;
     }
 
-    public override CollisionInteraction Collide()
+    public virtual void ShutOff(Battery machine)
     {
-        Destroy();
-
-        return base.Collide();
+        if (energySources.Contains(machine))
+            energySources.Remove(machine);
+        else
+            Debug.Log("Energy Source wasn't register!");
+        
+        if (energySources.Count == 0)
+            SetActive(false);
     }
 
-    private void Destroy()
+    public void Register(Battery machine)
     {
-        if ( !_isActive )
-            return;
-
-        SetActive( false );
-
-        _machineModel.SetActive( false );
-        _machineBrokenModel.SetActive( true );
-
-        foreach ( var item in _partsToShutOff )
-        {
-            item.ShutOff( this );
-        }
-
-        foreach ( var item in _wreckages )
-        {
-            item.Push();
-        }
-
-        _destroySound?.Play();
+        if (energySources == null) energySources = new List<Battery>();
+        if (!energySources.Contains(machine)) energySources.Add(machine);
     }
 
-    public AttackInteraction GetAttacked(int attackID, AttackType _attackType)
+    public virtual void Collide()
     {
-        Destroy();
-        AttackInteraction attackInteraction = new AttackInteraction( _healthGain );
-        //attackInteraction.SetHealth(_healthGain);
-        return attackInteraction;
+        Debug.Log($"Collided with: {gameObject.name}");
     }
-
-    public void ExitAttacked() { }
 }

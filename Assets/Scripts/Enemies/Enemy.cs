@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IAttackable
+public class Enemy : MonoBehaviour /*, IAttackable*/
 {
     public float RangedRange;
     public float ChaseRange;
@@ -47,13 +47,13 @@ public class Enemy : MonoBehaviour, IAttackable
         NavMeshTow.Target = _target;
     }
 
-    public virtual void TakeDamage(AttackType _attackType)
+    public virtual void TakeDamage(AttackTypes _attackType)
     {
-        if ( _attackType == AttackType.Flip )
+        if ( _attackType == AttackTypes.Flip )
         {
             Health -= FlipDamage;
         }
-        else if ( _attackType == AttackType.Slash )
+        else if ( _attackType == AttackTypes.Slash )
         {
             Health -= SlashDamage;
         }
@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour, IAttackable
         HasTakenDamage = true;
     }
 
-    public virtual AttackInteraction GetAttacked(int _amount, AttackType _attackType)
+    public virtual AttackInteraction GetAttacked(int _amount, AttackTypes _attackType)
     {
         if ( !HasTakenDamage )
         {

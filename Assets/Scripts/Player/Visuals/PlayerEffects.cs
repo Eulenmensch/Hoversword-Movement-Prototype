@@ -8,8 +8,9 @@ public class PlayerEffects : MonoBehaviour
     [SerializeField]
     private ParticleSystem _laserEffects;
 
-    internal void LaserDamage()
+    internal void Damage(DamageTypes damageType)
     {
-        _laserEffects.Play();
+        if (damageType == DamageTypes.Laser)
+            _laserEffects.Play();
     }
 }

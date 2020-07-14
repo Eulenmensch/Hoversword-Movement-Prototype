@@ -16,11 +16,11 @@ public class PointMovement : MonoBehaviour
 
     private void Start()
     {
+        _currentPoint = _startingPoint;
+
         if (_points[_currentPoint] == null)
             return;
 
-        //
-        _currentPoint = _startingPoint;
         //GetStartPosition();
 
         transform.position = GetStartPosition();

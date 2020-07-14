@@ -5,5 +5,6 @@ using UnityEngine;
 
 public interface ICollidable
 {
-    CollisionInteraction Collide();
+    // CollisionInteraction Collide();
+    void Collide();
 }

@@ -32,14 +32,14 @@ public class EnemyProjectile : Projectile, ICollidable
         transform.position += transform.forward * _moveSpeed * Time.deltaTime;
     }
 
-    public CollisionInteraction Collide()
+    public void /*CollisionInteraction*/ Collide()
     {
         CollisionInteraction interactionData = new CollisionInteraction( true/*, false*/);
         interactionData.SetDamage( true, _damage, _damageType, _slowDownForce, DamageDirectionType.Velocity );
 
         Destroy( gameObject );
 
-        return interactionData;
+        //return interactionData;
     }
 
     private void OnTriggerEnter(Collider other)

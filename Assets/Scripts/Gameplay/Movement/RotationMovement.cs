@@ -10,7 +10,7 @@ public class RotationMovement : MonoBehaviour
 {
     public enum RotationAxis { X, Y, Z }
     [Header("Rotation")]
-    [SerializeField] private RotationAxis _axis = RotationAxis.Z;
+    [SerializeField] private RotationAxis _axis = RotationAxis.Y;
     [SerializeField] private float _speed = 50f;
     [SerializeField] private float _startAngle = 0;
     [SerializeField] private float _endAngle = 0;

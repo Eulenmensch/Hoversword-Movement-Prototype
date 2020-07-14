@@ -11,85 +11,134 @@ public class PlayerCollisionHandler : MonoBehaviour
     [SerializeField]
     private LayerMask _collisionMask;
 
-    [SerializeField]
-    private float _cooldownDuration = 1f;
+    //[SerializeField]
+    //private float _cooldownDuration = 1f;
 
     private PlayerHealth _playerHealth;
-    private PlayerEffects _playerEffects;
+    //private PlayerEffects _playerEffects;
 
-    private Dictionary<ICollidable, float> _collisionHistory = new Dictionary<ICollidable, float>();
+    //private Dictionary<ICollidable, float> _collisionHistory = new Dictionary<ICollidable, float>();
 
     private void Awake()
     {
         _playerHealth = GetComponentInParent<PlayerHealth>();
-        _playerEffects = transform.parent.GetComponentInChildren<PlayerEffects>();
+        //_playerEffects = transform.parent.GetComponentInChildren<PlayerEffects>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        UpdateHistory();
+        //UpdateHistory();
 
         // Checks if layer is in layer mask
         if (((1 << other.gameObject.layer) & _collisionMask) != 0)
         {
-            ICollidable collidable = other.gameObject.GetComponentInParent<ICollidable>();
-            if (collidable != null)
-            {
-                if (!_collisionHistory.ContainsKey(collidable))
-                {
-                    Debug.Log("Collided with: " + other.gameObject.name);
-
-                    _collisionHistory.Add(collidable, Time.time);
-
-                    CollisionInteraction collisionInteraction = collidable.Collide();
-                    if (collisionInteraction.applyDamage) ProcessDamage(collisionInteraction);
-                    if (collisionInteraction.teleport) Teleport(collisionInteraction.teleportTarget);
-                }
-            }
+            GameObject gO = other.gameObject;
+            CheckForCollision(gO);
+            CheckForHealthGain(gO);
+            CheckForDamage(gO);
+            CheckForPushing(gO);
         }
     }
 
-    private void Teleport(Vector3 target)
+    private void CheckForCollision(GameObject target)
     {
-        transform.parent.position = target;
+        ICollidable collidable = target.GetComponentInParent<ICollidable>();
+        if (collidable != null)
+            collidable.Collide();
+        //{
+        //    //if (!_collisionHistory.ContainsKey(collidable))
+        //    //{
+        //    //_collisionHistory.Add(collidable, Time.time);
+
+        //    collidable.Collide();
+
+        //    // CollisionInteraction collisionInteraction = collidable.Collide();
+        //    //if (collisionInteraction.applyDamage) ProcessDamage(collisionInteraction);
+        //    //if (collisionInteraction.teleport) Teleport(collisionInteraction.teleportTarget);
+        //    //}
+        //}
     }
 
-    private void ProcessDamage(CollisionInteraction damageData)
+    private void CheckForHealthGain(GameObject target)
     {
-        if (damageData.damage > 0)
-        {
-            _playerHealth.Damage(damageData.damage);
-        }
+        IGiveHealth giveHealth = target.GetComponentInParent<IGiveHealth>();
+        if (giveHealth != null)
+            _playerHealth.AddHealth(giveHealth.GiveHealth(false));
+    }
 
-        if (damageData.damageType == DamageType.Laser)
+    private void CheckForDamage(GameObject target)
+    {
+        IDealDamage dealDamage = target.GetComponentInParent<IDealDamage>();
+        if (dealDamage != null)
         {
-            _playerEffects.LaserDamage();
+            (int damage, DamageTypes damageType) = dealDamage.DealDamage();
+            _playerHealth.Damage(damage, damageType);
         }
+    }
 
-        if (damageData.damageDirectionType == DamageDirectionType.Velocity)
+    private void CheckForPushing(GameObject target)
+    {
+        IPush push = target.GetComponentInParent<IPush>();
+        if (push != null)
+        {
+            (float pushStrength, PushTypes pushType) = push.Push();
+            Push(pushStrength, pushType);
+        }
+    }
+
+    // TODO: Refactor this somewhere
+    private void Push(float pushStrength, PushTypes pushType)
+    {
+        if (pushType == PushTypes.Veloctiy)
         {
             var rb = GetComponentInParent<Rigidbody>();
             float magnitude = rb.velocity.magnitude;
             Vector3 velocityDirection = rb.velocity.normalized;
-            rb.AddForce(-velocityDirection * damageData.forceMagnitude * magnitude, ForceMode.Impulse);
-            //rb.velocity = rb.velocity.normalized * rb.velocity.magnitude * 0.2f;
+            rb.AddForce(-velocityDirection * pushStrength * magnitude, ForceMode.Impulse);
         }
     }
 
-    private void UpdateHistory()
-    {
-        List<ICollidable> toDelete = new List<ICollidable>();
-        foreach (var item in _collisionHistory)
-        {
-            if (item.Value + _cooldownDuration < Time.time)
-            {
-                toDelete.Add(item.Key);
-            }
-        }
-        foreach (var item in toDelete)
-        {
-            _collisionHistory.Remove(item);
-        }
-        //toDelete.ForEach(k => _collisionHistory.Remove(k));
-    }
+    //private void Teleport(Vector3 target)
+    //{
+    //    transform.parent.position = target;
+    //}
+
+    //private void ProcessDamage(CollisionInteraction damageData)
+    //{
+    //    if (damageData.damage > 0)
+    //    {
+    //        _playerHealth.AddHealth(damageData.damage);
+    //    }
+
+    //    //if (damageData.damageType == DamageType.Laser)
+    //    //{
+    //    //    _playerEffects.LaserDamage();
+    //    //}
+
+    //    if (damageData.damageDirectionType == DamageDirectionType.Velocity)
+    //    {
+    //        var rb = GetComponentInParent<Rigidbody>();
+    //        float magnitude = rb.velocity.magnitude;
+    //        Vector3 velocityDirection = rb.velocity.normalized;
+    //        rb.AddForce(-velocityDirection * damageData.forceMagnitude * magnitude, ForceMode.Impulse);
+    //        //rb.velocity = rb.velocity.normalized * rb.velocity.magnitude * 0.2f;
+    //    }
+    //}
+
+    //private void UpdateHistory()
+    //{
+    //    List<ICollidable> toDelete = new List<ICollidable>();
+    //    foreach (var item in _collisionHistory)
+    //    {
+    //        if (item.Value + _cooldownDuration < Time.time)
+    //        {
+    //            toDelete.Add(item.Key);
+    //        }
+    //    }
+    //    foreach (var item in toDelete)
+    //    {
+    //        _collisionHistory.Remove(item);
+    //    }
+    //    //toDelete.ForEach(k => _collisionHistory.Remove(k));
+    //}
 }

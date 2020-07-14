@@ -41,13 +41,13 @@ public class EnemyYoshi_01 : Enemy
         }
     }
 
-    public override void TakeDamage(AttackType _attackType)
+    public override void TakeDamage(AttackTypes _attackType)
     {
         base.TakeDamage( _attackType );
         IncreaseHitCracks();
     }
 
-    public override AttackInteraction GetAttacked(int _amount, AttackType _attackType)
+    public override AttackInteraction GetAttacked(int _amount, AttackTypes _attackType)
     {
         base.GetAttacked( _amount, _attackType );
         EnterGetHitState();

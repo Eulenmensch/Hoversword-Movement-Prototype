@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser : Obstacle
+public class Laser : Machine
 {
     [Header("Laser")]
-    [SerializeField]
-    private GameObject[] _laserModel;
+    [SerializeField] private GameObject[] _laserModel;
 
     public override void SetActive(bool value)
     {

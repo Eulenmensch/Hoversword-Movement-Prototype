@@ -14,8 +14,6 @@ public class CombatController : MonoBehaviour
     public Animator _characterAnimator;
     public Animator _boardAnimator;
 
-
-
     public enum AttackStates { None, Flip, Slash }
     [Header("States")]
     [SerializeField] private AttackStates _attackState = AttackStates.None;
@@ -23,7 +21,7 @@ public class CombatController : MonoBehaviour
 
     [Header("Aiming")]
     [SerializeField, ShowOnly] private bool _isAiming;
-    public bool isAiming { get; private set; }
+    public bool isAiming { get { return _isAiming; } private set { _isAiming = value; } }
     [SerializeField] private bool _aimOnGround;
 
     [Header("Flip Attack")]
@@ -37,7 +35,7 @@ public class CombatController : MonoBehaviour
     [Header("Slash")]
     [SerializeField] private GameObject _slashColliderObject;
     private CapsuleCollider _slashCollider;
-    private HashSet<IAttackable> _hitAttackableCache = new HashSet<IAttackable>();
+
     [SerializeField] private float _slashDuration;
     private float _slashTimestamp;
 
@@ -48,12 +46,10 @@ public class CombatController : MonoBehaviour
     [Header("Collision")]
     [SerializeField] private LayerMask _hitMask;
     private Collider[] _colliderCache;
+    //private HashSet<IAttackable> _hitAttackableCache = new HashSet<IAttackable>();
 
     private int _attackID;
 
-
-    //public Vector3 HitBoxSize;
-    //public LayerMask EnemyLayers;
 
     private void Awake()
     {
@@ -61,9 +57,11 @@ public class CombatController : MonoBehaviour
         _hoverBoardController = GetComponent<HoverBoardControllerYoshi02>();
         _playerHealth = GetComponent<PlayerHealth>();
         if (_flipColliderObject != null)
-            _flipCollider = _flipColliderObject?.GetComponent<CapsuleCollider>();
+            _flipCollider = _flipColliderObject.GetComponent<CapsuleCollider>();
         if (_slashColliderObject != null)
-            _slashCollider = _slashColliderObject?.GetComponent<CapsuleCollider>();
+            _slashCollider = _slashColliderObject.GetComponent<CapsuleCollider>();
+
+        // TODO: Visuals
         _boardExtension.SetActive(false);
         _boardTrail.emitting = false;
     }
@@ -73,7 +71,7 @@ public class CombatController : MonoBehaviour
         // Process aiming input TODO: Do this with the new input system
         bool aimingInput = Input.GetAxis("Left Trigger") > 0.15;
 
-        if (aimingInput && !isAiming && (!_hoverBoardController.isGrounded || _aimOnGround))
+        if (aimingInput && !isAiming && _attackState == AttackStates.None && (!_hoverBoardController.isGrounded || _aimOnGround))
         {
             //print( "start" );
             StartAim();
@@ -90,9 +88,8 @@ public class CombatController : MonoBehaviour
     {
         if (_attackState == AttackStates.Flip && _flipCollider != null)
         {
-            //CheckCollision();
             _colliderCache = CapsuleCollisionCheck(_flipColliderObject.transform, _flipCollider);
-            ProcessCollisions(AttackType.Flip);
+            ProcessCollisions(AttackTypes.Flip);
 
             if (_flipTimestamp + _flipDuration < Time.unscaledTime)
             {
@@ -102,10 +99,8 @@ public class CombatController : MonoBehaviour
 
         if (_attackState == AttackStates.Slash)
         {
-            //collision check
-            //CheckForCollisions();
             _colliderCache = CapsuleCollisionCheck(_slashColliderObject.transform, _slashCollider);
-            ProcessCollisions(AttackType.Slash);
+            ProcessCollisions(AttackTypes.Slash);
 
             if (_slashTimestamp + _slashDuration < Time.unscaledTime)
             {
@@ -133,36 +128,17 @@ public class CombatController : MonoBehaviour
     private void StartAim()
     {
         isAiming = true;
+        TimeManager.Instance?.StartAim();
         _boardAnimator.SetBool("Aim", true);
         _boardExtension.SetActive(true);
-
-        //_aimCharacterModel.isAiming = true;
-
-        //_playerActionState = PlayerActionState.Aiming;
-        //aimHUD.SetActive(true);
-
-
-        //_timeTween?.Kill();
-        //_timeTween = DOTween.To(() => _timescale, x => _timescale = x, _bulletTimescaleAiming, _bulletTimeAimingFadeInDuration)
-        //    .SetEase(_bulletTimeAimingEaseIn).SetUpdate(true);
-        TimeManager.Instance?.StartAim();
     }
 
     private void StopAim()
     {
         isAiming = false;
+        TimeManager.Instance?.StopAim();
         _boardAnimator.SetBool("Aim", false);
         _boardExtension.SetActive(false);
-
-
-        //_aimCharacterModel.isAiming = false;
-
-        //_playerActionState = PlayerActionState.None;
-        //aimHUD.SetActive(false);
-        //_timeTween?.Kill();
-        //_timeTween = DOTween.To(() => _timescale, x => _timescale = x, 1f, _bulletTimeAimingFadeOutDuration)
-        //    .SetEase(_bulletTimeAimingEaseOut).SetUpdate(true);
-        TimeManager.Instance?.StopAim();
     }
 
     private void StartSlash()
@@ -172,27 +148,14 @@ public class CombatController : MonoBehaviour
         _attackID++;
         _boardAnimator.SetBool("Slash", true);
         _boardTrail.emitting = true;
-
-
-
-        //TimeManager.Instance.stopFrame = true;
-
-        //StartSlashVisualization();
-        // Debug.Log("slash");
     }
 
     private void StopSlash()
     {
         _attackState = AttackStates.None;
+        //AttackableExit(ref _hitAttackableCache);
         _boardAnimator.SetBool("Slash", false);
         _boardTrail.emitting = false;
-
-        //TimeManager.Instance.stopFrame = false;
-
-        //StopSlashVisualization();
-        // Debug.Log("stop slash");
-
-        AttackableExit(ref _hitAttackableCache);
     }
 
     private void StartFlip()
@@ -206,99 +169,75 @@ public class CombatController : MonoBehaviour
     private void StopFlip()
     {
         _attackState = AttackStates.None;
+        //AttackableExit(ref _hitAttackableCache);
         _boardAnimator.SetBool("Flip", false);
-        AttackableExit(ref _hitAttackableCache);
     }
 
-    private Collider[] CapsuleCollisionCheck(Transform colliderGameObject, CapsuleCollider collider)
-    {
-        // Getting the necessary positions for OverlapCapsule from capsule collider
-        Vector3 capsuleDirection = collider.direction == 0 ?
-            colliderGameObject.right : collider.direction == 1 ?
-            colliderGameObject.transform.up : colliderGameObject.forward;
-
-        Debug.DrawLine(colliderGameObject.position, colliderGameObject.position + capsuleDirection, Color.red, 3f);
-
-        float height = collider.radius > collider.height ? collider.radius * 2f : collider.height;
-
-
-        Vector3 center = colliderGameObject.TransformPoint(collider.center);
-
-        //Quaternion rot = colliderGameObject.rotation;
-        //center = rot * center;
-        DebugExtension.DebugPoint(center, Color.red, 1f, 1f);
-
-        Vector3 capsuleBottomPoint = center - capsuleDirection * (height * 0.5f - collider.radius);
-        Vector3 capsuleTopPoint = center + capsuleDirection * (height * 0.5f - collider.radius);
-
-
-        DebugExtension.DebugCapsule(capsuleBottomPoint - capsuleDirection * collider.radius, capsuleTopPoint + capsuleDirection * collider.radius,
-            Color.black, collider.radius, 3f);
-
-        //DebugExtension.DebugPoint(colliderGameObject.transform.position + collider.center, Color.green, 1f, 5f);
-        //DebugExtension.DebugPoint(capsuleBottomPoint, Color.green);
-        //DebugExtension.DebugPoint(capsuleTopPoint, Color.red);
-
-
-        return Physics.OverlapCapsule(capsuleBottomPoint, capsuleTopPoint, collider.radius, _hitMask, QueryTriggerInteraction.Collide);
-    }
-
-    private void ProcessCollisions(AttackType _attackType)
+    private void ProcessCollisions(AttackTypes _attackType)
     {
         if (_colliderCache.Length > 0)
         {
             foreach (var item in _colliderCache)
             {
-                IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
-                if (attackable != null)
-                {
-                    AttackInteraction attackInteraction = attackable.GetAttacked(_attackID, _attackType);
-                    _playerHealth.AddHealth(attackInteraction.health);
-                    _hitAttackableCache.Add(attackable);
-                }
+                CheckForAttack(_attackType, item.gameObject);
+                CheckForHealth(item.gameObject);
             }
         }
     }
 
-    private void AttackableExit(ref HashSet<IAttackable> _attackables)
+    private void CheckForAttack(AttackTypes _attackType, GameObject target)
     {
-
-        foreach (var attackable in _attackables)
+        // TODO: Gameobject hierarchy ?
+        IAttackable attackable = target.GetComponentInParent<IAttackable>();
+        if (attackable != null)
         {
-            print("attackable exit");
-            attackable.ExitAttacked();
+            // AttackInteraction attackInteraction = attackable.GetAttacked(_attackID, _attackType);
+            attackable.GetAttacked(_attackID, _attackType);
+            //_playerHealth.AddHealth(attackInteraction.health);
+            //_hitAttackableCache.Add(attackable);
         }
-        _attackables.Clear();
     }
 
-    //private void CheckCollision()
-    //{
-    //    // Getting the necessary positions for OverlapCapsule from capsule collider
-    //    Vector3 capsuleDirection = _flipCollider.direction == 0 ? _flipColliderObject.transform.right : _flipCollider.direction == 1 ? _flipColliderObject.transform.up : _flipColliderObject.transform.forward;
-    //    float height = _flipCollider.radius > _flipCollider.height ? _flipCollider.radius * 2f : _flipCollider.height;
-    //    Vector3 capsuleBottomPoint = _flipColliderObject.transform.position + _flipCollider.center - capsuleDirection * (height * 0.5f - _flipCollider.radius);
-    //    Vector3 capsuleTopPoint = _flipColliderObject.transform.position + _flipCollider.center + capsuleDirection * (height * 0.5f - _flipCollider.radius);
-    //    //DebugExtension.DebugPoint(_collisionObject.transform.position + _collider.center, Color.green, 1f, 5f);
-    //    //DebugExtension.DebugPoint( capsuleBottomPoint, Color.green );
-    //    //DebugExtension.DebugPoint( capsuleTopPoint, Color.green );
+    private void CheckForHealth(GameObject target)
+    {
+        IGiveHealth giveHealth = target.GetComponentInParent<IGiveHealth>();
+        if (giveHealth != null) _playerHealth.AddHealth(giveHealth.GiveHealth(true));
+    }
 
-    //    _colliderCache = Physics.OverlapCapsule(capsuleBottomPoint, capsuleTopPoint, _flipCollider.radius, _hitMask, QueryTriggerInteraction.Collide);
-    //    if (_colliderCache.Length > 0)
+    private Collider[] CapsuleCollisionCheck(Transform colliderGameObject, CapsuleCollider collider)
+    {
+        Vector3 capsuleDirection;
+        if (collider.direction == 0) capsuleDirection = colliderGameObject.right;
+        else if (collider.direction == 1) capsuleDirection = colliderGameObject.transform.up;
+        else capsuleDirection = colliderGameObject.forward;
+
+        // Debug capsule direction
+        // Debug.DrawLine(colliderGameObject.position, colliderGameObject.position + capsuleDirection * 10f, Color.red, 3f);
+
+        float height = collider.radius > collider.height ? collider.radius * 2f : collider.height;
+        Vector3 center = colliderGameObject.TransformPoint(collider.center);
+        // Debug center
+        // DebugExtension.DebugPoint(center, Color.red, 1f, 1f);
+
+        Vector3 capsuleBottomPoint = center - capsuleDirection * (height * 0.5f - collider.radius);
+        Vector3 capsuleTopPoint = center + capsuleDirection * (height * 0.5f - collider.radius);
+        // Debug bottom and top point
+        // DebugExtension.DebugPoint(capsuleBottomPoint, Color.green);
+        // DebugExtension.DebugPoint(capsuleTopPoint, Color.red);
+        // Debug capsule
+        // DebugExtension.DebugCapsule(capsuleBottomPoint - capsuleDirection * collider.radius, capsuleTopPoint + capsuleDirection * collider.radius,
+        //     Color.black, collider.radius, 3f);
+
+        return Physics.OverlapCapsule(capsuleBottomPoint, capsuleTopPoint, collider.radius, _hitMask, QueryTriggerInteraction.Collide);
+    }
+
+    //private void AttackableExit(ref HashSet<IAttackable> _attackables)
+    //{
+    //    foreach (var attackable in _attackables)
     //    {
-    //        foreach (var item in _colliderCache)
-    //        {
-    //            IAttackable attackable = item.gameObject.GetComponentInParent<IAttackable>();
-    //            if (attackable != null)
-    //            {
-    //                AttackInteraction attackInteraction = attackable.GetAttacked();
-    //                _playerHealth.AddHealth(attackInteraction.health);
-    //            }
-    //            Rigidbody rigidbody = item.gameObject.GetComponent<Rigidbody>();
-    //            if (rigidbody != null)
-    //            {
-    //                RepellEnemies(rigidbody);
-    //            }
-    //        }
+    //        print("attackable exit");
+    //        attackable.ExitAttacked();
     //    }
+    //    _attackables.Clear();
     //}
 }

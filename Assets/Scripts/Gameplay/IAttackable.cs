@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AttackType
+public enum AttackTypes
 {
     Flip,
     Slash
@@ -10,7 +10,7 @@ public enum AttackType
 
 public interface IAttackable
 {
-    AttackInteraction GetAttacked(int attackID, AttackType _attackType);
+    void GetAttacked(int attackID, AttackTypes _attackType);
 
-    void ExitAttacked();
+    //void ExitAttacked();
 }

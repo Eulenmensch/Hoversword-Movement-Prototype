@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7273082331409039550}
   - component: {fileID: 7273082331409039545}
+  - component: {fileID: 5138566872712482484}
+  - component: {fileID: 7055387157680532692}
   m_Layer: 12
   m_Name: gp_LaserWall
   m_TagString: Untagged
@@ -46,12 +48,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isActive: 1
-  _applyDamage: 1
+  _laserModel:
+  - {fileID: 8847364513025554781}
+--- !u!114 &5138566872712482484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273082331409039551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcca2600785ce154e8114f30fd5ec2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _damage: 1
-  _damageType: 0
-  _forceMagnitude: 100
-  _damageDirectionType: 0
-  _laserModel: {fileID: 8847364513025554781}
+  _damageType: 1
+--- !u!114 &7055387157680532692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273082331409039551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b33c681f8b6714e93eb1a8ff62d3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pushStrength: 40
+  _pushType: 0
 --- !u!1 &8847364513025554781
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +370,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -653,6 +680,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

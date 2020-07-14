@@ -6,10 +6,10 @@ public class TeleportField : MonoBehaviour, ICollidable
 {
     public Transform target;
 
-    public CollisionInteraction Collide()
+    public void Collide()
     {
-        CollisionInteraction collisionInteraction = new CollisionInteraction(false);
-        collisionInteraction.SetTeleport(true, target.position);
-        return collisionInteraction;
+        //CollisionInteraction collisionInteraction = new CollisionInteraction(false);
+        //collisionInteraction.SetTeleport(true, target.position);
+        //return collisionInteraction;
     }
 }

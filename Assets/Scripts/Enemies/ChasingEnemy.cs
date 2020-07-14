@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ChasingEnemy : MonoBehaviour, IAttackable
+public class ChasingEnemy : MonoBehaviour/*, IAttackable*/
 {
     [SerializeField] private float FlingForce;
     [SerializeField] private float FlingHeightFactor;
@@ -20,7 +20,7 @@ public class ChasingEnemy : MonoBehaviour, IAttackable
     {
         RB = GetComponent<Rigidbody>();
     }
-    public AttackInteraction GetAttacked(int attackID, AttackType _attackType)
+    public AttackInteraction GetAttacked(int attackID, AttackTypes _attackType)
     {
         OnHit.Invoke();
         GetSuckedInFront();

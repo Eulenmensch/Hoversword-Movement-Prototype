@@ -23,7 +23,7 @@ public class Shooter : MonoBehaviour, IShutOff
     [SerializeField] private float _coolDownDuration = 1f;
     private float _shotTimestamp;
 
-    public List<Machine> energySources { get; set; } = new List<Machine>();
+    public List<Battery> energySources { get; set; } = new List<Battery>();
 
     private void Start()
     {
@@ -67,7 +67,7 @@ public class Shooter : MonoBehaviour, IShutOff
         _angle = Quaternion.Angle(_barrel.rotation, lookRotation);
     }
 
-    public virtual void ShutOff(Machine machine)
+    public virtual void ShutOff(Battery machine)
     {
         //SetActive(false);
         if (energySources.Contains(machine))
@@ -85,7 +85,7 @@ public class Shooter : MonoBehaviour, IShutOff
         }
     }
 
-    public void Register(Machine machine)
+    public void Register(Battery machine)
     {
         if (!energySources.Contains(machine))
         {

@@ -10379,13 +10379,15 @@ MonoBehaviour:
   JumpMinChargeColor: {r: 0.24140087, g: 0.56005, b: 1.5835898, a: 1}
   JumpMaxChargeColor: {r: 0.28968105, g: 1.2456286, b: 1.8443027, a: 1}
   JumpFullChargeFeedbackColor: {r: 0.093141735, g: 1.9766746, b: 0.5278031, a: 1}
-  JetParticles:
-  - {fileID: 0}
-  - {fileID: 0}
+  MainBoosters: []
+  OuterCircles: []
+  Sparks: []
+  ThrusterTrails: []
   DashChargeParticles: {fileID: 1058960487482476565}
   DashJetParticles: {fileID: 1058960486218233242}
   JumpChargeParticles: {fileID: 6652802507900904665}
   JumpJetParticles: {fileID: 8579468188866589942}
+  SpeedLines: {fileID: 0}
   JumpChargeParticleRenderer: {fileID: 2372349624655965378}
   JumpJetParticleRenderer: {fileID: 2161675363379215223}
   JetDefaultColor: {r: 0.13456745, g: 0.6792453, b: 0.2539643, a: 1}
@@ -16458,10 +16460,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.4
-  m_Height: 2.1135125
+  m_Radius: 0.6837568
+  m_Height: 1.9082421
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8141618, z: -0.03}
+  m_Center: {x: 0, y: 0.7115266, z: 0.03641033}
 --- !u!136 &4020337322750172123
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16472,10 +16474,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.38
-  m_Height: 2.0805588
+  m_Radius: 0.49240085
+  m_Height: 3.6032171
   m_Direction: 2
-  m_Center: {x: 0, y: 0.19, z: 0.21058655}
+  m_Center: {x: 0, y: 0.18, z: 0.32573843}
 --- !u!114 &4020337322750172122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16490,8 +16492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collisionMask:
     serializedVersion: 2
-    m_Bits: 12288
-  _cooldownDuration: 0.5
+    m_Bits: 274432
 --- !u!1 &4020337323129913459
 GameObject:
   m_ObjectHideFlags: 0
@@ -22471,14 +22472,14 @@ MonoBehaviour:
   _isAiming: 0
   _aimOnGround: 1
   _flipColliderObject: {fileID: 4020337322632025976}
-  _flipDuration: 0.6
+  _flipDuration: 0.7
   _slashColliderObject: {fileID: 7336496259159820014}
   _slashDuration: 0.18
   _boardExtension: {fileID: 8417161220662920646}
   _boardTrail: {fileID: 3242339184498402737}
   _hitMask:
     serializedVersion: 2
-    m_Bits: 9216
+    m_Bits: 271360
 --- !u!114 &7301586764861273198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22565,6 +22566,7 @@ MonoBehaviour:
   _initialHealth: 5
   _maxHealth: 10
   _health: 0
+  _damageCooldown: 1
   _damageSound: {fileID: 4020337323129913461}
 --- !u!114 &4020337322759163268
 MonoBehaviour:
