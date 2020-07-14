@@ -6,5 +6,6 @@ using UnityEngine;
 public interface ICollidable
 {
     // CollisionInteraction Collide();
-    void Collide();
+    void TriggerEnter(GameObject caller);
+    void TriggerExit();
 }

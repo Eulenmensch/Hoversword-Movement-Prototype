@@ -41,7 +41,7 @@ public class Battery : Machine, IAttackable
         _wreckages = GetComponentsInChildren<Wreckage>(true);
     }
 
-    public override void Collide()
+    public override void TriggerEnter(GameObject caller)
     {
         Destroy();
     }

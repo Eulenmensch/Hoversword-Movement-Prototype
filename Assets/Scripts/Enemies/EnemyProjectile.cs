@@ -32,18 +32,18 @@ public class EnemyProjectile : Projectile, ICollidable
         transform.position += transform.forward * _moveSpeed * Time.deltaTime;
     }
 
-    public void /*CollisionInteraction*/ Collide()
+    public void TriggerEnter(GameObject caller)
     {
-        CollisionInteraction interactionData = new CollisionInteraction( true/*, false*/);
-        interactionData.SetDamage( true, _damage, _damageType, _slowDownForce, DamageDirectionType.Velocity );
+        CollisionInteraction interactionData = new CollisionInteraction(true/*, false*/);
+        interactionData.SetDamage(true, _damage, _damageType, _slowDownForce, DamageDirectionType.Velocity);
 
-        Destroy( gameObject );
-
-        //return interactionData;
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Instantiate( ExplosionPrefab, transform.position, Quaternion.identity );
+        Instantiate(ExplosionPrefab, transform.position, Quaternion.identity);
     }
+
+    public void TriggerExit() { }
 }

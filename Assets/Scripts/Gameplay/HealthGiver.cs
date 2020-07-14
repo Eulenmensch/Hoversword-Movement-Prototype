@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class HealthGiver : MonoBehaviour, IGiveHealth
 {
+    [SerializeField] private HealingTypes _healingType;
+
     [SerializeField] private int _healthForCollision;
     [SerializeField] private int _healthForAttack;
 
-    public int GiveHealth(bool isAttack)
+    
+
+    public HealthGainData GiveHealth(bool isAttack)
     {
-        return isAttack ? _healthForAttack : _healthForCollision;
+        return new HealthGainData(_healingType, isAttack ? _healthForAttack : _healthForCollision);
     }
 
     private void OnValidate()

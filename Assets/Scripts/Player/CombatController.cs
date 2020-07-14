@@ -201,7 +201,8 @@ public class CombatController : MonoBehaviour
     private void CheckForHealth(GameObject target)
     {
         IGiveHealth giveHealth = target.GetComponentInParent<IGiveHealth>();
-        if (giveHealth != null) _playerHealth.AddHealth(giveHealth.GiveHealth(true));
+        if (giveHealth != null)
+            _playerHealth.HealthGain(giveHealth.GiveHealth(true));
     }
 
     private Collider[] CapsuleCollisionCheck(Transform colliderGameObject, CapsuleCollider collider)

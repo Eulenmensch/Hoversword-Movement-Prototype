@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DestroyOnCollision : MonoBehaviour, ICollidable
 {
-    public void Collide()
+    public void TriggerEnter(GameObject caller)
     {
         Destroy(gameObject);
     }
+
+    public void TriggerExit() { }
 }

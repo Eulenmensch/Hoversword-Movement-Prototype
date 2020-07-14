@@ -56,7 +56,7 @@ public abstract class Machine : MonoBehaviour, ICollidable, IShutOff
             energySources.Remove(machine);
         else
             Debug.Log("Energy Source wasn't register!");
-        
+
         if (energySources.Count == 0)
             SetActive(false);
     }
@@ -67,8 +67,10 @@ public abstract class Machine : MonoBehaviour, ICollidable, IShutOff
         if (!energySources.Contains(machine)) energySources.Add(machine);
     }
 
-    public virtual void Collide()
+    public virtual void TriggerEnter(GameObject caller)
     {
-        Debug.Log($"Collided with: {gameObject.name}");
+        //Debug.Log($"Collided with: {gameObject.name}");
     }
+
+    public void TriggerExit() { }
 }

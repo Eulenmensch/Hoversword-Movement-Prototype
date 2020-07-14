@@ -15,6 +15,7 @@ public class PlayerCollisionHandler : MonoBehaviour
     //private float _cooldownDuration = 1f;
 
     private PlayerHealth _playerHealth;
+    private PlayerCheckpointResetter _playerCheckpointResetter;
     //private PlayerEffects _playerEffects;
 
     //private Dictionary<ICollidable, float> _collisionHistory = new Dictionary<ICollidable, float>();
@@ -22,6 +23,7 @@ public class PlayerCollisionHandler : MonoBehaviour
     private void Awake()
     {
         _playerHealth = GetComponentInParent<PlayerHealth>();
+        _playerCheckpointResetter = GetComponentInParent<PlayerCheckpointResetter>();
         //_playerEffects = transform.parent.GetComponentInChildren<PlayerEffects>();
     }
 
@@ -37,6 +39,17 @@ public class PlayerCollisionHandler : MonoBehaviour
             CheckForHealthGain(gO);
             CheckForDamage(gO);
             CheckForPushing(gO);
+            CheckForCheckpoint(gO);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (((1 << other.gameObject.layer) & _collisionMask) != 0)
+        {
+            ICollidable collidable = other.gameObject.GetComponentInParent<ICollidable>();
+            if (collidable != null)
+                collidable.TriggerExit();
         }
     }
 
@@ -44,26 +57,14 @@ public class PlayerCollisionHandler : MonoBehaviour
     {
         ICollidable collidable = target.GetComponentInParent<ICollidable>();
         if (collidable != null)
-            collidable.Collide();
-        //{
-        //    //if (!_collisionHistory.ContainsKey(collidable))
-        //    //{
-        //    //_collisionHistory.Add(collidable, Time.time);
-
-        //    collidable.Collide();
-
-        //    // CollisionInteraction collisionInteraction = collidable.Collide();
-        //    //if (collisionInteraction.applyDamage) ProcessDamage(collisionInteraction);
-        //    //if (collisionInteraction.teleport) Teleport(collisionInteraction.teleportTarget);
-        //    //}
-        //}
+            collidable.TriggerEnter(gameObject);
     }
 
     private void CheckForHealthGain(GameObject target)
     {
         IGiveHealth giveHealth = target.GetComponentInParent<IGiveHealth>();
         if (giveHealth != null)
-            _playerHealth.AddHealth(giveHealth.GiveHealth(false));
+            _playerHealth.HealthGain(giveHealth.GiveHealth(false));
     }
 
     private void CheckForDamage(GameObject target)
@@ -72,7 +73,8 @@ public class PlayerCollisionHandler : MonoBehaviour
         if (dealDamage != null)
         {
             (int damage, DamageTypes damageType) = dealDamage.DealDamage();
-            _playerHealth.Damage(damage, damageType);
+            if (damage > 0)
+                _playerHealth.Damage(damage, damageType);
         }
     }
 
@@ -83,6 +85,15 @@ public class PlayerCollisionHandler : MonoBehaviour
         {
             (float pushStrength, PushTypes pushType) = push.Push();
             Push(pushStrength, pushType);
+        }
+    }
+
+    private void CheckForCheckpoint(GameObject target)
+    {
+        Checkpoint checkpoint = target.GetComponentInParent<Checkpoint>();
+        if (checkpoint != null)
+        {
+            _playerCheckpointResetter.SetCheckpoint(checkpoint);
         }
     }
 
@@ -97,48 +108,4 @@ public class PlayerCollisionHandler : MonoBehaviour
             rb.AddForce(-velocityDirection * pushStrength * magnitude, ForceMode.Impulse);
         }
     }
-
-    //private void Teleport(Vector3 target)
-    //{
-    //    transform.parent.position = target;
-    //}
-
-    //private void ProcessDamage(CollisionInteraction damageData)
-    //{
-    //    if (damageData.damage > 0)
-    //    {
-    //        _playerHealth.AddHealth(damageData.damage);
-    //    }
-
-    //    //if (damageData.damageType == DamageType.Laser)
-    //    //{
-    //    //    _playerEffects.LaserDamage();
-    //    //}
-
-    //    if (damageData.damageDirectionType == DamageDirectionType.Velocity)
-    //    {
-    //        var rb = GetComponentInParent<Rigidbody>();
-    //        float magnitude = rb.velocity.magnitude;
-    //        Vector3 velocityDirection = rb.velocity.normalized;
-    //        rb.AddForce(-velocityDirection * damageData.forceMagnitude * magnitude, ForceMode.Impulse);
-    //        //rb.velocity = rb.velocity.normalized * rb.velocity.magnitude * 0.2f;
-    //    }
-    //}
-
-    //private void UpdateHistory()
-    //{
-    //    List<ICollidable> toDelete = new List<ICollidable>();
-    //    foreach (var item in _collisionHistory)
-    //    {
-    //        if (item.Value + _cooldownDuration < Time.time)
-    //        {
-    //            toDelete.Add(item.Key);
-    //        }
-    //    }
-    //    foreach (var item in toDelete)
-    //    {
-    //        _collisionHistory.Remove(item);
-    //    }
-    //    //toDelete.ForEach(k => _collisionHistory.Remove(k));
-    //}
 }

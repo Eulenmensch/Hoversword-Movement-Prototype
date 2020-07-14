@@ -2,13 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerHealth : MonoBehaviour
 {
+    private PlayerCheckpointResetter _playerCheckpointResetter;
+
     [SerializeField] private int _initialHealth;
 
     [SerializeField] private int _maxHealth;
     public int maxHealth => _maxHealth;
+
+    [SerializeField] private int _resetHealth;
 
     [SerializeField] private int _health;
     public int health
@@ -26,13 +31,19 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
-        ResetHealth();
-        _playerEffects = transform.GetComponentInChildren<PlayerEffects>();
+        _health = _initialHealth;
+        _playerCheckpointResetter = GetComponent<PlayerCheckpointResetter>();
+        _playerEffects = GetComponentInChildren<PlayerEffects>();
     }
 
-    private void ResetHealth()
+    public void ResetHealth()
     {
-        health = _initialHealth;
+        health = Mathf.Max(_resetHealth, _health);
+    }
+
+    public void FillHealth()
+    {
+        health = maxHealth;
     }
 
     public void AddHealth(int value)
@@ -51,5 +62,39 @@ public class PlayerHealth : MonoBehaviour
         _playerEffects.Damage(damageType);
         if (_damageSound != null)
             _damageSound.Play();
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void UseHealth(int value)
+    {
+        health -= value;
+        if (health <= 0)
+            Die();
+    }
+
+    public void HealthGain(HealthGainData healthGainData)
+    {
+        switch (healthGainData.healingType)
+        {
+            case HealingTypes.Adding:
+                AddHealth(healthGainData.healthGain);
+                break;
+            case HealingTypes.Reset:
+                ResetHealth();
+                break;
+            case HealingTypes.Full:
+                FillHealth();
+                break;
+        }
+    }
+
+    private void Die()
+    {
+        ResetHealth();
+        _playerCheckpointResetter.Reset();
     }
 }
