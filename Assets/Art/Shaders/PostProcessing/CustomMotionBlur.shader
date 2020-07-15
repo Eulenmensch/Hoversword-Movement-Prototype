@@ -149,15 +149,15 @@ Shader "CustomMotionBlur"
 				float2 uv0145 = i.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
 				float3 ase_worldNormal = i.ase_texcoord2.xyz;
 				float3 ase_worldPos = i.ase_texcoord3.xyz;
-				float3 temp_output_16_0_g16 = ( ase_worldPos * 100.0 );
-				float3 crossY18_g16 = cross( ase_worldNormal , ddy( temp_output_16_0_g16 ) );
-				float3 worldDerivativeX2_g16 = ddx( temp_output_16_0_g16 );
-				float dotResult6_g16 = dot( crossY18_g16 , worldDerivativeX2_g16 );
-				float crossYDotWorldDerivX34_g16 = abs( dotResult6_g16 );
+				float3 temp_output_16_0_g18 = ( ase_worldPos * 100.0 );
+				float3 crossY18_g18 = cross( ase_worldNormal , ddy( temp_output_16_0_g18 ) );
+				float3 worldDerivativeX2_g18 = ddx( temp_output_16_0_g18 );
+				float dotResult6_g18 = dot( crossY18_g18 , worldDerivativeX2_g18 );
+				float crossYDotWorldDerivX34_g18 = abs( dotResult6_g18 );
 				float2 uv0148 = i.texcoord.xy * float2( 1,1 ) + float2( -0.5,-0.5 );
 				float2 CenteredUV15_g13 = ( uv0148 - float2( 0,0 ) );
 				float2 break17_g13 = CenteredUV15_g13;
-				float2 appendResult23_g13 = (float2(( length( CenteredUV15_g13 ) * 0.03 * 2.0 ) , ( atan2( break17_g13.x , break17_g13.y ) * ( 1.0 / 6,28318548202515 ) * 1.81 )));
+				float2 appendResult23_g13 = (float2(( length( CenteredUV15_g13 ) * 0.03 * 2.0 ) , ( atan2( break17_g13.x , break17_g13.y ) * ( 1.0 / 6.28318548202515 ) * 1.81 )));
 				float mulTime199 = _Time.y * 10.61;
 				float cos216 = cos( mulTime199 );
 				float sin216 = sin( mulTime199 );
@@ -169,16 +169,16 @@ Shader "CustomMotionBlur"
 				float blendOpSrc195 = 0.0;
 				float blendOpDest195 = ( simplePerlin3D147 * smoothstepResult198 );
 				float lerpBlendMode195 = lerp(blendOpDest195,( blendOpSrc195 * blendOpDest195 ),0.2);
-				float temp_output_20_0_g16 = ( saturate( lerpBlendMode195 ));
-				float3 crossX19_g16 = cross( ase_worldNormal , worldDerivativeX2_g16 );
-				float3 break29_g16 = ( sign( crossYDotWorldDerivX34_g16 ) * ( ( ddx( temp_output_20_0_g16 ) * crossY18_g16 ) + ( ddy( temp_output_20_0_g16 ) * crossX19_g16 ) ) );
-				float3 appendResult30_g16 = (float3(break29_g16.x , -break29_g16.y , break29_g16.z));
-				float3 normalizeResult39_g16 = normalize( ( ( crossYDotWorldDerivX34_g16 * ase_worldNormal ) - appendResult30_g16 ) );
+				float temp_output_20_0_g18 = ( saturate( lerpBlendMode195 ));
+				float3 crossX19_g18 = cross( ase_worldNormal , worldDerivativeX2_g18 );
+				float3 break29_g18 = ( sign( crossYDotWorldDerivX34_g18 ) * ( ( ddx( temp_output_20_0_g18 ) * crossY18_g18 ) + ( ddy( temp_output_20_0_g18 ) * crossX19_g18 ) ) );
+				float3 appendResult30_g18 = (float3(break29_g18.x , -break29_g18.y , break29_g18.z));
+				float3 normalizeResult39_g18 = normalize( ( ( crossYDotWorldDerivX34_g18 * ase_worldNormal ) - appendResult30_g18 ) );
 				float3 temp_output_5_0_g17 = ( ( ase_worldPos - float3( 0,0,0 ) ) / _MaskRadius );
 				float dotResult8_g17 = dot( temp_output_5_0_g17 , temp_output_5_0_g17 );
 				
 
-				float4 color = tex2D( _MainTex, ( float3( uv0145 ,  0.0 ) + ( normalizeResult39_g16 * pow( saturate( dotResult8_g17 ) , 1.55 ) ) ).xy );
+				float4 color = tex2D( _MainTex, ( float3( uv0145 ,  0.0 ) + ( normalizeResult39_g18 * pow( saturate( dotResult8_g17 ) , 1.55 ) ) ).xy );
 				
 				return color;
 			}
@@ -203,13 +203,13 @@ Node;AmplifyShaderEditor.SimpleTimeNode;199;-2650.515,-277.4388;Inherit;False;1;
 Node;AmplifyShaderEditor.RangedFloatNode;149;-2561.503,-205.3281;Inherit;False;Property;_NoiseScale;NoiseScale;0;0;Create;True;0;0;False;0;False;17.28066;20;1;20;0;1;FLOAT;0
 Node;AmplifyShaderEditor.LengthOpNode;101;-2438.114,-73.54544;Inherit;True;1;0;FLOAT2;0,0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RotatorNode;216;-2465.15,-430.7483;Inherit;False;3;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;2;FLOAT;1;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.NoiseGeneratorNode;147;-2277.355,-435.0621;Inherit;True;Simplex3D;True;False;2;0;FLOAT3;0,0,0;False;1;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SmoothstepOpNode;198;-2241.726,-158.5969;Inherit;False;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;1;FLOAT;0
+Node;AmplifyShaderEditor.NoiseGeneratorNode;147;-2277.355,-435.0621;Inherit;True;Simplex3D;True;False;2;0;FLOAT3;0,0,0;False;1;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;197;-2027.927,-277.3378;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;155;-1888.1,-9.403754;Inherit;False;Property;_MaskRadius;MaskRadius;1;0;Create;True;0;0;False;0;False;0;0;0;20;0;1;FLOAT;0
 Node;AmplifyShaderEditor.BlendOpsNode;195;-1886.397,-356.2276;Inherit;True;Multiply;True;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0.2;False;1;FLOAT;0
 Node;AmplifyShaderEditor.FunctionNode;153;-1593.899,-28.3038;Inherit;True;SphereMask;-1;;17;988803ee12caf5f4690caee3c8c4a5bb;0;3;15;FLOAT3;0,0,0;False;14;FLOAT;5.3;False;12;FLOAT;1.55;False;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;186;-1602.743,-301.4629;Inherit;True;Normal From Height;-1;;16;1942fe2c5f1a1f94881a33d532e4afeb;0;1;20;FLOAT;0;False;2;FLOAT3;40;FLOAT3;0
+Node;AmplifyShaderEditor.FunctionNode;186;-1602.743,-301.4629;Inherit;True;Normal From Height;-1;;18;1942fe2c5f1a1f94881a33d532e4afeb;0;1;20;FLOAT;0;False;2;FLOAT3;40;FLOAT3;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;145;-1237.091,-248.4064;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;154;-1227.1,-124.2037;Inherit;True;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;146;-1002.422,-136.3104;Inherit;True;2;2;0;FLOAT2;0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
@@ -224,9 +224,9 @@ WireConnection;196;1;148;0
 WireConnection;101;0;100;0
 WireConnection;216;0;196;0
 WireConnection;216;2;199;0
+WireConnection;198;0;101;0
 WireConnection;147;0;216;0
 WireConnection;147;1;149;0
-WireConnection;198;0;101;0
 WireConnection;197;0;147;0
 WireConnection;197;1;198;0
 WireConnection;195;1;197;0
@@ -240,4 +240,4 @@ WireConnection;10;0;142;0
 WireConnection;10;1;146;0
 WireConnection;141;0;10;0
 ASEEND*/
-//CHKSM=3290E929036482776823AF2EA8CDFDF21D1B75BC
+//CHKSM=C85341FDF5F747A8ECD3B229CA422B460F41DB69

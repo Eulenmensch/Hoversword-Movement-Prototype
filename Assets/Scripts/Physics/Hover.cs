@@ -119,6 +119,7 @@ public class Hover : MonoBehaviour
             }
         }
     }
+
     private void ApplyGroundStickForce()
     {
         Ray groundStickRay = new Ray( transform.position, -transform.up );
@@ -128,6 +129,7 @@ public class Hover : MonoBehaviour
             if ( Physics.Raycast( groundStickRay, out hit, GroundStickHeight, GroundMask ) )
             {
                 Vector3 force = Vector3.zero;
+                //Checks if the hovering object implements IMove
                 if ( Movement != null )
                 {
                     force = -hit.normal * GroundStickForce * ( RB.velocity.magnitude / Movement.MaxSpeed );
