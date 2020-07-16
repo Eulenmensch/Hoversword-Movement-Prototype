@@ -10,7 +10,8 @@ public class PlayerEngineFX : MonoBehaviour
     // [SerializeField] private StudioEventEmitter EngineEmitter;
     // [SerializeField] private StudioEventEmitter ThrustersEmitter;
     [SerializeField] private Rigidbody RB;
-    [SerializeField] private HoverBoardControllerYoshi02 ControllerYoshi02;
+    [SerializeField] private PlayerHandling Handling;
+    [SerializeField] private PlayerJump Jump;
     [SerializeField] private Renderer SwordRenderer;
     [SerializeField, ColorUsage( true, true )] private Color JumpMinChargeColor;
     [SerializeField, ColorUsage( true, true )] private Color JumpMaxChargeColor;
@@ -60,9 +61,6 @@ public class PlayerEngineFX : MonoBehaviour
 
     void Update()
     {
-        SetRPMParameter();
-        SetThrustParameter();
-        SetTurnParameter();
         SetJetParticleParameters();
         SetJumpChargeColor();
         PlayDashParticles();
@@ -148,30 +146,13 @@ public class PlayerEngineFX : MonoBehaviour
         }
     }
 
-    void SetRPMParameter()
-    {
-        // RPM = RB.velocity.magnitude / ControllerYoshi02.MaxSpeed;
-        // EngineEmitter.SetParameter( "RPM", RPM );
-
-    }
-
-    void SetThrustParameter()
-    {
-        // ThrustersEmitter.SetParameter( "Thrust", Thrust );
-    }
-
-    void SetTurnParameter()
-    {
-        // EngineEmitter.SetParameter( "Turn", Turn );
-    }
-
     void SetJumpChargeColor()
     {
-        Color chargeColor = Color.Lerp( JumpMinChargeColor, JumpMaxChargeColor, ControllerYoshi02.JumpForceCharge );
-        SwordRenderer.materials[1].SetColor( "_EmissionColor", chargeColor );
+        Color chargeColor = Color.Lerp( JumpMinChargeColor, JumpMaxChargeColor, Jump.JumpForceCharge );
+        SwordRenderer.materials[3].SetColor( "_EmissionColor", chargeColor );
         JumpChargeParticleRenderer.trailMaterial.SetColor( "_EmissionColor", chargeColor );
         JumpJetParticleRenderer.trailMaterial.SetColor( "_EmissionColor", chargeColor );
-        if ( ControllerYoshi02.JumpForceCharge >= 1 )
+        if ( Jump.JumpForceCharge >= 1 )
         {
             SwordRenderer.materials[1].SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
             JumpChargeParticleRenderer.trailMaterial.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
@@ -183,7 +164,7 @@ public class PlayerEngineFX : MonoBehaviour
     {
         if ( SpeedLines != null )
         {
-            SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / ControllerYoshi02.MaxSpeed );
+            SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / Handling.MaxSpeed );
         }
     }
 

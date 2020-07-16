@@ -6,7 +6,9 @@ public class PlayerHandling : MonoBehaviour, IMove
 {
     public float MaxSpeed { get; private set; }
     public bool IsDashing { get; set; }
+    public bool IsGrounded { get; private set; }
 
+    [SerializeField] PlayerEngineFX BoardFX;
     //Settings
 
     //References
@@ -19,7 +21,6 @@ public class PlayerHandling : MonoBehaviour, IMove
     private QuadraticDrag QuadraticDrag;
 
     //Private Fields
-    private bool IsGrounded;
     private float ThrustInput;
     private float TurnInput;
     private float PitchInput;
@@ -93,10 +94,12 @@ public class PlayerHandling : MonoBehaviour, IMove
         if ( context.started )
         {
             PlayerDash.StartCharge();
+            BoardFX.SetDashing( true );
         }
         else if ( context.canceled )
         {
             PlayerDash.StopCharge();
+            BoardFX.SetDashing( false );
         }
     }
 
@@ -105,11 +108,14 @@ public class PlayerHandling : MonoBehaviour, IMove
         if ( context.started )
         {
             PlayerJump.SetCharging( true );
+            BoardFX.SetCrouching( true );
         }
         else if ( context.canceled )
         {
             PlayerJump.Jump();
+            BoardFX.PlayJumpJetParticles();
             PlayerJump.SetCharging( false );
+            BoardFX.SetCrouching( false );
         }
     }
 

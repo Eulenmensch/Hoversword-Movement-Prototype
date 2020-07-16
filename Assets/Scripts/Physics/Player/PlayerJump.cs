@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent( typeof( PlayerHandling ), typeof( Rigidbody ) )]
 public class PlayerJump : MonoBehaviour
 {
+    public float JumpForceCharge { get; private set; }  //A value that goes up from 0 to 1 while crouching, impacting how much jump force will be exerted on the body
+
     [SerializeField] private float JumpForceMax;                //The maximum force JumpForce can be
     [SerializeField] private float JumpForceMin;                //The minimum force JumpForce can be
     [SerializeField] private float JumpChargeTime;              //The time in seconds it takes to charge up the jump while crouching
@@ -14,7 +16,6 @@ public class PlayerJump : MonoBehaviour
     private Rigidbody RB;
 
     private float JumpForce;                //The impulse applied to the body upwards to make it jump
-    private float JumpForceCharge;          //A value that goes up from 0 to 1 while crouching, impacting how much jump force will be exerted on the body
     private bool IsCharging;
     private bool IsGrounded;
     private bool IsCoyoteTimeRunning;
