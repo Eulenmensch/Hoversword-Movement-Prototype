@@ -80,8 +80,10 @@ public class PlayerHandling : MonoBehaviour, IMove
 
     public void GetMoveInput(InputAction.CallbackContext context)
     {
-        ThrustInput = context.ReadValue<Vector2>().y;
-        TurnInput = context.ReadValue<Vector2>().x;
+        Vector2 inputVector = context.ReadValue<Vector2>();
+        ThrustInput = inputVector.y;
+        TurnInput = inputVector.x;
+        BoardFX.SetMoveInput( inputVector.y, inputVector.x );
     }
 
     public void GetPitchInput(InputAction.CallbackContext context)
