@@ -5,35 +5,35 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent( typeof( Rigidbody ) )]
+[RequireComponent(typeof(Rigidbody))]
 public class Hover : MonoBehaviour
 {
     #region Settings
-    [Header( "Hover Settings" )]
+    [Header("Hover Settings")]
     [SerializeField] private float HoverForce;                  //The force that pushes the board upwards
     //TODO:public float AnticipativeHoverForce;                 //The force that smoothes out sudden changes in ground gradient
     [SerializeField] private float HoverHeight;                 //The ideal height at which the board wants to hover
 
-    [Header( "Ground Stick Settings" )]
+    [Header("Ground Stick Settings")]
     [SerializeField] private bool StickToGround;                //Whether the board should stick to the ground when grounded
     [SerializeField] private float GroundStickForce;            //The force applied inverse to ground normal
     [SerializeField] private float GroundStickHeight;           //The maximum height at which the ground stick force is applied
     [SerializeField] private LayerMask GroundMask;              //The layer mask that determines what counts as ground
 
-    [Header( "Hover Point Settings" )]
+    [Header("Hover Point Settings")]
     [SerializeField] private GameObject HoverPointPrefab;       //The hover point prefab
     [SerializeField] private GameObject HoverPointContainer;    //The GameObject to which the generated hoverpoints are childed
     [SerializeField] private BoxCollider HoverArea;             //The area in which a hoverpoint array is generated
     [SerializeField] private int HoverPointRows;                //how many hoverpoint rows are generated
     [SerializeField] private int HoverPointColumns;             //how many hoverpoint columns are generated
 
-    [Header( "PID Controller Settings" )]
-    [SerializeField, Range( 0.0f, 1.0f )] private float ProportionalGain;  //A tuning value for the proportional error correction
-    [SerializeField, Range( 0.0f, 1.0f )] private float IntegralGain;      //A tuning value for the integral error correction
-    [SerializeField, Range( 0.0f, 1.0f )] private float DerivativeGain;    //A tuning value for the derivative error correction
+    [Header("PID Controller Settings")]
+    [SerializeField, Range(0.0f, 1.0f)] private float ProportionalGain;  //A tuning value for the proportional error correction
+    [SerializeField, Range(0.0f, 1.0f)] private float IntegralGain;      //A tuning value for the integral error correction
+    [SerializeField, Range(0.0f, 1.0f)] private float DerivativeGain;    //A tuning value for the derivative error correction
 
 #if UNITY_EDITOR
-    [Header( "Debug Settings" )]
+    [Header("Debug Settings")]
     [SerializeField] private bool Debugging;
     [SerializeField] private GUIStyle DebugTextStyle;
     [SerializeField] private Gradient DebugGradient;
@@ -52,7 +52,7 @@ public class Hover : MonoBehaviour
 
         //Initialize an array to contain all hover points
         HoverPoints = new Transform[HoverPointRows * HoverPointColumns];
-        GenerateHoverPoints( HoverArea, HoverPointColumns, HoverPointRows );
+        GenerateHoverPoints(HoverArea, HoverPointColumns, HoverPointRows);
 
         CreatePIDs();
     }
@@ -61,28 +61,31 @@ public class Hover : MonoBehaviour
     {
         ApplyHoverForces();
         ApplyGroundStickForce();
+#if UNITY_EDITOR
+        UpdatePIDs();
+#endif
     }
 
     private void GenerateHoverPoints(BoxCollider _area, int _columns, int _rows)
     {
-        float columnSpacing = _area.size.x / ( _columns - 1 );
-        float rowSpacing = _area.size.z / ( _rows - 1 );
-        Vector3 rowOffset = new Vector3( 0, 0, rowSpacing );
+        float columnSpacing = _area.size.x / (_columns - 1);
+        float rowSpacing = _area.size.z / (_rows - 1);
+        Vector3 rowOffset = new Vector3(0, 0, rowSpacing);
 
-        for ( int i = 0; i < _columns; i++ )
+        for (int i = 0; i < _columns; i++)
         {
             Vector3 columnHead = new Vector3(
-                ( _area.center.x - _area.extents.x ) + ( columnSpacing * i ),
+                (_area.center.x - (_area.size.x / 2)) + (columnSpacing * i),
                 _area.center.y,
-                _area.center.z + _area.extents.z
+                _area.center.z + (_area.size.z / 2)
             );
 
-            for ( int j = 0; j < _rows; j++ )
+            for (int j = 0; j < _rows; j++)
             {
-                Vector3 hoverPointPos = columnHead - ( rowOffset * j );
-                hoverPointPos = transform.TransformPoint( hoverPointPos );
-                GameObject newHoverPoint = Instantiate( HoverPointPrefab, hoverPointPos, Quaternion.identity, HoverPointContainer.transform );
-                HoverPoints[( i * _rows ) + j] = newHoverPoint.transform;
+                Vector3 hoverPointPos = columnHead - (rowOffset * j);
+                hoverPointPos = transform.TransformPoint(hoverPointPos);
+                GameObject newHoverPoint = Instantiate(HoverPointPrefab, hoverPointPos, Quaternion.identity, HoverPointContainer.transform);
+                HoverPoints[(i * _rows) + j] = newHoverPoint.transform;
             }
         }
     }
@@ -90,55 +93,55 @@ public class Hover : MonoBehaviour
     {
         //Create an instance of the PIDController class for each hover point
         PIDs = new PIDController[HoverPoints.Length];
-        for ( int i = 0; i < HoverPoints.Length; i++ )
+        for (int i = 0; i < HoverPoints.Length; i++)
         {
-            PIDs[i] = new PIDController( ProportionalGain, IntegralGain, DerivativeGain );
+            PIDs[i] = new PIDController(ProportionalGain, IntegralGain, DerivativeGain);
         }
     }
 
     private void ApplyHoverForces()
     {
-        foreach ( Transform hoverPoint in HoverPoints )
+        foreach (Transform hoverPoint in HoverPoints)
         {
             Vector3 hoverPointPos = hoverPoint.position;
             RaycastHit hit;
 
-            if ( HoverRay( hoverPointPos, out hit ) )
+            if (HoverRay(hoverPointPos, out hit))
             {
                 float actualHeight = hit.distance;
                 Vector3 groundNormal = hit.normal;
 
                 //Use the respective PID controller to calculate the percentage of hover force to be used
-                float forcePercent = PIDs[Array.IndexOf( HoverPoints, hoverPoint )].Control( HoverHeight, actualHeight );
+                float forcePercent = PIDs[Array.IndexOf(HoverPoints, hoverPoint)].Control(HoverHeight, actualHeight);
 
                 //calculate the adjusted force in the direction of the ground normal
                 Vector3 adjustedForce = HoverForce * forcePercent * groundNormal;
 
                 //Add the force to the rigidbody at the respective hoverpoint's position
-                RB.AddForceAtPosition( adjustedForce, hoverPointPos, ForceMode.Acceleration );
+                RB.AddForceAtPosition(adjustedForce, hoverPointPos, ForceMode.Acceleration);
             }
         }
     }
 
     private void ApplyGroundStickForce()
     {
-        Ray groundStickRay = new Ray( transform.position, -transform.up );
+        Ray groundStickRay = new Ray(transform.position, -transform.up);
         RaycastHit hit;
-        if ( StickToGround )
+        if (StickToGround)
         {
-            if ( Physics.Raycast( groundStickRay, out hit, GroundStickHeight, GroundMask ) )
+            if (Physics.Raycast(groundStickRay, out hit, GroundStickHeight, GroundMask))
             {
                 Vector3 force = Vector3.zero;
                 //Checks if the hovering object implements IMove
-                if ( Movement != null )
+                if (Movement != null)
                 {
-                    force = -hit.normal * GroundStickForce * ( RB.velocity.magnitude / Movement.MaxSpeed );
+                    force = -hit.normal * GroundStickForce * (RB.velocity.magnitude / Movement.MaxSpeed);
                 }
-                else if ( Movement == null )
+                else if (Movement == null)
                 {
                     force = -hit.normal * GroundStickForce;
                 }
-                RB.AddForce( force, ForceMode.Acceleration );
+                RB.AddForce(force, ForceMode.Acceleration);
             }
         }
     }
@@ -146,7 +149,7 @@ public class Hover : MonoBehaviour
     private bool HoverRay(Vector3 _hoverPointPosition, out RaycastHit _hit)
     {
         RaycastHit hit;
-        bool ray = Physics.Raycast( _hoverPointPosition, -transform.up, out hit, HoverHeight, GroundMask );
+        bool ray = Physics.Raycast(_hoverPointPosition, -transform.up, out hit, HoverHeight, GroundMask);
         _hit = hit;
         return ray;
     }
@@ -155,20 +158,20 @@ public class Hover : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if ( Debugging )
+        if (Debugging)
         {
-            if ( HoverPoints != null )
+            if (HoverPoints != null)
             {
-                foreach ( var hoverPoint in HoverPoints )
+                foreach (var hoverPoint in HoverPoints)
                 {
-                    Gizmos.DrawWireSphere( hoverPoint.position, 0.1f );
+                    Gizmos.DrawWireSphere(hoverPoint.position, 0.1f);
 
                     RaycastHit hit;
-                    if ( HoverRay( hoverPoint.position, out hit ) )
+                    if (HoverRay(hoverPoint.position, out hit))
                     {
-                        Gizmos.color = DebugGradient.Evaluate( hit.distance / HoverHeight );
-                        Gizmos.DrawSphere( hit.point, 0.07f );
-                        Debug.DrawLine( hoverPoint.position, hoverPoint.position - transform.up * hit.distance, DebugGradient.Evaluate( hit.distance / HoverHeight ) );
+                        Gizmos.color = DebugGradient.Evaluate(hit.distance / HoverHeight);
+                        Gizmos.DrawSphere(hit.point, 0.07f);
+                        Debug.DrawLine(hoverPoint.position, hoverPoint.position - transform.up * hit.distance, DebugGradient.Evaluate(hit.distance / HoverHeight));
                     }
                     Gizmos.color = Color.white;
                 }
@@ -177,17 +180,27 @@ public class Hover : MonoBehaviour
     }
     private void OnGUI()
     {
-        if ( Debugging )
+        if (Debugging)
         {
-            foreach ( var hoverPoint in HoverPoints )
+            foreach (var hoverPoint in HoverPoints)
             {
                 RaycastHit hit;
-                if ( HoverRay( hoverPoint.position, out hit ) )
+                if (HoverRay(hoverPoint.position, out hit))
                 {
-                    string text = ( hit.distance / HoverHeight ).ToString( "0.00" ); //the ratio of intended height and actual height
-                    Handles.Label( hoverPoint.position - transform.up * ( hit.distance / 2 ), text, DebugTextStyle );
+                    string text = (hit.distance / HoverHeight).ToString("0.00"); //the ratio of intended height and actual height
+                    Handles.Label(hoverPoint.position - transform.up * (hit.distance / 2), text, DebugTextStyle);
                 }
             }
+        }
+    }
+
+    private void UpdatePIDs()
+    {
+        foreach (PIDController pid in PIDs)
+        {
+            pid.Kp = ProportionalGain;
+            pid.Ki = IntegralGain;
+            pid.Kd = DerivativeGain;
         }
     }
 #endif
