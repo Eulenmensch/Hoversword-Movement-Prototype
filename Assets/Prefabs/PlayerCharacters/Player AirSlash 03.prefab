@@ -14971,7 +14971,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6492268544987444822}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: -1.88}
+  m_LocalPosition: {x: 0, y: -4.8, z: -1.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6492268546152196770}
@@ -15281,8 +15281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a95d9639a1a18489ab4dea0d0357ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoverForce: 20
-  HoverHeight: 0.8
+  HoverForce: 13
+  HoverHeight: 3
   StickToGround: 1
   GroundStickForce: 25
   GroundStickHeight: 3
@@ -15293,11 +15293,11 @@ MonoBehaviour:
     type: 3}
   HoverPointContainer: {fileID: 6492268545562072551}
   HoverArea: {fileID: 6492268545068793987}
-  HoverPointRows: 10
-  HoverPointColumns: 4
-  ProportionalGain: 0.347
+  HoverPointRows: 4
+  HoverPointColumns: 2
+  ProportionalGain: 0.409
   IntegralGain: 0
-  DerivativeGain: 0.014
+  DerivativeGain: 0.269
   Debugging: 1
   DebugTextStyle:
     m_Name: 
@@ -15410,7 +15410,7 @@ MonoBehaviour:
   GroundAccelerationForce: 37
   AirAccelerationForce: 37
   IdleSpeed: 10
-  IdleFriction: 10
+  IdleFriction: 30
   ThrustMotor: {fileID: 6492268544683881007}
   ThrustDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &6492268545068793992
@@ -15425,9 +15425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd7accbde9f209409a5c625e610953d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TurnForceMin: 5
+  TurnForceMin: 8
   TurnForceMax: 15
-  SidewaysFriction: 7
+  SidewaysFriction: 20
   TurnMotor: {fileID: 6492268544987444821}
 --- !u!114 &6492268545068793985
 MonoBehaviour:
@@ -15460,7 +15460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boostForce: 150
   ChargeTime: 1
-  Duration: 3
+  Duration: 1
   Mode: 1
 --- !u!114 &6492268545068794013
 MonoBehaviour:
@@ -15533,7 +15533,7 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 256
-  GroundRayLength: 1
+  GroundRayLength: 3
   Space: 0
 --- !u!114 &6492268545068794011
 MonoBehaviour:
