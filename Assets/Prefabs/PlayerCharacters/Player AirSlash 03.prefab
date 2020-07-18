@@ -15254,7 +15254,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.48, y: 0.03, z: 2.9507117}
+  m_Size: {x: 1.9, y: 0.03, z: 2.9507117}
   m_Center: {x: 0, y: 0, z: 0.42015046}
 --- !u!114 &6492268545068793993
 MonoBehaviour:
@@ -15281,8 +15281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a95d9639a1a18489ab4dea0d0357ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoverForce: 13
-  HoverHeight: 3
+  HoverForce: 7.51
+  HoverHeight: 2
   StickToGround: 1
   GroundStickForce: 25
   GroundStickHeight: 3
@@ -15294,10 +15294,10 @@ MonoBehaviour:
   HoverPointContainer: {fileID: 6492268545562072551}
   HoverArea: {fileID: 6492268545068793987}
   HoverPointRows: 4
-  HoverPointColumns: 2
-  ProportionalGain: 0.409
+  HoverPointColumns: 4
+  ProportionalGain: 0.527
   IntegralGain: 0
-  DerivativeGain: 0.269
+  DerivativeGain: 0.108
   Debugging: 1
   DebugTextStyle:
     m_Name: 
@@ -15533,7 +15533,7 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 256
-  GroundRayLength: 3
+  GroundRayLength: 2
   Space: 0
 --- !u!114 &6492268545068794011
 MonoBehaviour:
