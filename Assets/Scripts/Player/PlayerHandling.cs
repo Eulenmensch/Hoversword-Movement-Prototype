@@ -49,7 +49,7 @@ public class PlayerHandling : MonoBehaviour, IMove
 
     private void CalculateMaxSpeed()
     {
-        if ( GroundCheck.IsGrounded() )
+        if ( IsGrounded )
         {
             if ( !IsDashing )
             {
@@ -62,7 +62,7 @@ public class PlayerHandling : MonoBehaviour, IMove
                 MaxSpeed = Mathf.Sqrt( ( Thrust.GroundAccelerationForce + PlayerDash.BoostForce ) / QuadraticDrag.Drag );
             }
         }
-        else if ( !GroundCheck.IsGrounded() )
+        else
         {
             if ( !IsDashing )
             {

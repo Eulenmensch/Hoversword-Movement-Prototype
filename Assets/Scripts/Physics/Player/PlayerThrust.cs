@@ -57,6 +57,7 @@ public class PlayerThrust : MonoBehaviour
         {
             float friction = Mathf.Lerp( IdleFriction, 0.0f, RB.velocity.magnitude / IdleSpeed );
             RB.AddForce( -RB.velocity * friction, ForceMode.Acceleration );
+            RB.AddTorque( -RB.angularVelocity * friction, ForceMode.Acceleration );
         }
     }
 }
