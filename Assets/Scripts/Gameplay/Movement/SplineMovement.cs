@@ -5,16 +5,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SplineMovement : MonoBehaviour
+public class SplineMovement : MonoBehaviour, IMovement
 {
+    [SerializeField] private bool _moveOnStart;
+    public bool IsMoving { get; set; }
+    [SerializeField] private bool _isLooping;
+
     [SerializeField] float _speed = 1;
     private float _percentageSpeed;
     [SerializeField] Ease _ease = Ease.Linear;
+    //[SerializeField] private bool _isLooping;
     [SerializeField] LoopType _loopType = LoopType.Yoyo;
-
-    //[SerializeField] private List<Transform> _points;
-    //[SerializeField] private int _startingPoint;
-    //private int _currentPoint;
 
     [SerializeField, Range(0, 1)] private float _startPercent;
 
@@ -32,15 +33,18 @@ public class SplineMovement : MonoBehaviour
         float length = _follower.CalculateLength();
         _percentageSpeed = _speed / length;
 
-        //float from = (float)_follower.clipFrom;
-        //float to = (float)_follower.clipTo;
-        //float from = 0;
-        //float to = 1;
-
         _percent = _startPercent;
         SetFollower();
 
-        DOTween.To(() => _percent, x => _percent = x, 1f, _percentageSpeed).SetSpeedBased().SetEase(_ease).OnComplete(StartLoopFromEnd);
+        if (_moveOnStart) Move();
+    }
+
+    public void Move()
+    {
+        if (_isLooping)
+            DOTween.To(() => _percent, x => _percent = x, 1f, _percentageSpeed).SetSpeedBased().SetEase(_ease).OnComplete(StartLoopFromEnd);
+        else
+            DOTween.To(() => _percent, x => _percent = x, 1f, _percentageSpeed).SetSpeedBased().SetEase(_ease);
     }
 
     private void SetFollower()
@@ -70,42 +74,10 @@ public class SplineMovement : MonoBehaviour
 
     }
 
-    //private Vector3 GetStartPosition()
-    //{
-    //    return Vector3.Lerp(_points[_currentPoint].position, _points[GetNextPointIndex()].position, _startPercent);
-    //}
-
-    //private void MoveToNextPoint()
-    //{
-    //    _currentPoint = GetNextPointIndex();
-
-    //    transform.DOMove(_points[_currentPoint].position, _speed).SetSpeedBased().SetEase(ease).OnComplete(MoveToNextPoint);
-    //}
-
-    //private int GetNextPointIndex()
-    //{
-    //    int nextPointIndex = _currentPoint + 1;
-    //    if (nextPointIndex >= _points.Count)
-    //        nextPointIndex = 0;
-    //    return nextPointIndex;
-    //}
     private void OnValidate()
     {
         if (_follower == null) _follower = GetComponent<SplineFollower>();
         _follower.startPosition = _startPercent;
         //SetFollower();
-
     }
-
-    //private void OnValidate()
-    //{
-    //    _currentPoint = _startingPoint;
-
-    //    if (_currentPoint + 1 > _points.Count)
-    //        return;
-    //    if (_points[_currentPoint] == null)
-    //        return;
-
-    //    transform.position = GetStartPosition();
-    //}
 }

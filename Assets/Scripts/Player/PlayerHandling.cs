@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(GroundCheck))]
-public class PlayerHandling : MonoBehaviour, IMove
+public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
     public float MaxSpeed { get; private set; }
     public bool IsDashing { get; set; }

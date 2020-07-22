@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3938847151480017807}
   m_Layer: 0
-  m_Name: Tunnel Spline Wall
+  m_Name: gp_LaserWallMovingTrapezoidx2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6367,7 +6367,6 @@ GameObject:
   - component: {fileID: 8064427461601024145}
   - component: {fileID: 8064427461601024144}
   - component: {fileID: 8064427461601024151}
-  - component: {fileID: 8064427461601024148}
   m_Layer: 12
   m_Name: LaserWallModel
   m_TagString: Untagged
@@ -6740,25 +6739,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &8064427461601024148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8064427461601024150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3af412a9cb5ea5740b22e5f4b6402e68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 20
-  ease: 4
-  _points:
-  - {fileID: 0}
-  - {fileID: 0}
-  _startingPoint: 1
-  _startPercent: 0
 --- !u!1 &8200369866392527220
 GameObject:
   m_ObjectHideFlags: 0
@@ -6806,12 +6786,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isActive: 1
-  _applyDamage: 1
-  _damage: 1
-  _damageType: 0
-  _forceMagnitude: 100
-  _damageDirectionType: 0
-  _destroy: 0
   _laserModel: []
 --- !u!114 &8200369866392527219
 MonoBehaviour:
@@ -8331,6 +8305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c35d3bf5f720a543a34f1be597b2e61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveOnStart: 0
   _speed: 30
   _ease: 4
   _loopType: 1

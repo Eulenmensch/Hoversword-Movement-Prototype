@@ -6,15 +6,21 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class RotationMovement : MonoBehaviour
+public class RotationMovement : MonoBehaviour, IMovement
 {
+    [SerializeField] private bool _moveOnStart;
+    public bool IsMoving { get; set; }
+    [SerializeField] private bool _isLooping;
+
     public enum RotationAxis { X, Y, Z }
     [Header("Rotation")]
     [SerializeField] private RotationAxis _axis = RotationAxis.Y;
     [SerializeField] private float _speed = 50f;
+    [SerializeField] private Ease ease = Ease.Linear;
+
+    [Header("Angles")]
     [SerializeField] private float _startAngle = 0;
     [SerializeField] private float _endAngle = 0;
-    [SerializeField] private Ease ease = Ease.Linear;
 
     [Header("Full Rotation")]
     [SerializeField] private bool _fullRotation;
@@ -26,37 +32,35 @@ public class RotationMovement : MonoBehaviour
     private float _angle;
     private Vector3 rotationAxis = Vector3.zero;
 
+    private bool _flip;
+
     private void Start()
     {
         SetStartingPosition();
-        SetRotationAxis();
+        //SetRotationAxis();
 
-        if (_fullRotation)
-        {
-            //DOTween.To(() => _angle, x => _angle = x, 52, 1);
-        }
-        else
-        {
-            DOTween.To(() => _angle, x => _angle = x, _endAngle, _speed).SetSpeedBased().SetLoops(-1, LoopType.Yoyo).SetEase(ease);
-        }
+        if (_moveOnStart) Move();
+    }
 
+    public void Move()
+    {
+        IsMoving = true;
+        if (!_fullRotation)
+        {
+            if (_isLooping)
+                DOTween.To(() => _angle, x => _angle = x, _endAngle, _speed).SetSpeedBased().SetLoops(-1, LoopType.Yoyo).SetEase(ease);
+            else
+            {
+                float targetAngle = _flip ? _startAngle : _endAngle;
+                _flip = !_flip;
+                DOTween.To(() => _angle, x => _angle = x, targetAngle, _speed).SetSpeedBased().SetEase(ease);
+            }
+        }
     }
 
     private void Update()
     {
-        if (_fullRotation)
-        {
-            int sign = _rotationDirection == RotationDirection.clockwise ? -1 : 1;
-            _angle = _angle + (sign * _speed * Time.deltaTime);
-            if (_angle >= 360f)
-            {
-                _angle -= 360;
-            }
-            else if (_angle <= 0)
-            {
-                _angle += 360;
-            }
-        }
+        if (IsMoving && _fullRotation) FullRotation();
 
         if (_useEuler)
         {
@@ -71,15 +75,23 @@ public class RotationMovement : MonoBehaviour
         {
             SetRotationAxis();
             Quaternion rot = Quaternion.AngleAxis(_angle, rotationAxis);
-
-            //if (_rotatedParent != null)
-            //{
-            //    rot = rot * Quaternion.Inverse(_rotatedParent.rotation);
-            //}
-
             transform.rotation = rot;
         }
-        Debug.DrawLine(transform.position, transform.position + rotationAxis, Color.red);
+        //Debug.DrawLine(transform.position, transform.position + rotationAxis, Color.red);
+    }
+
+    private void FullRotation()
+    {
+        int sign = _rotationDirection == RotationDirection.clockwise ? -1 : 1;
+        _angle = _angle + (sign * _speed * Time.deltaTime);
+        if (_angle >= 360f)
+        {
+            _angle -= 360;
+        }
+        else if (_angle <= 0)
+        {
+            _angle += 360;
+        }
     }
 
     private void SetStartingPosition()
@@ -94,7 +106,7 @@ public class RotationMovement : MonoBehaviour
     private void SetRotationAxis()
     {
         rotationAxis = (_axis == RotationAxis.Z) ? transform.forward : (_axis == RotationAxis.Y) ? transform.up : transform.right;
-        Debug.DrawLine(transform.position, transform.position + rotationAxis, Color.red);
+        //Debug.DrawLine(transform.position, transform.position + rotationAxis, Color.red);
     }
 
     private void OnValidate()

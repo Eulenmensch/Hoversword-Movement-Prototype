@@ -3,11 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PointMovement : MonoBehaviour
+public class PointMovement : MonoBehaviour, IMovement
 {
+    [SerializeField] private bool _moveOnStart;
+    public bool IsMoving { get; set; }
+    [SerializeField] private bool _isLooping;
+
+    [Header("Movement")]
     [SerializeField] float _speed = 1;
     [SerializeField] Ease ease = Ease.Linear;
 
+    [Header("Points")]
     [SerializeField] private List<Transform> _points;
     [SerializeField] private int _startingPoint;
     private int _currentPoint;
@@ -21,9 +27,13 @@ public class PointMovement : MonoBehaviour
         if (_points[_currentPoint] == null)
             return;
 
-        //GetStartPosition();
-
         transform.position = GetStartPosition();
+        if (_moveOnStart) Move();
+    }
+
+    public void Move()
+    {
+        IsMoving = true;
         MoveToNextPoint();
     }
 
@@ -36,7 +46,15 @@ public class PointMovement : MonoBehaviour
     {
         _currentPoint = GetNextPointIndex();
 
-        transform.DOMove(_points[_currentPoint].position, _speed).SetSpeedBased().SetEase(ease).OnComplete(MoveToNextPoint);
+        if (_isLooping)
+            transform.DOMove(_points[_currentPoint].position, _speed).SetSpeedBased().SetEase(ease).OnComplete(MoveToNextPoint);
+        else
+            transform.DOMove(_points[_currentPoint].position, _speed).SetSpeedBased().SetEase(ease).OnComplete(StopMovement);
+    }
+
+    private void StopMovement()
+    {
+        IsMoving = false;
     }
 
     private int GetNextPointIndex()
