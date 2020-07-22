@@ -11,6 +11,7 @@ public class PlayerEngineFX : MonoBehaviour
     // [SerializeField] private StudioEventEmitter ThrustersEmitter;
     [SerializeField] private Rigidbody RB;
     [SerializeField] private PlayerHandling Handling;
+    [SerializeField] private PlayerDash Dash;
     [SerializeField] private PlayerJump Jump;
     [SerializeField] private Renderer SwordRenderer;
     [SerializeField, ColorUsage( true, true )] private Color JumpMinChargeColor;
@@ -39,7 +40,7 @@ public class PlayerEngineFX : MonoBehaviour
     private bool IsCarving;
 
     private bool IsDashing;
-    private bool DashHasCharged;
+    private bool DashChargeStarted;
 
     private bool IsCrouching;
     private bool JumpHasCharged;
@@ -59,37 +60,64 @@ public class PlayerEngineFX : MonoBehaviour
         CameraShake = GetComponent<CinemachineImpulseSource>();
     }
 
+    private void Start()
+    {
+        SetDashChargeParticleDuration();
+    }
+
     void Update()
     {
         SetJetParticleParameters();
         SetJumpChargeColor();
-        PlayDashParticles();
+        PlayDashChargeParticles();
+        PlayDashJetParticles();
         PlayJumpChargeParticles();
         SetSpeedlinePosition();
     }
 
-    void PlayDashParticles()
+    void SetDashChargeParticleDuration()
     {
-        if ( IsDashing )
+        float chargeTime = Dash.ChargeTime;
+        if ( chargeTime != 0 )
         {
-            if ( !DashHasCharged )
+            var main = DashChargeParticles.main;
+            main.simulationSpeed = ( 1.0f / Dash.ChargeTime );
+        }
+        else
+        {
+            var main = DashChargeParticles.main;
+            main.simulationSpeed = 0.0f;
+        }
+    }
+    void PlayDashChargeParticles()
+    {
+        if ( Dash.IsCharging )
+        {
+            if ( !DashChargeStarted )
             {
                 DashChargeParticles.Play();
-                DashHasCharged = true;
-            }
-            if ( DashChargeParticles.isStopped )
-            {
-                DashJetParticles.Play();
-                CameraShake.GenerateImpulse(); //FIXME: There should be a class for camera effects but for now this works.
+                DashChargeStarted = true;
             }
         }
         else
         {
             DashChargeParticles.Clear();
-            DashJetParticles.Stop();
-            DashHasCharged = false;
+            DashChargeStarted = false;
         }
     }
+
+    void PlayDashJetParticles()
+    {
+        if ( Handling.IsDashing )
+        {
+            DashJetParticles.Play();
+        }
+        else
+        {
+            DashJetParticles.Stop();
+        }
+    }
+
     void PlayJumpChargeParticles()
     {
         if ( IsCrouching )
@@ -103,8 +131,6 @@ public class PlayerEngineFX : MonoBehaviour
         }
     }
 
-    //FIXME: This subscribes to a unity event via editor. These weird dependencies would be solved if Groundchecks were their own class
-    //that this class could implement
     public void PlayJumpJetParticles()
     {
         JumpJetParticles.Play();

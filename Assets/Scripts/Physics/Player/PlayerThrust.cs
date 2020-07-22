@@ -25,13 +25,10 @@ public class PlayerThrust : MonoBehaviour
     #region Thrust
     public void Thrust(float _thrustInput, bool _grounded, RaycastHit _hit)
     {
-        RaycastHit hit = _hit;
-        bool grounded = _grounded;
-
-        if ( grounded )
+        if ( _grounded )
         {
             //on ground project thrust direction on ground up
-            ApplyThrustForce( _thrustInput, GroundAccelerationForce, hit.normal, ThrustMotor.position );
+            ApplyThrustForce( _thrustInput, GroundAccelerationForce, _hit.normal, ThrustMotor.position );
         }
 
         else
@@ -39,8 +36,10 @@ public class PlayerThrust : MonoBehaviour
             //in air project thrust direction on world up
             ApplyThrustForce( _thrustInput, AirAccelerationForce, Vector3.up, RB.worldCenterOfMass );
         }
-
-        ApplyIdleFriction( _thrustInput );
+        if ( _grounded )
+        {
+            ApplyIdleFriction( _thrustInput );
+        }
     }
 
     private void ApplyThrustForce(float _thrustInput, float _accelerationForce, Vector3 _projectedPlaneNormal, Vector3 _forcePosition)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerHandling), typeof(Rigidbody))]
+[RequireComponent( typeof( PlayerHandling ), typeof( Rigidbody ) )]
 public class PlayerDash : MonoBehaviour
 {
     enum BoostMode
@@ -13,9 +13,16 @@ public class PlayerDash : MonoBehaviour
         get { return boostForce; }
         private set { boostForce = value; }
     }
+    public float ChargeTime
+    {
+        get { return chargeTime; }
+        private set { boostForce = value; }
+    }
+    public bool IsCharging { get; private set; }
+
 
     [SerializeField] float boostForce;
-    [SerializeField] float ChargeTime;
+    [SerializeField] float chargeTime;
     [SerializeField] float Duration;
     [SerializeField] BoostMode Mode;
 
@@ -24,8 +31,6 @@ public class PlayerDash : MonoBehaviour
     private PlayerThrust Thrust;
     private float ChargeTimer;
     private float DashTimer;
-    private bool IsCharging;
-    private bool IsDashing;
 
     private void Start()
     {
@@ -55,12 +60,13 @@ public class PlayerDash : MonoBehaviour
 
     private void Charge()
     {
-        if (IsCharging)
+        if ( IsCharging )
         {
             ChargeTimer += Time.deltaTime;
-            if (ChargeTimer >= ChargeTime)
+            if ( ChargeTimer >= chargeTime )
             {
                 ChargeTimer = 0;
+                IsCharging = false;
                 StartDash();
             }
         }
@@ -77,11 +83,11 @@ public class PlayerDash : MonoBehaviour
 
     private void Dash()
     {
-        if (Handling.IsDashing)
+        if ( Handling.IsDashing )
         {
             Boost();
             DashTimer += Time.deltaTime;
-            if (DashTimer >= Duration)
+            if ( DashTimer >= Duration )
             {
                 StopDash();
                 DashTimer = 0;
@@ -92,16 +98,16 @@ public class PlayerDash : MonoBehaviour
     private void Boost()
     {
         Vector3 thrustForce = Vector3.zero;
-        if (Mode == BoostMode.NoHeightGain)
+        if ( Mode == BoostMode.NoHeightGain )
         {
             //Calculate thrust force
             thrustForce = Thrust.ThrustDirection * BoostForce;
         }
-        else if (Mode == BoostMode.HeightGain)
+        else if ( Mode == BoostMode.HeightGain )
         {
             thrustForce = transform.forward * BoostForce;
         }
         //Apply calculated thrust to the rigidbody at the thrust motor position
-        RB.AddForceAtPosition(thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration);
+        RB.AddForceAtPosition( thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration );
     }
 }
