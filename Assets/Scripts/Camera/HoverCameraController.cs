@@ -8,7 +8,6 @@ public class HoverCameraController : MonoBehaviour
     [SerializeField] private PlayerHandling Handling;
     [SerializeField] private Rigidbody RB;
     [SerializeField] float MaxZOffset;
-    [SerializeField] float TweenDuration;
 
     private float ZOffset;
     private Vector3 TrackedObjectOffset;

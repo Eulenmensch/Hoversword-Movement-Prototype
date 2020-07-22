@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8095073806807851488}
   - component: {fileID: 8095073806807851503}
   - component: {fileID: 8095073806807851518}
+  - component: {fileID: 6756226749300479830}
   m_Layer: 0
   m_Name: CM StateDrivenCamera2
   m_TagString: Untagged
@@ -81,15 +82,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   m_CustomBlends: {fileID: 11400000, guid: be81c1047fe96434c8f4ac22c32ac22e, type: 2}
-  m_ParentHash:
-  - m_Hash: -1817436067
-    m_ParentHash: 756556552
-  - m_Hash: -1192906254
-    m_ParentHash: 756556552
-  - m_Hash: 1459142704
-    m_ParentHash: 756556552
-  - m_Hash: 969208110
-    m_ParentHash: 756556552
+  m_ParentHash: []
 --- !u!114 &8095073806807851518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +96,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 0}
+--- !u!114 &6756226749300479830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8095073806807851489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fff460b7ad752b4db3a675ac672ebe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FreeLook: {fileID: 4658322530798790457}
+  Handling: {fileID: 0}
+  RB: {fileID: 0}
+  MaxZOffset: 5
+  TweenDuration: 0
 --- !u!1001 &1148692734821283471
 PrefabInstance:
   m_ObjectHideFlags: 0

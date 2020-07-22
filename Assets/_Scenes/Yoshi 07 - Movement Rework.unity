@@ -7974,18 +7974,6 @@ Transform:
   m_Father: {fileID: 444881994}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &518479876 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7007395846145651867, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 2421505912819316154}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319d2fe34a804e245819465c9505ea59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &519179900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -202436171642372208, guid: b9c1a50601686914da7c8e1aaa17c72a,
@@ -13023,29 +13011,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1018972222 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5894526301735432771, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 2421505912819316154}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1018972226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018972222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fff460b7ad752b4db3a675ac672ebe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FreeLook: {fileID: 518479876}
-  Handling: {fileID: 1942712455}
-  RB: {fileID: 1942712456}
-  MaxZOffset: 5
-  TweenDuration: 0.5
 --- !u!1 &1022520470
 GameObject:
   m_ObjectHideFlags: 0
@@ -25544,24 +25509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c73148e5bf30a459edff921b85286f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1942712455 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2421505912079181340, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 2421505912819316154}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45ab362a1ff0f7842bce07d54cf9b111, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!54 &1942712456 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 2421505912079181328, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 2421505912819316154}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1953044568
 Mesh:
   m_ObjectHideFlags: 0
@@ -28848,6 +28795,11 @@ PrefabInstance:
         type: 3}
       propertyPath: simulationSpeed
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894526301735432781, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
+        type: 3}
+      propertyPath: m_ChildCameras.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7007395845365115668, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}
