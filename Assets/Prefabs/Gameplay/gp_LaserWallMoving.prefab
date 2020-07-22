@@ -383,6 +383,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -680,6 +681,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -715,6 +717,8 @@ MonoBehaviour:
   _points:
   - {fileID: 1687079068970465213}
   - {fileID: 1687079069184656999}
+  _startingPoint: 0
+  _startPercent: 0
 --- !u!1 &6318396243639770418
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,6 +729,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6318396243639770419}
   - component: {fileID: 6318396243639770420}
+  - component: {fileID: 878146718}
+  - component: {fileID: 2163290478039682460}
   m_Layer: 12
   m_Name: gp_LaserWallMoving
   m_TagString: Untagged
@@ -739,7 +745,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6318396243639770418}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 264.96948, y: 0, z: 63.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -762,9 +768,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isActive: 1
-  _applyDamage: 1
+  _laserModel: []
+--- !u!114 &878146718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6318396243639770418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcca2600785ce154e8114f30fd5ec2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _damage: 1
-  _damageType: 0
-  _forceMagnitude: 100
-  _damageDirectionType: 0
-  _laserModel: {fileID: 5298618100768908496}
+  _damageType: 1
+--- !u!114 &2163290478039682460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6318396243639770418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b33c681f8b6714e93eb1a8ff62d3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pushStrength: 40
+  _pushType: 0
