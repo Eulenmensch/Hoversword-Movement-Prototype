@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent( typeof( PlayerHandling ), typeof( Rigidbody ) )]
+[RequireComponent(typeof(PlayerHandling), typeof(Rigidbody))]
 public class PlayerDash : MonoBehaviour
 {
     enum BoostMode
@@ -53,16 +53,15 @@ public class PlayerDash : MonoBehaviour
         ChargeTimer = 0;
     }
 
-    void Charge()
+    private void Charge()
     {
-        if ( IsCharging )
+        if (IsCharging)
         {
             ChargeTimer += Time.deltaTime;
-            if ( ChargeTimer >= ChargeTime )
+            if (ChargeTimer >= ChargeTime)
             {
-                StartDash();
-                Handling.IsDashing = true;
                 ChargeTimer = 0;
+                StartDash();
             }
         }
     }
@@ -76,13 +75,13 @@ public class PlayerDash : MonoBehaviour
         Handling.IsDashing = false;
     }
 
-    public void Dash()
+    private void Dash()
     {
-        if ( Handling.IsDashing )
+        if (Handling.IsDashing)
         {
             Boost();
             DashTimer += Time.deltaTime;
-            if ( DashTimer >= Duration )
+            if (DashTimer >= Duration)
             {
                 StopDash();
                 DashTimer = 0;
@@ -90,19 +89,19 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
-    public void Boost()
+    private void Boost()
     {
         Vector3 thrustForce = Vector3.zero;
-        if ( Mode == BoostMode.NoHeightGain )
+        if (Mode == BoostMode.NoHeightGain)
         {
             //Calculate thrust force
             thrustForce = Thrust.ThrustDirection * BoostForce;
         }
-        else if ( Mode == BoostMode.HeightGain )
+        else if (Mode == BoostMode.HeightGain)
         {
             thrustForce = transform.forward * BoostForce;
         }
         //Apply calculated thrust to the rigidbody at the thrust motor position
-        RB.AddForceAtPosition( thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration );
+        RB.AddForceAtPosition(thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration);
     }
 }

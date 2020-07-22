@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour/*, IReset*/
 {
     private PlayerCheckpointResetter _playerCheckpointResetter;
 
@@ -97,4 +97,9 @@ public class PlayerHealth : MonoBehaviour
         ResetHealth();
         _playerCheckpointResetter.Reset();
     }
+
+    //public void Reset()
+    //{
+    //    ResetHealth();
+    //}
 }

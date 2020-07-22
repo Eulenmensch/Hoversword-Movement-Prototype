@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent( typeof( GroundCheck ) )]
+[RequireComponent(typeof(GroundCheck))]
 public class PlayerHandling : MonoBehaviour, IMove
 {
     public float MaxSpeed { get; private set; }
     public bool IsDashing { get; set; }
+    public bool IsBoosting{ get; set; }
     public bool IsGrounded { get; private set; }
 
     [SerializeField] PlayerEngineFX BoardFX;
@@ -16,6 +17,7 @@ public class PlayerHandling : MonoBehaviour, IMove
     private PlayerThrust Thrust;
     private PlayerTurn Turn;
     private PlayerDash PlayerDash;
+    private PlayerBoost PlayerBoost;
     private PlayerJump PlayerJump;
     private PlayerAirControl AirControl;
     private QuadraticDrag QuadraticDrag;
@@ -31,6 +33,7 @@ public class PlayerHandling : MonoBehaviour, IMove
         Thrust = GetComponent<PlayerThrust>();
         Turn = GetComponent<PlayerTurn>();
         PlayerDash = GetComponent<PlayerDash>();
+        PlayerBoost = GetComponent<PlayerBoost>();
         PlayerJump = GetComponent<PlayerJump>();
         AirControl = GetComponent<PlayerAirControl>();
         QuadraticDrag = GetComponent<QuadraticDrag>();
@@ -38,43 +41,21 @@ public class PlayerHandling : MonoBehaviour, IMove
     private void FixedUpdate()
     {
         RaycastHit hit;
-        IsGrounded = GroundCheck.IsGrounded( out hit );
+        IsGrounded = GroundCheck.IsGrounded(out hit);
 
         CalculateMaxSpeed();
         CoyoteTime();
-        Thrust.Thrust( ThrustInput, IsGrounded, hit );
-        Turn.Turn( TurnInput );
-        AirControl.AirControl( PitchInput, IsGrounded );
+        Thrust.Thrust(ThrustInput, IsGrounded, hit);
+        Turn.Turn(TurnInput);
+        AirControl.AirControl(PitchInput, IsGrounded);
     }
 
     private void CalculateMaxSpeed()
     {
-        if ( IsGrounded )
-        {
-            if ( !IsDashing )
-            {
-                //Calculate the maximum velocity based on the defined ground acceleration force and drag
-                MaxSpeed = Mathf.Sqrt( Thrust.GroundAccelerationForce / QuadraticDrag.Drag );
-            }
-            else if ( IsDashing )
-            {
-                //Calculate the maximum velocity based on the defined ground acceleration force, the boost force and drag
-                MaxSpeed = Mathf.Sqrt( ( Thrust.GroundAccelerationForce + PlayerDash.BoostForce ) / QuadraticDrag.Drag );
-            }
-        }
-        else
-        {
-            if ( !IsDashing )
-            {
-                //Calculate the maximum velocity based on the defined air acceleration force and drag
-                MaxSpeed = Mathf.Sqrt( Thrust.AirAccelerationForce / QuadraticDrag.Drag );
-            }
-            else if ( IsDashing )
-            {
-                //Calculate the maximum velocity based on the defined air acceleration force, the boost force and drag
-                MaxSpeed = Mathf.Sqrt( ( Thrust.AirAccelerationForce + PlayerDash.BoostForce ) / QuadraticDrag.Drag );
-            }
-        }
+        float force = IsGrounded ? Thrust.GroundAccelerationForce : Thrust.AirAccelerationForce;
+        if (IsDashing) force += PlayerDash.BoostForce;
+        if (IsBoosting) force += PlayerBoost.BoostForce;
+        MaxSpeed = Mathf.Sqrt(force / QuadraticDrag.Drag);
     }
 
 
@@ -83,7 +64,7 @@ public class PlayerHandling : MonoBehaviour, IMove
         Vector2 inputVector = context.ReadValue<Vector2>();
         ThrustInput = inputVector.y;
         TurnInput = inputVector.x;
-        BoardFX.SetMoveInput( inputVector.y, inputVector.x );
+        BoardFX.SetMoveInput(inputVector.y, inputVector.x);
     }
 
     public void GetPitchInput(InputAction.CallbackContext context)
@@ -93,37 +74,37 @@ public class PlayerHandling : MonoBehaviour, IMove
 
     public void Dash(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if (context.started)
         {
             PlayerDash.StartCharge();
-            BoardFX.SetDashing( true );
+            BoardFX.SetDashing(true);
         }
-        else if ( context.canceled )
+        else if (context.canceled)
         {
             PlayerDash.StopCharge();
-            BoardFX.SetDashing( false );
+            BoardFX.SetDashing(false);
         }
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if (context.started)
         {
-            PlayerJump.SetCharging( true );
-            BoardFX.SetCrouching( true );
+            PlayerJump.SetCharging(true);
+            BoardFX.SetCrouching(true);
         }
-        else if ( context.canceled )
+        else if (context.canceled)
         {
             PlayerJump.Jump();
             BoardFX.PlayJumpJetParticles();
-            PlayerJump.SetCharging( false );
-            BoardFX.SetCrouching( false );
+            PlayerJump.SetCharging(false);
+            BoardFX.SetCrouching(false);
         }
     }
 
     private void CoyoteTime()
     {
-        if ( !IsGrounded )
+        if (!IsGrounded)
         {
             PlayerJump.StartCoyoteTime();
         }
