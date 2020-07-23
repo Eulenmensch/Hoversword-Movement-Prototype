@@ -112,7 +112,8 @@ MonoBehaviour:
   Handling: {fileID: 0}
   RB: {fileID: 0}
   MaxZOffset: 5
-  TweenDuration: 0
+  MaxXOffset: 3
+  XLerpTime: 0.02
 --- !u!1001 &1148692734821283471
 PrefabInstance:
   m_ObjectHideFlags: 0
