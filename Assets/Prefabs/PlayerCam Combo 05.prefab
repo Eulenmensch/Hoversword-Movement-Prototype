@@ -321,6 +321,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2421505912904826758}
     m_Modifications:
+    - target: {fileID: 6100975805730647297, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
+        type: 3}
+      propertyPath: SwordRenderer
+      value: 
+      objectReference: {fileID: 3728963948960816161}
+    - target: {fileID: 6100975805730647297, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
+        type: 3}
+      propertyPath: Dash
+      value: 
+      objectReference: {fileID: 2421505912079181321}
     - target: {fileID: 6492268545068793994, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -437,9 +447,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ab362a1ff0f7842bce07d54cf9b111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2421505912079181321 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6492268545068794012, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
+    type: 3}
+  m_PrefabInstance: {fileID: 8900169580286600853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c73148e5bf30a459edff921b85286f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &2421505912144289479 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 6492268545138112594, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
+    type: 3}
+  m_PrefabInstance: {fileID: 8900169580286600853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &3728963948960816161 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5205090109215767220, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
     type: 3}
   m_PrefabInstance: {fileID: 8900169580286600853}
   m_PrefabAsset: {fileID: 0}
