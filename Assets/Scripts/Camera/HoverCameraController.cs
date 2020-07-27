@@ -20,8 +20,12 @@ public class HoverCameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ScaleZOffsetWithSpeed();
-        SetOffset(XOffset, ZOffset);
+        if (Handling.IsGrounded)
+        {
+            ScaleZOffsetWithSpeed();
+            SetOffset(XOffset, ZOffset);
+        }
+        SetAirOffset();
     }
 
     private void ScaleZOffsetWithSpeed()
@@ -46,6 +50,19 @@ public class HoverCameraController : MonoBehaviour
             var rig = FreeLook.GetRig(i);
             var composer = rig.GetCinemachineComponent<CinemachineComposer>();
             composer.m_TrackedObjectOffset = TrackedObjectOffset;
+        }
+    }
+
+    private void SetAirOffset()
+    {
+        if (!Handling.IsGrounded)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                var rig = FreeLook.GetRig(i);
+                var composer = rig.GetCinemachineComponent<CinemachineComposer>();
+                composer.m_TrackedObjectOffset = Vector3.Lerp(composer.m_TrackedObjectOffset, Vector3.zero, XLerpTime);
+            }
         }
     }
 

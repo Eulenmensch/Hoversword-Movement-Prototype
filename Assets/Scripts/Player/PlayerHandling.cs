@@ -6,7 +6,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
     public float MaxSpeed { get; private set; }
     public bool IsDashing { get; set; }
-    public bool IsBoosting{ get; set; }
+    public bool IsBoosting { get; set; }
     public bool IsGrounded { get; private set; }
 
     [SerializeField] PlayerEngineFX BoardFX;
@@ -20,12 +20,16 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private PlayerBoost PlayerBoost;
     private PlayerJump PlayerJump;
     private PlayerAirControl AirControl;
+    private CustomCenterOfMass CenterOfMass;
     private QuadraticDrag QuadraticDrag;
 
-    //Private Fields
+    //Input Fields
     private float ThrustInput;
     private float TurnInput;
     private float PitchInput;
+
+    //Flags
+    private bool CenterOfMassSet;
 
     private void Start()
     {
@@ -37,13 +41,16 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         PlayerJump = GetComponent<PlayerJump>();
         AirControl = GetComponent<PlayerAirControl>();
         QuadraticDrag = GetComponent<QuadraticDrag>();
+        CenterOfMass = GetComponent<CustomCenterOfMass>();
     }
+
     private void FixedUpdate()
     {
         RaycastHit hit;
         IsGrounded = GroundCheck.IsGrounded(out hit);
 
         CalculateMaxSpeed();
+        // AdjustCenterOfMassInAir();
         CoyoteTime();
         Thrust.Thrust(ThrustInput, IsGrounded, hit);
         Turn.Turn(TurnInput);
@@ -57,7 +64,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         if (IsBoosting) force += PlayerBoost.BoostForce;
         MaxSpeed = Mathf.Sqrt(force / QuadraticDrag.Drag);
     }
-
 
     public void GetMoveInput(InputAction.CallbackContext context)
     {
@@ -111,6 +117,20 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         else
         {
             PlayerJump.StopCoyoteTime();
+        }
+    }
+
+    private void AdjustCenterOfMassInAir()
+    {
+        if (!IsGrounded && !CenterOfMassSet)
+        {
+            CenterOfMass.SetCenterOfMass(transform.position);
+            CenterOfMassSet = true;
+        }
+        else if (IsGrounded && CenterOfMassSet)
+        {
+            CenterOfMass.SetCenterOfMass(CenterOfMass.CenterOfMassTransform.localPosition);
+            CenterOfMassSet = false;
         }
     }
 }

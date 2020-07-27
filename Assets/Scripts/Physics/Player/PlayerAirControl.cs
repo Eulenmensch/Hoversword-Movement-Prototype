@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent( typeof( Rigidbody ) )]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerAirControl : MonoBehaviour
 {
     [SerializeField] private float StabilizationForce;          //The force exerted on the body to orient it upright
@@ -23,10 +23,13 @@ public class PlayerAirControl : MonoBehaviour
         //Define the up rotation the body is rotated to
         Vector3 upDirection = Vector3.up;
 
-        if ( !_grounded )
+        if (!_grounded)
         {
-            ControlAngularMotion( pitchAxis, _pitchInput );
-            StabilizeAngularMotion( rollAxis, upDirection );
+            ControlAngularMotion(pitchAxis, _pitchInput);
+            if (_pitchInput == 0)
+            {
+                StabilizeAngularMotion(rollAxis, upDirection);
+            }
         }
     }
     //Adds torque to the rigidbody to make it return to a upright position.
@@ -36,20 +39,20 @@ public class PlayerAirControl : MonoBehaviour
         //Do some spooky voodoo shit http://answers.unity.com/answers/10426/view.html
         float predictedUpAngle = RB.angularVelocity.magnitude * Mathf.Rad2Deg * StabilizationForce / StabilizationSpeed;
         //Calculate the necessary rotation
-        Vector3 predictedUp = Quaternion.AngleAxis( predictedUpAngle, RB.angularVelocity ) * transform.up;
+        Vector3 predictedUp = Quaternion.AngleAxis(predictedUpAngle, RB.angularVelocity) * transform.up;
         //Do we need to rotate cw or ccw? In which plane?
-        Vector3 torqueVector = Vector3.Cross( predictedUp, _upDirection );
+        Vector3 torqueVector = Vector3.Cross(predictedUp, _upDirection);
         //Only affect the axis given by the attribute
-        torqueVector = Vector3.Project( torqueVector, _rotationAxis );
+        torqueVector = Vector3.Project(torqueVector, _rotationAxis);
 
         //Add the torque force to the body
-        RB.AddTorque( torqueVector * StabilizationSpeed * StabilizationSpeed, ForceMode.Acceleration );
+        RB.AddTorque(torqueVector * StabilizationSpeed * StabilizationSpeed, ForceMode.Acceleration);
     }
 
     //Adds torque to the rigidbody based on the player Input
     private void ControlAngularMotion(Vector3 _rotationAxis, float _controlInput)
     {
         Vector3 controlForce = _rotationAxis * AirControlForce * _controlInput;
-        RB.AddTorque( controlForce, ForceMode.Acceleration );
+        RB.AddTorque(controlForce, ForceMode.Acceleration);
     }
 }
