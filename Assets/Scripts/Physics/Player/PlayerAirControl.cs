@@ -6,6 +6,7 @@ public class PlayerAirControl : MonoBehaviour
     [SerializeField] private float StabilizationForce;          //The force exerted on the body to orient it upright
     [SerializeField] private float StabilizationSpeed;          //The time it takes for the board to return to an upright state
     [SerializeField] private float AirControlForce;             //The angular force exerted on the body by player input
+    [SerializeField] private float MinimumRollInput;            //The input amount up from which the character stops being stabilized
 
     private Rigidbody RB;
 
@@ -26,7 +27,7 @@ public class PlayerAirControl : MonoBehaviour
         if (!_grounded)
         {
             ControlAngularMotion(pitchAxis, _pitchInput);
-            if (_pitchInput == 0)
+            if (_pitchInput <= MinimumRollInput)
             {
                 StabilizeAngularMotion(rollAxis, upDirection);
             }
