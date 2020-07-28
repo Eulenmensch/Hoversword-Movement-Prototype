@@ -15002,7 +15002,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6492268545003442197}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6492268545858511687}
@@ -15284,7 +15284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a95d9639a1a18489ab4dea0d0357ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoverForce: 7.51
+  HoverForce: 7
   HoverHeight: 2
   StickToGround: 1
   GroundStickForce: 25
@@ -15464,7 +15464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boostForce: 150
   chargeTime: 0
-  Duration: 1
+  duration: 1
   Mode: 1
 --- !u!114 &6492268545068794013
 MonoBehaviour:
@@ -15481,6 +15481,7 @@ MonoBehaviour:
   StabilizationForce: 3
   StabilizationSpeed: 10
   AirControlForce: 5
+  MinimumRollInput: 0.5
 --- !u!114 &6492268545068794014
 MonoBehaviour:
   m_ObjectHideFlags: 0

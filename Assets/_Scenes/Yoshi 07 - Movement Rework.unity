@@ -27513,11 +27513,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2421505912079181329, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}
-      propertyPath: MaxStickAngle
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 2421505912079181329, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
-        type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -27659,22 +27654,22 @@ PrefabInstance:
     - target: {fileID: 7007395845976470192, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.28180927
+      value: 0.28180924
       objectReference: {fileID: 0}
     - target: {fileID: 7007395845976470192, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.24818349
+      value: -0.24818344
       objectReference: {fileID: 0}
     - target: {fileID: 7007395845976470192, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.07571616
+      value: 0.07571614
       objectReference: {fileID: 0}
     - target: {fileID: 7007395845976470192, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.92371833
+      value: 0.9237184
       objectReference: {fileID: 0}
     - target: {fileID: 7007395845976470192, guid: 6e765f4d0d2e45b42b804e7b945c60c8,
         type: 3}

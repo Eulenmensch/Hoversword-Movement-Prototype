@@ -27,7 +27,7 @@ public class PlayerAirControl : MonoBehaviour
         if (!_grounded)
         {
             ControlAngularMotion(pitchAxis, _pitchInput);
-            if (_pitchInput <= MinimumRollInput)
+            if (_pitchInput <= MinimumRollInput && _pitchInput >= -MinimumRollInput)
             {
                 StabilizeAngularMotion(rollAxis, upDirection);
             }

@@ -114,6 +114,49 @@ MonoBehaviour:
   MaxZOffset: 5
   MaxXOffset: 3
   XLerpTime: 0.02
+  ZLerpTime: 0.03
+  FOVCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.6236846
+      outSlope: 2.6236846
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.03521277
+      value: 0.09238721
+      inSlope: 2.185374
+      outSlope: 2.185374
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.102581754
+      outWeight: 0.018722354
+    - serializedVersion: 3
+      time: 0.6034317
+      value: 0.2896223
+      inSlope: -1.3266457
+      outSlope: -1.3266457
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.025813507
+      outWeight: 0.027815321
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.37406775
+      outSlope: -0.37406775
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.09525767
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1148692734821283471
 PrefabInstance:
   m_ObjectHideFlags: 0

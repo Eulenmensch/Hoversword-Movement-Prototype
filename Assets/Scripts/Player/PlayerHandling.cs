@@ -50,7 +50,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         IsGrounded = GroundCheck.IsGrounded(out hit);
 
         CalculateMaxSpeed();
-        // AdjustCenterOfMassInAir();
         CoyoteTime();
         Thrust.Thrust(ThrustInput, IsGrounded, hit);
         Turn.Turn(TurnInput);
@@ -117,20 +116,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         else
         {
             PlayerJump.StopCoyoteTime();
-        }
-    }
-
-    private void AdjustCenterOfMassInAir()
-    {
-        if (!IsGrounded && !CenterOfMassSet)
-        {
-            CenterOfMass.SetCenterOfMass(transform.position);
-            CenterOfMassSet = true;
-        }
-        else if (IsGrounded && CenterOfMassSet)
-        {
-            CenterOfMass.SetCenterOfMass(CenterOfMass.CenterOfMassTransform.localPosition);
-            CenterOfMassSet = false;
         }
     }
 }
