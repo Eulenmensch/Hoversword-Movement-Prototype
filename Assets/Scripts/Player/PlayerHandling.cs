@@ -7,9 +7,17 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     public float MaxSpeed { get; private set; }
     public bool IsDashing { get; set; }
     public bool IsBoosting { get; set; }
+    public bool IsAirborne { get; private set; }
     public bool IsGrounded { get; private set; }
 
+    public Animator Animator
+    {
+        get { return animator; }
+        private set { animator = value; }
+    }
+
     [SerializeField] PlayerEngineFX BoardFX;
+    [SerializeField] Animator animator;
     //Settings
 
     //References
@@ -27,9 +35,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private float ThrustInput;
     private float TurnInput;
     private float PitchInput;
-
-    //Flags
-    private bool CenterOfMassSet;
 
     private void Start()
     {
@@ -51,6 +56,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
         CalculateMaxSpeed();
         CoyoteTime();
+        Land();
         Thrust.Thrust(ThrustInput, IsGrounded, hit);
         Turn.Turn(TurnInput);
         AirControl.AirControl(PitchInput, IsGrounded);
@@ -83,11 +89,13 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         {
             PlayerDash.StartCharge();
             BoardFX.SetDashing(true);
+            animator.SetTrigger("StartDash");
         }
         else if (context.canceled)
         {
             PlayerDash.StopCharge();
             BoardFX.SetDashing(false);
+            animator.SetTrigger("CancelDash");
         }
     }
 
@@ -97,6 +105,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         {
             PlayerJump.SetCharging(true);
             BoardFX.SetCrouching(true);
+            animator.SetTrigger("StartJumpCharge");
         }
         else if (context.canceled)
         {
@@ -104,6 +113,24 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
             BoardFX.PlayJumpJetParticles();
             PlayerJump.SetCharging(false);
             BoardFX.SetCrouching(false);
+            animator.SetTrigger("StartJump");
+        }
+    }
+
+    private void Land()
+    {
+        if (!IsGrounded)
+        {
+            IsAirborne = true;
+        }
+        else if (IsAirborne && IsGrounded)
+        {
+            IsAirborne = false;
+            //this is so that the trigger isn't set when merely falling, which causes the animator to get stuck
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
+            {
+                animator.SetTrigger("StopJump");
+            }
         }
     }
 

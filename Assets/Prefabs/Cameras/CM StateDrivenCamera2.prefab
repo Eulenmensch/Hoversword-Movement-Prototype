@@ -110,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FreeLook: {fileID: 4658322530798790457}
   Handling: {fileID: 0}
+  Dash: {fileID: 0}
   RB: {fileID: 0}
   MaxZOffset: 5
   MaxXOffset: 3
@@ -121,32 +122,32 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2.6236846
-      outSlope: 2.6236846
-      tangentMode: 34
+      inSlope: 0.19447626
+      outSlope: 0.19447626
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.62862563
     - serializedVersion: 3
-      time: 0.03521277
-      value: 0.09238721
-      inSlope: 2.185374
-      outSlope: 2.185374
+      time: 0.18574388
+      value: 0.37942585
+      inSlope: 0.85339046
+      outSlope: 0.85339046
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.102581754
-      outWeight: 0.018722354
+      weightedMode: 3
+      inWeight: 0.8587823
+      outWeight: 0.17204444
     - serializedVersion: 3
-      time: 0.6034317
-      value: 0.2896223
-      inSlope: -1.3266457
-      outSlope: -1.3266457
+      time: 0.85413
+      value: 0.38168216
+      inSlope: -0.53915626
+      outSlope: -0.53915626
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.025813507
-      outWeight: 0.027815321
+      weightedMode: 3
+      inWeight: 0.25114048
+      outWeight: 0.6342601
     - serializedVersion: 3
-      time: 1
+      time: 0.99
       value: 0
       inSlope: -0.37406775
       outSlope: -0.37406775

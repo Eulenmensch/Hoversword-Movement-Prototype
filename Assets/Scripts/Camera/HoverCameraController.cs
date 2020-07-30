@@ -22,6 +22,7 @@ public class HoverCameraController : MonoBehaviour
     private Vector3 TrackedObjectOffset;
     private float PulseFrame;
     private float DefaultFOV;
+    private bool IsDashing;
 
     private void Start()
     {
@@ -85,14 +86,17 @@ public class HoverCameraController : MonoBehaviour
     {
         if (Handling.IsDashing && PulseFrame <= Dash.Duration)
         {
+            this.IsDashing = true;
             PulseFrame += Time.deltaTime;
             var scaledPulseFrame = PulseFrame / Dash.Duration;
             var fov = (FOVCurve.Evaluate(scaledPulseFrame) + 1) * DefaultFOV;
             FreeLook.m_Lens.FieldOfView = fov;
         }
-        if (PulseFrame > Dash.Duration)
+        else if (!Handling.IsDashing && this.IsDashing)
         {
             PulseFrame = 0;
+            FreeLook.m_Lens.FieldOfView = DefaultFOV;
+            this.IsDashing = false;
         }
     }
 

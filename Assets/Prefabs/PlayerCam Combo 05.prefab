@@ -328,11 +328,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6100975805730647297, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
         type: 3}
-      propertyPath: SwordRenderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6100975805730647297, guid: 3fa8f41f30d5da2448c93bb0e6f24567,
-        type: 3}
       propertyPath: Dash
       value: 
       objectReference: {fileID: 2421505912079181321}
