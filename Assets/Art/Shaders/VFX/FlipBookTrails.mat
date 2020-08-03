@@ -10,7 +10,7 @@ Material:
   m_Name: FlipBookTrails
   m_Shader: {fileID: 4800000, guid: 8be7d5bbd41f76443a81e73f4250bc42, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -42,12 +42,12 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _Cutoff: 0.5
-    - _EmissionIntensity: 3.79
+    - _EmissionIntensity: 20.96
     - _InvFade: 1
     - _ScrollSpeed: 10
     - _SpriteSheetColumns: 2
     - _SpriteSheetRows: 2
     - __dirty: 0
     m_Colors:
-    - _Color: {r: 0, g: 0.43091092, b: 0.7529412, a: 1}
+    - _Color: {r: 0, g: 0.4309109, b: 0.7529412, a: 1}
     - _TintColor: {r: 0, g: 0, b: 0, a: 1}

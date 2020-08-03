@@ -17,11 +17,7 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField, ColorUsage( true, true )] private Color JumpMinChargeColor;
     [SerializeField, ColorUsage( true, true )] private Color JumpMaxChargeColor;
     [SerializeField, ColorUsage( true, true )] private Color JumpFullChargeFeedbackColor;
-    [SerializeField] private ParticleSystem[] MainBoosters;
-    [SerializeField] private ParticleSystem[] OuterCircles;
-    [SerializeField] private ParticleSystem[] Sparks;
-    [SerializeField] private ParticleSystem[] ThrusterTrails;
-    [SerializeField] private ParticleSystem DashChargeParticles;
+    [SerializeField] private ParticleSystem[] DashChargeParticles;
     [SerializeField] private ParticleSystem DashJetParticles;
     [SerializeField] private ParticleSystem JumpChargeParticles;
     [SerializeField] private ParticleSystem JumpJetParticles;
@@ -53,10 +49,6 @@ public class PlayerEngineFX : MonoBehaviour
 
     private void Awake()
     {
-        DefaultMainBooster = MainBoosters[0];
-        DefaultOuterCircle = OuterCircles[0];
-        DefaultSpark = Sparks[0];
-        DefaultThrusterTrail = ThrusterTrails[0];
         CameraShake = GetComponent<CinemachineImpulseSource>();
     }
 
@@ -80,13 +72,20 @@ public class PlayerEngineFX : MonoBehaviour
         float chargeTime = Dash.ChargeTime;
         if ( chargeTime != 0 )
         {
-            var main = DashChargeParticles.main;
-            main.simulationSpeed = ( 1.0f / Dash.ChargeTime );
+            foreach ( var dashChargeParticle in DashChargeParticles )
+            {
+                var main = dashChargeParticle.main;
+                main.simulationSpeed = ( 1.0f / Dash.ChargeTime );
+            }
+
         }
         else
         {
-            var main = DashChargeParticles.main;
-            main.simulationSpeed = 0.0f;
+            foreach ( var dashChargeParticle in DashChargeParticles )
+            {
+                var main = dashChargeParticle.main;
+                main.simulationSpeed = 0.0f;
+            }
         }
     }
     void PlayDashChargeParticles()
@@ -95,13 +94,20 @@ public class PlayerEngineFX : MonoBehaviour
         {
             if ( !DashChargeStarted )
             {
-                DashChargeParticles.Play();
+                foreach ( var dashChargeParticle in DashChargeParticles )
+                {
+                    dashChargeParticle.Play();
+                }
                 DashChargeStarted = true;
             }
         }
         else
         {
-            DashChargeParticles.Clear();
+            foreach ( var dashChargeParticle in DashChargeParticles )
+            {
+                // dashChargeParticle.Clear();
+                dashChargeParticle.Stop();
+            }
             DashChargeStarted = false;
         }
     }
@@ -138,38 +144,7 @@ public class PlayerEngineFX : MonoBehaviour
 
     void SetJetParticleParameters()
     {
-        foreach ( var booster in MainBoosters )
-        {
-            var main = booster.main;
-            main.startSizeZMultiplier = 0.5f + ( 1.5f * Thrust );
-        }
-        foreach ( var outerCircle in OuterCircles )
-        {
-            var main = outerCircle.main;
-            main.startSizeZMultiplier = 0.8f + ( 2.2f * Thrust );
-        }
-        foreach ( var spark in Sparks )
-        {
-            var main = spark.main;
-            main.startSizeMultiplier = 0.3f * Thrust;
-            main.startSpeedMultiplier = 0.6f + ( 1.25f * Thrust );
-            var emission = spark.emission;
-            emission.rateOverTimeMultiplier = 35.0f * Thrust;
-            var velOverTime = spark.velocityOverLifetime;
-            velOverTime.zMultiplier = 2.8f * Thrust;
-            var noise = spark.noise;
-            noise.strengthMultiplier = 2.3f * Thrust;
-            noise.frequency = 1.2f * Thrust;
-            noise.scrollSpeedMultiplier = 5.4f * Thrust;
-            noise.sizeAmount = new ParticleSystem.MinMaxCurve( 0.4f * Thrust );
-        }
-        foreach ( var trail in ThrusterTrails )
-        {
-            var main = trail.main;
-            main.startSizeMultiplier = 0.15f + ( 0.85f * Thrust );
-            var emission = trail.emission;
-            emission.rateOverTimeMultiplier = 10.0f + ( 10.0f * Thrust );
-        }
+
     }
 
     void SetJumpChargeColor()
