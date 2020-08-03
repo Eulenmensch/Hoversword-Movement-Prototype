@@ -48,9 +48,9 @@ public class CombatController : MonoBehaviour
     [SerializeField] private LayerMask _hitMask;
     private Collider[] _colliderCache;
     //private HashSet<IAttackable> _hitAttackableCache = new HashSet<IAttackable>();
+    [SerializeField] private bool _debugCollider;
 
     private int _attackID;
-
 
     private void Awake()
     {
@@ -229,8 +229,13 @@ public class CombatController : MonoBehaviour
         // DebugExtension.DebugPoint(capsuleBottomPoint, Color.green);
         // DebugExtension.DebugPoint(capsuleTopPoint, Color.red);
         // Debug capsule
-        // DebugExtension.DebugCapsule(capsuleBottomPoint - capsuleDirection * collider.radius, capsuleTopPoint + capsuleDirection * collider.radius,
-        //     Color.black, collider.radius, 3f);
+
+        if (_debugCollider)
+        {
+            // Debug capsule
+            DebugExtension.DebugCapsule(capsuleBottomPoint - capsuleDirection * collider.radius, capsuleTopPoint + capsuleDirection * collider.radius,
+                Color.black, collider.radius, 3f);
+        }
 
         return Physics.OverlapCapsule(capsuleBottomPoint, capsuleTopPoint, collider.radius, _hitMask, QueryTriggerInteraction.Collide);
     }

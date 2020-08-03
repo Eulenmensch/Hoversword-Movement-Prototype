@@ -8,6 +8,8 @@ public class PlayerHealth : MonoBehaviour/*, IReset*/
 {
     private PlayerCheckpointResetter _playerCheckpointResetter;
 
+    [SerializeField] private bool _isImmortal;
+
     [SerializeField] private int _initialHealth;
 
     [SerializeField] private int _maxHealth;
@@ -56,17 +58,15 @@ public class PlayerHealth : MonoBehaviour/*, IReset*/
         if (!(Time.unscaledTime > _damageTimestamp + _damageCooldown))
             return;
 
-        health -= value;
+        health = Mathf.Max(0, health - value);
 
         _damageTimestamp = Time.unscaledTime;
         _playerEffects.Damage(damageType);
         if (_damageSound != null)
             _damageSound.Play();
 
-        if (health <= 0)
-        {
+        if (health <= 0 && !_isImmortal)
             Die();
-        }
     }
 
     public void UseHealth(int value)

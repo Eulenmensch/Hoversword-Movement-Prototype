@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SplineFollower))]
 public class SplineMovement : MonoBehaviour, IMovement
 {
     [SerializeField] private bool _moveOnStart;
@@ -77,7 +78,8 @@ public class SplineMovement : MonoBehaviour, IMovement
     private void OnValidate()
     {
         if (_follower == null) _follower = GetComponent<SplineFollower>();
+        if (_follower == null) return;
+
         _follower.startPosition = _startPercent;
-        //SetFollower();
     }
 }

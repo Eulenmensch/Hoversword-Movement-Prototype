@@ -88,7 +88,7 @@ public class @InputActionsAsset : IInputActionCollection, IDisposable
                     ""id"": ""5afc2fad-e445-471f-b3db-8ae51ca847ef"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=1)""
+                    ""interactions"": ""Hold(duration=0.3)""
                 }
             ],
             ""bindings"": [

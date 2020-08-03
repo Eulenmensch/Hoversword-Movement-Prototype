@@ -121,7 +121,7 @@ public class RotationMovement : MonoBehaviour, IMovement
     {
         SetRotationAxis();
 
-        Quaternion startRot = Quaternion.AngleAxis(_startAngle, rotationAxis);
+        Quaternion startRot =  transform.parent.rotation * Quaternion.AngleAxis(_startAngle, rotationAxis);
         Vector3 start = startRot * Vector3.up;
 
         Gizmos.color = Color.black;
@@ -129,7 +129,7 @@ public class RotationMovement : MonoBehaviour, IMovement
 
         if (!_fullRotation)
         {
-            Quaternion endRot = Quaternion.AngleAxis(_endAngle, rotationAxis);
+            Quaternion endRot = transform.parent.rotation * Quaternion.AngleAxis(_endAngle, rotationAxis);
             Vector3 end = endRot * Vector3.up;
 
             Gizmos.color = Color.grey;

@@ -1918,6 +1918,7 @@ GameObject:
   - component: {fileID: 9053832565370203655}
   - component: {fileID: 9053832565370203652}
   - component: {fileID: 1896163962}
+  - component: {fileID: 1959487749506173659}
   m_Layer: 12
   m_Name: gp_LaserBeam
   m_TagString: Untagged
@@ -1968,6 +1969,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 1
   _damageType: 1
+--- !u!114 &1959487749506173659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9053832565370203654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b33c681f8b6714e93eb1a8ff62d3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pushStrength: 25
+  _pushType: 0
 --- !u!1 &9053832565438939726
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,11 +2028,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d0114dd69a2bf4c94e4d67f5c805ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveOnStart: 0
+  _isLooping: 0
   _axis: 2
   _speed: 100
+  ease: 4
   _startAngle: 0
   _endAngle: 0
-  ease: 13
   _fullRotation: 0
   _rotationDirection: 0
   _useEuler: 1
