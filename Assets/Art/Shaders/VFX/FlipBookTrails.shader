@@ -1,3 +1,5 @@
+// Upgrade NOTE: upgraded instancing buffer 'FlipBookTrails' to new syntax.
+
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
 Shader "FlipBookTrails"
@@ -91,8 +93,12 @@ Shader "FlipBookTrails"
 				uniform int _SpriteSheetColumns;
 				uniform int _SpriteSheetRows;
 				uniform float _ScrollSpeed;
-				uniform float4 _Color;
-				uniform float _EmissionIntensity;
+				UNITY_INSTANCING_BUFFER_START(FlipBookTrails)
+					UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
+#define _Color_arr FlipBookTrails
+					UNITY_DEFINE_INSTANCED_PROP(float, _EmissionIntensity)
+#define _EmissionIntensity_arr FlipBookTrails
+				UNITY_INSTANCING_BUFFER_END(FlipBookTrails)
 
 
 				v2f vert ( appdata_t v  )
@@ -157,9 +163,11 @@ Shader "FlipBookTrails"
 					// Flipbook UV
 					half2 fbuv17 = uv018 * fbtiling17 + fboffset17;
 					// *** END Flipbook UV Animation vars ***
+					float4 _Color_Instance = UNITY_ACCESS_INSTANCED_PROP(_Color_arr, _Color);
+					float _EmissionIntensity_Instance = UNITY_ACCESS_INSTANCED_PROP(_EmissionIntensity_arr, _EmissionIntensity);
 					
 
-					fixed4 col = ( tex2D( _Flipbook, fbuv17 ) * _Color * _EmissionIntensity );
+					fixed4 col = ( tex2D( _Flipbook, fbuv17 ) * _Color_Instance * _EmissionIntensity_Instance );
 					UNITY_APPLY_FOG(i.fogCoord, col);
 					return col;
 				}
@@ -173,19 +181,19 @@ Shader "FlipBookTrails"
 }
 /*ASEBEGIN
 Version=18100
-2810;499.3333;1145;562;-73.64935;69.65402;1;True;False
+-1780;213;1083;936;1073.334;1430.822;2.359004;True;False
 Node;AmplifyShaderEditor.SimpleTimeNode;4;-320.6191,104.6911;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;18;-320.6191,-7.308942;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.IntNode;11;-320.6191,168.691;Inherit;False;Property;_SpriteSheetColumns;SpriteSheetColumns;3;0;Create;True;0;0;False;0;False;2;1;0;1;INT;0
-Node;AmplifyShaderEditor.IntNode;12;-320.6191,232.691;Inherit;False;Property;_SpriteSheetRows;SpriteSheetRows;2;0;Create;True;0;0;False;0;False;2;3;0;1;INT;0
-Node;AmplifyShaderEditor.RangedFloatNode;13;-320.6191,296.6911;Inherit;False;Property;_ScrollSpeed;ScrollSpeed;1;0;Create;True;0;0;False;0;False;0;5.86;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;3;80,-240;Inherit;True;Property;_Flipbook;Flipbook;0;0;Create;True;0;0;False;0;False;None;207602659ff2c304e84637a6413bcbc4;False;white;Auto;Texture2D;-1;0;1;SAMPLER2D;0
+Node;AmplifyShaderEditor.IntNode;11;-320.6191,168.691;Inherit;False;Property;_SpriteSheetColumns;SpriteSheetColumns;4;0;Create;True;0;0;False;0;False;2;1;0;1;INT;0
+Node;AmplifyShaderEditor.IntNode;12;-320.6191,232.691;Inherit;False;Property;_SpriteSheetRows;SpriteSheetRows;3;0;Create;True;0;0;False;0;False;2;3;0;1;INT;0
+Node;AmplifyShaderEditor.RangedFloatNode;13;-320.6191,296.6911;Inherit;False;Property;_ScrollSpeed;ScrollSpeed;2;0;Create;True;0;0;False;0;False;0;5.86;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;3;80,-240;Inherit;True;Property;_Flipbook;Flipbook;1;0;Create;True;0;0;False;0;False;None;207602659ff2c304e84637a6413bcbc4;False;white;Auto;Texture2D;-1;0;1;SAMPLER2D;0
 Node;AmplifyShaderEditor.TFHCFlipBookUVAnimation;17;-0.61904,8.691055;Inherit;False;0;0;6;0;FLOAT2;0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;3;FLOAT2;0;FLOAT;1;FLOAT;2
-Node;AmplifyShaderEditor.ColorNode;14;480,192;Inherit;False;Property;_Color;Color;4;0;Create;True;0;0;False;0;False;0,0,0,0;0.48131,0.9811321,0.9709787,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;16;496,368;Inherit;False;Property;_EmissionIntensity;EmissionIntensity;5;0;Create;True;0;0;False;0;False;0;6.91;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SamplerNode;19;400,-16;Inherit;True;Property;_TextureSample0;Texture Sample 0;6;0;Create;True;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;15;803,122;Inherit;False;3;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;1093,94;Float;False;True;-1;2;ASEMaterialInspector;0;8;FlipBookTrails;0b6a9f8b4f707c74ca64c0be8e590de0;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;8;5;False;-1;1;False;-1;0;1;False;-1;0;False;-1;False;False;True;2;False;-1;True;True;True;True;False;0;False;-1;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;;0
+Node;AmplifyShaderEditor.ColorNode;14;494,184;Inherit;False;InstancedProperty;_Color;Color;5;0;Create;True;0;0;False;0;False;0,0,0,0;0,0.7772108,0.9811321,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;16;496,368;Inherit;False;InstancedProperty;_EmissionIntensity;EmissionIntensity;6;0;Create;True;0;0;False;0;False;0;3.9;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;15;840,38;Inherit;False;3;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;31;1157,0;Float;False;True;-1;2;ASEMaterialInspector;0;8;FlipBookTrails;0b6a9f8b4f707c74ca64c0be8e590de0;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;8;5;False;-1;1;False;-1;0;1;False;-1;0;False;-1;False;False;True;2;False;-1;True;True;True;True;False;0;False;-1;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;;0
 WireConnection;17;0;18;0
 WireConnection;17;1;11;0
 WireConnection;17;2;12;0
@@ -196,6 +204,6 @@ WireConnection;19;1;17;0
 WireConnection;15;0;19;0
 WireConnection;15;1;14;0
 WireConnection;15;2;16;0
-WireConnection;1;0;15;0
+WireConnection;31;0;15;0
 ASEEND*/
-//CHKSM=128E386618F9F48F6943681B7AC8F846A3DA6CF2
+//CHKSM=0BDB1CCFBAA39C0A915AFE1D7F4AF961D219E7DF
