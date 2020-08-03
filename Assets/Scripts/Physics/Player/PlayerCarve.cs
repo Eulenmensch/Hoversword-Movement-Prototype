@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerDrift : MonoBehaviour
+public class PlayerCarve : MonoBehaviour
 {
     public bool IsCarving { get; private set; }
 
@@ -13,14 +13,14 @@ public class PlayerDrift : MonoBehaviour
 
     public void Carve(float _turnInput)
     {
-        if (IsCarving)
+        if ( IsCarving )
         {
             //Make the Turn Input scale exponentially to get more of a carving feel when steering
-            float scaledTurnInput = Mathf.Pow(_turnInput, 3);
+            float scaledTurnInput = Mathf.Pow( _turnInput, 3 );
             //Calculate turn force
             Vector3 turnForce = -transform.right * CarveForce * scaledTurnInput;
             //Apply calculated turn force to the rigidbody at the turn motor position
-            RB.AddForceAtPosition(turnForce, CarveMotor.position, ForceMode.Acceleration);
+            RB.AddForceAtPosition( turnForce, CarveMotor.position, ForceMode.Acceleration );
             ApplyCarveFriction();
         }
     }
@@ -28,8 +28,8 @@ public class PlayerDrift : MonoBehaviour
     //FIXME: This method currently duplicates the code of PlayerTurn.ApplySidewaysFriction()
     private void ApplyCarveFriction()
     {
-        float sidewaysSpeed = Vector3.Dot(RB.velocity, -transform.right);
-        RB.AddForce(transform.right * sidewaysSpeed * CarveFriction, ForceMode.Acceleration);
+        float sidewaysSpeed = Vector3.Dot( RB.velocity, -transform.right );
+        RB.AddForce( transform.right * sidewaysSpeed * CarveFriction, ForceMode.Acceleration );
     }
 
     public void SetCarving(bool _carving)

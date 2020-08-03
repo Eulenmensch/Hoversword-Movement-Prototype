@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(GroundCheck))]
+[RequireComponent( typeof( GroundCheck ) )]
 public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
     public float MaxSpeed { get; private set; }
@@ -24,6 +24,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private GroundCheck GroundCheck;
     private PlayerThrust Thrust;
     private PlayerTurn Turn;
+    private PlayerCarve PlayerCarve;
     private PlayerDash PlayerDash;
     private PlayerBoost PlayerBoost;
     private PlayerJump PlayerJump;
@@ -41,6 +42,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         GroundCheck = GetComponent<GroundCheck>();
         Thrust = GetComponent<PlayerThrust>();
         Turn = GetComponent<PlayerTurn>();
+        PlayerCarve = GetComponent<PlayerCarve>();
         PlayerDash = GetComponent<PlayerDash>();
         PlayerBoost = GetComponent<PlayerBoost>();
         PlayerJump = GetComponent<PlayerJump>();
@@ -52,22 +54,22 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private void FixedUpdate()
     {
         RaycastHit hit;
-        IsGrounded = GroundCheck.IsGrounded(out hit);
+        IsGrounded = GroundCheck.IsGrounded( out hit );
 
         CalculateMaxSpeed();
         CoyoteTime();
         Land();
-        Thrust.Thrust(ThrustInput, IsGrounded, hit);
-        Turn.Turn(TurnInput);
-        AirControl.AirControl(PitchInput, IsGrounded);
+        Thrust.Thrust( ThrustInput, IsGrounded, hit );
+        Turn.Turn( TurnInput );
+        AirControl.AirControl( PitchInput, IsGrounded );
     }
 
     private void CalculateMaxSpeed()
     {
         float force = IsGrounded ? Thrust.GroundAccelerationForce : Thrust.AirAccelerationForce;
-        if (IsDashing) force += PlayerDash.BoostForce;
-        if (IsBoosting) force += PlayerBoost.BoostForce;
-        MaxSpeed = Mathf.Sqrt(force / QuadraticDrag.Drag);
+        if ( IsDashing ) force += PlayerDash.BoostForce;
+        if ( IsBoosting ) force += PlayerBoost.BoostForce;
+        MaxSpeed = Mathf.Sqrt( force / QuadraticDrag.Drag );
     }
 
     public void GetMoveInput(InputAction.CallbackContext context)
@@ -75,7 +77,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         Vector2 inputVector = context.ReadValue<Vector2>();
         ThrustInput = inputVector.y;
         TurnInput = inputVector.x;
-        BoardFX.SetMoveInput(inputVector.y, inputVector.x);
+        BoardFX.SetMoveInput( inputVector.y, inputVector.x );
     }
 
     public void GetPitchInput(InputAction.CallbackContext context)
@@ -83,60 +85,72 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         PitchInput = context.ReadValue<Vector2>().y;
     }
 
+    public void Carve(InputAction.CallbackContext context)
+    {
+        if ( context.started )
+        {
+            PlayerCarve.SetCarving( true );
+        }
+        else if ( context.canceled )
+        {
+            PlayerCarve.SetCarving( false );
+        }
+    }
+
     public void Dash(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if ( context.started )
         {
             PlayerDash.StartCharge();
-            BoardFX.SetDashing(true);
-            animator.SetTrigger("StartDash");
+            BoardFX.SetDashing( true );
+            animator.SetTrigger( "StartDash" );
         }
-        else if (context.canceled)
+        else if ( context.canceled )
         {
             PlayerDash.StopCharge();
-            BoardFX.SetDashing(false);
-            animator.SetTrigger("CancelDash");
+            BoardFX.SetDashing( false );
+            animator.SetTrigger( "CancelDash" );
         }
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if ( context.started )
         {
-            PlayerJump.SetCharging(true);
-            BoardFX.SetCrouching(true);
-            animator.SetTrigger("StartJumpCharge");
+            PlayerJump.SetCharging( true );
+            BoardFX.SetCrouching( true );
+            animator.SetTrigger( "StartJumpCharge" );
         }
-        else if (context.canceled)
+        else if ( context.canceled )
         {
             PlayerJump.Jump();
             BoardFX.PlayJumpJetParticles();
-            PlayerJump.SetCharging(false);
-            BoardFX.SetCrouching(false);
-            animator.SetTrigger("StartJump");
+            PlayerJump.SetCharging( false );
+            BoardFX.SetCrouching( false );
+            animator.SetTrigger( "StartJump" );
         }
     }
 
     private void Land()
     {
-        if (!IsGrounded)
+        if ( !IsGrounded )
         {
             IsAirborne = true;
         }
-        else if (IsAirborne && IsGrounded)
+        else if ( IsAirborne && IsGrounded )
         {
             IsAirborne = false;
             //this is so that the trigger isn't set when merely falling, which causes the animator to get stuck
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
+            if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) )
             {
-                animator.SetTrigger("StopJump");
+                animator.SetTrigger( "StopJump" );
             }
         }
     }
 
     private void CoyoteTime()
     {
-        if (!IsGrounded)
+        if ( !IsGrounded )
         {
             PlayerJump.StartCoyoteTime();
         }
