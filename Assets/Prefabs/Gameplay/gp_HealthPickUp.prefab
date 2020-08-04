@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4339694638930632391}
   - component: {fileID: 4339694638930632385}
   - component: {fileID: 4339694638930632384}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4339694639023256172}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: P1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4339694639120829780}
   - component: {fileID: 4339694639120829782}
   - component: {fileID: 4339694639120829781}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4339694639390673174}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: MovementPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4339694639912364377}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: P2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 4339694639966420004}
   - component: {fileID: 4339694639966420006}
   - component: {fileID: 4339694639966420005}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 4339694640067132648}
   - component: {fileID: 9099582801215251051}
   - component: {fileID: 4339694640067132655}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: gp_HealthPickUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,6 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae234c4484b7c549b3a4c1ac7749637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _healingType: 0
   _healthForCollision: 1
   _healthForAttack: 1
 --- !u!1 &4339694640716670885
@@ -427,7 +428,7 @@ GameObject:
   - component: {fileID: 4339694640716670886}
   - component: {fileID: 4339694640716670880}
   - component: {fileID: 4339694640716670887}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,6 +464,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af412a9cb5ea5740b22e5f4b6402e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveOnStart: 0
+  _isLooping: 0
   _speed: 0.2
   ease: 4
   _points:
@@ -482,11 +485,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d0114dd69a2bf4c94e4d67f5c805ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveOnStart: 0
+  _isLooping: 0
   _axis: 1
   _speed: 30
+  ease: 1
   _startAngle: 0
   _endAngle: 0
-  ease: 1
   _fullRotation: 1
   _rotationDirection: 0
   _useEuler: 1
