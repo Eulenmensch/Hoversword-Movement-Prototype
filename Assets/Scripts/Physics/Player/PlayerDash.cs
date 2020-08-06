@@ -23,6 +23,8 @@ public class PlayerDash : MonoBehaviour
         get { return duration; }
         private set { duration = value; }
     }
+
+    public float DashTime { get; private set; }
     public bool IsCharging { get; private set; }
 
 
@@ -36,6 +38,12 @@ public class PlayerDash : MonoBehaviour
     private PlayerThrust Thrust;
     private float ChargeTimer;
     private float DashTimer;
+    // private float DashTime;
+
+    private void OnEnable()
+    {
+        PlayerEvents.Instance.OnStartDash += StartDash;
+    }
 
     private void Start()
     {
@@ -50,7 +58,7 @@ public class PlayerDash : MonoBehaviour
     private void FixedUpdate()
     {
         Charge();
-        Dash();
+        Dash(DashTime);
     }
 
     public void StartCharge()
@@ -72,14 +80,15 @@ public class PlayerDash : MonoBehaviour
             {
                 ChargeTimer = 0;
                 IsCharging = false;
-                StartDash();
+                StartDash(Duration);
             }
         }
     }
 
-    private void StartDash()
+    public void StartDash(float _duration)
     {
         Handling.IsDashing = true;
+        DashTime = _duration;
     }
     private void StopDash()
     {
@@ -87,13 +96,13 @@ public class PlayerDash : MonoBehaviour
         Handling.Animator.SetTrigger("StopDash");
     }
 
-    private void Dash()
+    private void Dash(float _duration)
     {
         if (Handling.IsDashing)
         {
             Boost();
             DashTimer += Time.deltaTime;
-            if (DashTimer >= duration)
+            if (DashTimer >= _duration)
             {
                 StopDash();
                 DashTimer = 0;

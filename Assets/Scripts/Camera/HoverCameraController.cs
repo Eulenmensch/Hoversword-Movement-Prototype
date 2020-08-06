@@ -15,6 +15,8 @@ public class HoverCameraController : MonoBehaviour
     // [SerializeField] float ZLerpTime;
     [SerializeField] float XLerpTime;
     [SerializeField] float ZLerpTime;
+    [SerializeField] float CarveZOffset;
+    [SerializeField] float CarveXMultiplier;
     [SerializeField] AnimationCurve FOVCurve;
 
     private float ZOffset;
@@ -34,6 +36,7 @@ public class HoverCameraController : MonoBehaviour
         ScaleZOffsetWithSpeed();
         SetGroundOffset();
         SetAirOffset();
+        SetCarveOffset();
     }
 
     private void Update()
@@ -68,7 +71,7 @@ public class HoverCameraController : MonoBehaviour
 
     private void SetGroundOffset()
     {
-        if (Handling.IsGrounded)
+        if (Handling.IsGrounded && !Handling.IsCarving)
         {
             SetOffset(XOffset, ZOffset);
         }
@@ -82,15 +85,26 @@ public class HoverCameraController : MonoBehaviour
         }
     }
 
+    private void SetCarveOffset()
+    {
+        if (Handling.IsGrounded && Handling.IsCarving)
+        {
+            SetOffset(XOffset * CarveXMultiplier, CarveZOffset);
+        }
+    }
+
     private void PulseFOV()
     {
-        if (Handling.IsDashing && PulseFrame <= Dash.Duration)
+        if (Dash.DashTime == Dash.Duration)
         {
-            this.IsDashing = true;
-            PulseFrame += Time.deltaTime;
-            var scaledPulseFrame = PulseFrame / Dash.Duration;
-            var fov = (FOVCurve.Evaluate(scaledPulseFrame) + 1) * DefaultFOV;
-            FreeLook.m_Lens.FieldOfView = fov;
+            if (Handling.IsDashing && PulseFrame <= Dash.DashTime)
+            {
+                this.IsDashing = true;
+                PulseFrame += Time.deltaTime;
+                var scaledPulseFrame = PulseFrame / Dash.DashTime;
+                var fov = (FOVCurve.Evaluate(scaledPulseFrame) + 1) * DefaultFOV;
+                FreeLook.m_Lens.FieldOfView = fov;
+            }
         }
         else if (!Handling.IsDashing && this.IsDashing)
         {

@@ -34,7 +34,8 @@ public class RagdollController : MonoBehaviour
         Character.GetComponent<Animator>().enabled = false;
         foreach (var body in Rigidbodies)
         {
-            body.AddForce(_crashForce, ForceMode.VelocityChange);
+            var forceMultiplier = Random.Range(-2f, 5f);
+            body.AddForce(_crashForce * forceMultiplier, ForceMode.VelocityChange);
         }
     }
 

@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SandNormal:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: dd1ad706663683546b665fd5b0286bbd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SparkleNoise:
@@ -81,13 +81,13 @@ Material:
     - _GlossyReflections: 1
     - _GradientCenter: 0.50635296
     - _GradientOffset: 0.79
-    - _GradientScale: 0.16
-    - _InternalNoiseScale: 0.22
+    - _GradientScale: 0.08
+    - _InternalNoiseScale: 0.28
     - _Metallic: 0
     - _Metalness: 0.42
     - _Mode: 0
-    - _NormalScale: 0.8
-    - _NormalStrength: 0.2
+    - _NormalScale: 0.14
+    - _NormalStrength: 4.54
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SandSpeckCutoff: 2.21
@@ -100,7 +100,7 @@ Material:
     - _SrcBlend: 1
     - _TrailBlendingMax: 1
     - _UVSec: 0
-    - _WaveAmplitude: 196
+    - _WaveAmplitude: 334.4
     - _WaveFrequency: 1
     - _WaveFrequencyNoise: 7.1
     - _WaveLengthNoise: 31.8
@@ -111,7 +111,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FresnelColor: {r: 0.8490566, g: 0.5246529, b: 0.6459035, a: 0}
-    - _HighColor: {r: 0.060875755, g: 0.16721278, b: 0.2264151, a: 0.9843137}
-    - _LowColor: {r: 0.52156866, g: 0.8666667, b: 0.8273873, a: 0}
+    - _HighColor: {r: 0.060875706, g: 0.16721272, b: 0.22641504, a: 0.9843137}
+    - _LowColor: {r: 0.52156854, g: 0.8666667, b: 0.8273873, a: 0}
     - _MidColor: {r: 0.28977814, g: 0.2791474, b: 0.4811321, a: 0}
-    - _TrailColor: {r: 0.7924528, g: 0.04111784, b: 0.33459696, a: 1}
+    - _TrailColor: {r: 0.7924528, g: 0.041117787, b: 0.3345969, a: 1}
