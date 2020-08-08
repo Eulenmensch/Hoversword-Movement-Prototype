@@ -112,16 +112,7 @@ public class PlayerDash : MonoBehaviour
 
     private void Boost()
     {
-        Vector3 thrustForce = Vector3.zero;
-        if (Mode == BoostMode.NoHeightGain)
-        {
-            //Calculate thrust force
-            thrustForce = Thrust.ThrustDirection * BoostForce;
-        }
-        else if (Mode == BoostMode.HeightGain)
-        {
-            thrustForce = transform.forward * BoostForce;
-        }
+        Vector3 thrustForce = transform.forward * BoostForce;
         //Apply calculated thrust to the rigidbody at the thrust motor position
         RB.AddForceAtPosition(thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration);
     }

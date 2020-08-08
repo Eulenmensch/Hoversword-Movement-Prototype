@@ -104,13 +104,16 @@ public class HoverCameraController : MonoBehaviour
                 var scaledPulseFrame = PulseFrame / Dash.DashTime;
                 var fov = (FOVCurve.Evaluate(scaledPulseFrame) + 1) * DefaultFOV;
                 FreeLook.m_Lens.FieldOfView = fov;
+                print("pulsing");
             }
-        }
-        else if (!Handling.IsDashing && this.IsDashing)
-        {
-            PulseFrame = 0;
-            FreeLook.m_Lens.FieldOfView = DefaultFOV;
-            this.IsDashing = false;
+
+            else if (!Handling.IsDashing && this.IsDashing)
+            {
+                PulseFrame = 0;
+                FreeLook.m_Lens.FieldOfView = DefaultFOV;
+                this.IsDashing = false;
+                print("pulse ended");
+            }
         }
     }
 

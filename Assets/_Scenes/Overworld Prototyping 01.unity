@@ -10954,13 +10954,28 @@ GameObject:
   m_Component:
   - component: {fileID: 1154149622}
   - component: {fileID: 1154149621}
+  - component: {fileID: 1154149620}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: TrailCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1154149620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154149619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a28c2857b0cbb449b1403c8a23af0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 2421505912979959414}
+  SandMaterial: {fileID: 2100000, guid: 640c38d13b24cd344a34b020b92ea96d, type: 2}
 --- !u!20 &1154149621
 Camera:
   m_ObjectHideFlags: 0
@@ -10988,7 +11003,7 @@ Camera:
   far clip plane: 80
   field of view: 60
   orthographic: 1
-  orthographic size: 500
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -11016,7 +11031,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &1178517895
 PrefabInstance:
@@ -11778,7 +11793,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1933780789 stripped
 Transform:
@@ -29006,17 +29021,26 @@ MonoBehaviour:
   Dash: {fileID: 2421505912979959392}
   Jump: {fileID: 2421505912979959421}
   SwordRenderer: {fileID: 401277406}
+  DashChargeParticles:
+  - {fileID: 0}
+  DashBoardParticles: []
+  DashJetParticles: {fileID: 3398181698007370558}
   JumpMinChargeColor: {r: 0.24140087, g: 0.56005, b: 1.5835898, a: 1}
   JumpMaxChargeColor: {r: 0.28968105, g: 1.2456286, b: 1.8443027, a: 1}
   JumpFullChargeFeedbackColor: {r: 0.5767773, g: 4.303646, b: 0, a: 1}
-  DashChargeParticles:
+  JumpChargeSpinSpeed:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  JumpChargeParticles:
   - {fileID: 0}
-  DashJetParticles: {fileID: 3398181698007370558}
-  JumpChargeParticles: {fileID: 9063892747475360381}
+  JumpChargeSpinParticles: {fileID: 0}
   JumpJetParticles: {fileID: 6235952837661608530}
-  SpeedLines: {fileID: 0}
   JumpChargeParticleRenderer: {fileID: 105462571769172582}
   JumpJetParticleRenderer: {fileID: 4351948963636479443}
+  SpeedLines: {fileID: 0}
   JetDefaultColor: {r: 0.13456745, g: 0.6792453, b: 0.2539643, a: 1}
   JetCarveColor: {r: 0.6784314, g: 0.13333333, b: 0.60982835, a: 1}
 --- !u!4 &3398181698007370556
