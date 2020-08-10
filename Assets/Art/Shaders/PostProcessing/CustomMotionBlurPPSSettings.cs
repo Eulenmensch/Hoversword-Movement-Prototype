@@ -6,13 +6,17 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 [Serializable]
-[PostProcess( typeof( CustomMotionBlurPPSRenderer ), PostProcessEvent.AfterStack, "CustomMotionBlur", true )]
+[PostProcess( typeof( CustomMotionBlurPPSRenderer ), PostProcessEvent.BeforeStack, "CustomMotionBlur", true )]
 public sealed class CustomMotionBlurPPSSettings : PostProcessEffectSettings
 {
 	[Tooltip( "NoiseScale" )]
 	public FloatParameter _NoiseScale = new FloatParameter { value = 17.28066f };
+	[Tooltip( "Vector 0" )]
+	public Vector4Parameter _Vector0 = new Vector4Parameter { value = new Vector4(0.5f,0.5f,0f,0f) };
 	[Tooltip( "MaskRadius" )]
 	public FloatParameter _MaskRadius = new FloatParameter { value = 0f };
+	[Tooltip( "Offset" )]
+	public Vector4Parameter _Offset = new Vector4Parameter { value = new Vector4(-0.5f,-0.5f,0f,0f) };
 }
 
 public sealed class CustomMotionBlurPPSRenderer : PostProcessEffectRenderer<CustomMotionBlurPPSSettings>
@@ -21,7 +25,9 @@ public sealed class CustomMotionBlurPPSRenderer : PostProcessEffectRenderer<Cust
 	{
 		var sheet = context.propertySheets.Get( Shader.Find( "CustomMotionBlur" ) );
 		sheet.properties.SetFloat( "_NoiseScale", settings._NoiseScale );
+		sheet.properties.SetVector( "_Vector0", settings._Vector0 );
 		sheet.properties.SetFloat( "_MaskRadius", settings._MaskRadius );
+		sheet.properties.SetVector( "_Offset", settings._Offset );
 		context.command.BlitFullscreenTriangle( context.source, context.destination, sheet, 0 );
 	}
 }

@@ -12,7 +12,6 @@ public class HoverCameraController : MonoBehaviour
     [SerializeField] private Rigidbody RB;
     [SerializeField] float MaxZOffset;
     [SerializeField] float MaxXOffset;
-    // [SerializeField] float ZLerpTime;
     [SerializeField] float XLerpTime;
     [SerializeField] float ZLerpTime;
     [SerializeField] float CarveZOffset;
@@ -46,7 +45,7 @@ public class HoverCameraController : MonoBehaviour
 
     private void ScaleZOffsetWithSpeed()
     {
-        PhysicsUtilities.ScaleForceWithSpeed(ref ZOffset, 0, MaxZOffset, RB, Handling.MaxSpeed);
+        PhysicsUtilities.ScaleValueWithSpeed( ref ZOffset, 0, MaxZOffset, RB, Handling.MaxSpeed );
     }
 
     public void ScaleXOffsetWithTurnInput(InputAction.CallbackContext context)
@@ -57,13 +56,13 @@ public class HoverCameraController : MonoBehaviour
 
     private void SetOffset(float _xOffset, float _zOffset)
     {
-        TrackedObjectOffset.x = Mathf.Lerp(TrackedObjectOffset.x, _xOffset, XLerpTime);
+        TrackedObjectOffset.x = Mathf.Lerp( TrackedObjectOffset.x, _xOffset, XLerpTime );
         TrackedObjectOffset.y = 1;
-        TrackedObjectOffset.z = Mathf.Lerp(TrackedObjectOffset.z, _zOffset, ZLerpTime);
+        TrackedObjectOffset.z = Mathf.Lerp( TrackedObjectOffset.z, _zOffset, ZLerpTime );
 
-        for (int i = 0; i < 3; i++)
+        for ( int i = 0; i < 3; i++ )
         {
-            var rig = FreeLook.GetRig(i);
+            var rig = FreeLook.GetRig( i );
             var composer = rig.GetCinemachineComponent<CinemachineComposer>();
             composer.m_TrackedObjectOffset = TrackedObjectOffset;
         }
@@ -71,48 +70,46 @@ public class HoverCameraController : MonoBehaviour
 
     private void SetGroundOffset()
     {
-        if (Handling.IsGrounded && !Handling.IsCarving)
+        if ( Handling.IsGrounded && !Handling.IsCarving )
         {
-            SetOffset(XOffset, ZOffset);
+            SetOffset( XOffset, ZOffset );
         }
     }
 
     private void SetAirOffset()
     {
-        if (!Handling.IsGrounded)
+        if ( !Handling.IsGrounded )
         {
-            SetOffset(XOffset / MaxXOffset, 0);
+            SetOffset( XOffset / MaxXOffset, 0 );
         }
     }
 
     private void SetCarveOffset()
     {
-        if (Handling.IsGrounded && Handling.IsCarving)
+        if ( Handling.IsGrounded && Handling.IsCarving )
         {
-            SetOffset(XOffset * CarveXMultiplier, CarveZOffset);
+            SetOffset( XOffset * CarveXMultiplier, CarveZOffset );
         }
     }
 
     private void PulseFOV()
     {
-        if (Dash.DashTime == Dash.Duration)
+        if ( Dash.DashTime == Dash.Duration )
         {
-            if (Handling.IsDashing && PulseFrame <= Dash.DashTime)
+            if ( Handling.IsDashing && PulseFrame <= Dash.DashTime )
             {
                 this.IsDashing = true;
                 PulseFrame += Time.deltaTime;
                 var scaledPulseFrame = PulseFrame / Dash.DashTime;
-                var fov = (FOVCurve.Evaluate(scaledPulseFrame) + 1) * DefaultFOV;
+                var fov = ( FOVCurve.Evaluate( scaledPulseFrame ) + 1 ) * DefaultFOV;
                 FreeLook.m_Lens.FieldOfView = fov;
-                print("pulsing");
             }
 
-            else if (!Handling.IsDashing && this.IsDashing)
+            else if ( !Handling.IsDashing && this.IsDashing )
             {
                 PulseFrame = 0;
                 FreeLook.m_Lens.FieldOfView = DefaultFOV;
                 this.IsDashing = false;
-                print("pulse ended");
             }
         }
     }
@@ -120,7 +117,7 @@ public class HoverCameraController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(RB.transform.TransformPoint(TrackedObjectOffset), 0.2f);
+        Gizmos.DrawSphere( RB.transform.TransformPoint( TrackedObjectOffset ), 0.2f );
     }
 #endif
 }

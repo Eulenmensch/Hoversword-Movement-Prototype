@@ -1,67 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8712727568236075194
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
-  m_Name: Grain
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  colored:
-    overrideState: 0
-    value: 1
-  intensity:
-    overrideState: 0
-    value: 0
-  size:
-    overrideState: 0
-    value: 1
-  lumContrib:
-    overrideState: 0
-    value: 0.8
---- !u!114 &-6682836706900878937
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b77c5407dc277943b591ade9e6b18c5, type: 3}
-  m_Name: LensDistortion
-  m_EditorClassIdentifier: 
-  active: 0
-  enabled:
-    overrideState: 1
-    value: 1
-  intensity:
-    overrideState: 1
-    value: -46.4
-  intensityX:
-    overrideState: 0
-    value: 1
-  intensityY:
-    overrideState: 0
-    value: 1
-  centerX:
-    overrideState: 0
-    value: 0
-  centerY:
-    overrideState: 0
-    value: 0
-  scale:
-    overrideState: 0
-    value: 1
 --- !u!114 &-6668253368139240451
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1494,6 +1432,34 @@ MonoBehaviour:
   quality:
     overrideState: 0
     value: 2
+--- !u!114 &-5424672434455956415
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: febbddcf06107c942ada1b0eedb0ba57, type: 3}
+  m_Name: CustomMotionBlurPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  _NoiseScale:
+    overrideState: 1
+    value: 38.98
+  _Vector0:
+    overrideState: 0
+    value: {x: 0.45, y: 0.5, z: 0, w: 0}
+  _MaskRadius:
+    overrideState: 1
+    value: 1.84
+  _Offset:
+    overrideState: 1
+    value: {x: 0.5, y: 0.5, z: -31.9, w: 0}
 --- !u!114 &-2985605366761444977
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1541,7 +1507,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: Main Camera Profile 1
+  m_Name: Main Camera Profile_Adjusted Red
   m_EditorClassIdentifier: 
   settings:
   - {fileID: -6659652614283622491}
@@ -1550,9 +1516,8 @@ MonoBehaviour:
   - {fileID: 1042010716177410179}
   - {fileID: 7457137536333866152}
   - {fileID: -2985605366761444977}
-  - {fileID: -6682836706900878937}
   - {fileID: 5694244514772567658}
-  - {fileID: -8712727568236075194}
+  - {fileID: -5424672434455956415}
 --- !u!114 &1042010716177410179
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1565,7 +1530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94fcd11afffcb142908bfcb1e261fba, type: 3}
   m_Name: MotionBlur
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -1587,19 +1552,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   spectralLut:
-    overrideState: 1
+    overrideState: 0
     value: {fileID: 0}
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.256
+    value: 0
   fastMode:
-    overrideState: 0
+    overrideState: 1
     value: 0
 --- !u!114 &6538773297208882881
 MonoBehaviour:
@@ -1622,16 +1587,16 @@ MonoBehaviour:
     value: 3.48
   threshold:
     overrideState: 1
-    value: 1.02
+    value: 0.91
   softKnee:
     overrideState: 1
-    value: 0.114
+    value: 0.303
   clamp:
     overrideState: 0
     value: 65472
   diffusion:
     overrideState: 1
-    value: 9.04
+    value: 6.18
   anamorphicRatio:
     overrideState: 0
     value: 0.8
@@ -1648,6 +1613,34 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 0
     value: 0
+--- !u!114 &7168893836147525628
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: febbddcf06107c942ada1b0eedb0ba57, type: 3}
+  m_Name: CustomMotionBlurPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _NoiseScale:
+    overrideState: 1
+    value: 17.28066
+  _Vector0:
+    overrideState: 0
+    value: {x: 0.5, y: 0.5, z: 0, w: 0}
+  _MaskRadius:
+    overrideState: 1
+    value: 0
+  _Offset:
+    overrideState: 0
+    value: {x: -0.5, y: -0.5, z: 0, w: 0}
 --- !u!114 &7457137536333866152
 MonoBehaviour:
   m_ObjectHideFlags: 3
