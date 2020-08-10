@@ -1,13 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerHandling), typeof(Rigidbody))]
+[RequireComponent( typeof( PlayerHandling ), typeof( Rigidbody ) )]
 public class PlayerDash : MonoBehaviour
 {
-    enum BoostMode
-    {
-        NoHeightGain,
-        HeightGain
-    }
     public float BoostForce                     //The additional force applied to the body while boosting
     {
         get { return boostForce; }
@@ -31,14 +26,12 @@ public class PlayerDash : MonoBehaviour
     [SerializeField] float boostForce;
     [SerializeField] float chargeTime;
     [SerializeField] float duration;
-    [SerializeField] BoostMode Mode;
 
     private Rigidbody RB;
     private PlayerHandling Handling;
     private PlayerThrust Thrust;
     private float ChargeTimer;
     private float DashTimer;
-    // private float DashTime;
 
     private void OnEnable()
     {
@@ -58,7 +51,7 @@ public class PlayerDash : MonoBehaviour
     private void FixedUpdate()
     {
         Charge();
-        Dash(DashTime);
+        Dash( DashTime );
     }
 
     public void StartCharge()
@@ -73,14 +66,14 @@ public class PlayerDash : MonoBehaviour
 
     private void Charge()
     {
-        if (IsCharging)
+        if ( IsCharging )
         {
             ChargeTimer += Time.deltaTime;
-            if (ChargeTimer >= chargeTime)
+            if ( ChargeTimer >= chargeTime )
             {
                 ChargeTimer = 0;
                 IsCharging = false;
-                StartDash(Duration);
+                StartDash( Duration );
             }
         }
     }
@@ -93,16 +86,17 @@ public class PlayerDash : MonoBehaviour
     private void StopDash()
     {
         Handling.IsDashing = false;
-        Handling.Animator.SetTrigger("StopDash");
+        // Handling.Animator.SetTrigger( "StopDash" );
+        PlayerEvents.Instance.StopDash();
     }
 
     private void Dash(float _duration)
     {
-        if (Handling.IsDashing)
+        if ( Handling.IsDashing )
         {
             Boost();
             DashTimer += Time.deltaTime;
-            if (DashTimer >= _duration)
+            if ( DashTimer >= _duration )
             {
                 StopDash();
                 DashTimer = 0;
@@ -114,6 +108,6 @@ public class PlayerDash : MonoBehaviour
     {
         Vector3 thrustForce = transform.forward * BoostForce;
         //Apply calculated thrust to the rigidbody at the thrust motor position
-        RB.AddForceAtPosition(thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration);
+        RB.AddForceAtPosition( thrustForce, Thrust.ThrustMotor.position, ForceMode.Acceleration );
     }
 }

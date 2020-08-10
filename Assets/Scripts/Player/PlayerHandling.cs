@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(GroundCheck), typeof(Rigidbody))]
+[RequireComponent( typeof( GroundCheck ), typeof( Rigidbody ) )]
 public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
     public float MaxSpeed { get; private set; }
@@ -10,6 +10,8 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     public bool IsCarving { get; set; }
     public bool IsAirborne { get; private set; }
     public bool IsGrounded { get; private set; }
+
+    public Rigidbody RB { get; private set; }
 
     public Animator Animator
     {
@@ -33,7 +35,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private PlayerAirControl PlayerAirControl;
     private CustomCenterOfMass CenterOfMass;
     private QuadraticDrag QuadraticDrag;
-    private Rigidbody RB;
+    // private Rigidbody RB;
 
     //Input Fields
     private float ThrustInput;
@@ -59,23 +61,23 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private void FixedUpdate()
     {
         RaycastHit hit;
-        IsGrounded = GroundCheck.IsGrounded(out hit);
+        IsGrounded = GroundCheck.IsGrounded( out hit );
 
         CalculateMaxSpeed();
         CoyoteTime();
         Land();
-        Thrust(hit);
+        Thrust( hit );
         Turn();
-        PlayerAirControl.AirControl(PitchInput, IsGrounded);
+        PlayerAirControl.AirControl( PitchInput, IsGrounded );
         Carve();
     }
 
     private void CalculateMaxSpeed()
     {
         float force = IsGrounded ? PlayerThrust.GroundAccelerationForce : PlayerThrust.AirAccelerationForce;
-        if (IsDashing) force += PlayerDash.BoostForce;
-        if (IsBoosting) force += PlayerBoost.BoostForce;
-        MaxSpeed = Mathf.Sqrt(force / QuadraticDrag.Drag);
+        if ( IsDashing ) force += PlayerDash.BoostForce;
+        if ( IsBoosting ) force += PlayerBoost.BoostForce;
+        MaxSpeed = Mathf.Sqrt( force / QuadraticDrag.Drag );
     }
 
     public void GetMoveInput(InputAction.CallbackContext context)
@@ -83,7 +85,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         Vector2 inputVector = context.ReadValue<Vector2>();
         ThrustInput = inputVector.y;
         TurnInput = inputVector.x;
-        BoardFX.SetMoveInput(inputVector.y, inputVector.x);
+        BoardFX.SetMoveInput( inputVector.y, inputVector.x );
     }
 
     public void GetPitchInput(InputAction.CallbackContext context)
@@ -93,37 +95,37 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void Thrust(RaycastHit _hit)
     {
-        PlayerThrust.Thrust(ThrustInput, IsGrounded, _hit);
-        if (IsGrounded)
+        PlayerThrust.Thrust( ThrustInput, IsGrounded, _hit );
+        if ( IsGrounded )
         {
-            PlayerFriction.ApplyIdleFriction(ThrustInput, RB);
+            PlayerFriction.ApplyIdleFriction( ThrustInput, RB );
         }
     }
 
     private void Turn()
     {
-        if (!IsCarving)
+        if ( !IsCarving )
         {
-            PlayerTurn.Turn(TurnInput);
-            PlayerFriction.ApplySidewaysFriction(RB, PlayerTurn.TurnFriction);
+            PlayerTurn.Turn( TurnInput );
+            PlayerFriction.ApplySidewaysFriction( RB, PlayerTurn.TurnFriction );
         }
     }
 
     private void Carve()
     {
-        PlayerCarve.Carve(TurnInput);
-        if (IsCarving)
+        PlayerCarve.Carve( TurnInput );
+        if ( IsCarving )
         {
-            PlayerFriction.ApplySidewaysFriction(RB, PlayerCarve.CarveFriction);
+            PlayerFriction.ApplySidewaysFriction( RB, PlayerCarve.CarveFriction );
         }
     }
     public void SetCarve(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if ( context.started )
         {
-            PlayerCarve.StartCarve(TurnInput);
+            PlayerCarve.StartCarve( TurnInput );
         }
-        else if (context.canceled)
+        else if ( context.canceled )
         {
             PlayerCarve.StopCarve();
         }
@@ -131,58 +133,63 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     public void Dash(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if ( context.started )
         {
             PlayerDash.StartCharge();
-            BoardFX.SetDashing(true);
-            animator.SetTrigger("StartDash");
+            BoardFX.SetDashing( true );
+            // animator.SetTrigger( "StartDash" );
+            PlayerEvents.Instance.StartDashCharge();
         }
-        else if (context.canceled)
+        else if ( context.canceled )
         {
             PlayerDash.StopCharge();
-            BoardFX.SetDashing(false);
-            animator.SetTrigger("CancelDash");
+            BoardFX.SetDashing( false );
+            // animator.SetTrigger( "CancelDash" );
+            PlayerEvents.Instance.StopDashCharge();
         }
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if ( context.started )
         {
-            PlayerJump.SetCharging(true);
-            BoardFX.SetCrouching(true);
-            animator.SetTrigger("StartJumpCharge");
+            PlayerJump.SetCharging( true );
+            BoardFX.SetCrouching( true );
+            // animator.SetTrigger( "StartJumpCharge" );
+            PlayerEvents.Instance.StartJumpCharge();
         }
-        else if (context.canceled)
+        else if ( context.canceled )
         {
             PlayerJump.Jump();
             BoardFX.PlayJumpJetParticles();
-            PlayerJump.SetCharging(false);
-            BoardFX.SetCrouching(false);
-            animator.SetTrigger("StartJump");
+            PlayerJump.SetCharging( false );
+            BoardFX.SetCrouching( false );
+            // animator.SetTrigger( "StartJump" );
+            PlayerEvents.Instance.Jump();
         }
     }
 
     private void Land()
     {
-        if (!IsGrounded)
+        if ( !IsGrounded )
         {
             IsAirborne = true;
         }
-        else if (IsAirborne && IsGrounded)
+        else if ( IsAirborne && IsGrounded )
         {
             IsAirborne = false;
             //this is so that the trigger isn't set when merely falling, which causes the animator to get stuck
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
+            if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) )
             {
-                animator.SetTrigger("StopJump");
+                // animator.SetTrigger( "StopJump" );
+                PlayerEvents.Instance.Land();
             }
         }
     }
 
     private void CoyoteTime()
     {
-        if (!IsGrounded)
+        if ( !IsGrounded )
         {
             PlayerJump.StartCoyoteTime();
         }

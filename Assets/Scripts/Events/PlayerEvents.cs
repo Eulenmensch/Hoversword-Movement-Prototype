@@ -3,11 +3,18 @@ using System;
 
 public class PlayerEvents : MonoBehaviour
 {
-    public static PlayerEvents Instance;
+    public static PlayerEvents Instance { get; private set; }
 
-    private void Awake()
+    void Awake()
     {
-        Instance = this;
+        if ( Instance != null && Instance != this )
+        {
+            Destroy( this );
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
     public event Action OnJump;
@@ -26,7 +33,7 @@ public class PlayerEvents : MonoBehaviour
     public void StopDashCharge() { OnStopDashCharge?.Invoke(); }
 
     public event Action<float> OnStartDash;
-    public void StartDash(float _duration) { OnStartDash?.Invoke(_duration); }
+    public void StartDash(float _duration) { OnStartDash?.Invoke( _duration ); }
 
     public event Action OnStopDash;
     public void StopDash() { OnStopDash?.Invoke(); }
@@ -36,4 +43,22 @@ public class PlayerEvents : MonoBehaviour
 
     public event Action OnStopCarve;
     public void StopCarve() { OnStopCarve?.Invoke(); }
+
+    public event Action OnStartAim;
+    public void StartAim() { OnStartAim?.Invoke(); }
+
+    public event Action OnStopAim;
+    public void StopAim() { OnStopAim?.Invoke(); }
+
+    public event Action OnStartSlashAttack;
+    public void StartSlashAttack() { OnStartSlashAttack?.Invoke(); }
+
+    public event Action OnStopSlashAttack;
+    public void StopSlashAttack() { OnStopSlashAttack?.Invoke(); }
+
+    public event Action OnStartKickAttack;
+    public void StartKickAttack() { OnStartKickAttack?.Invoke(); }
+
+    public event Action OnStopKickAttack;
+    public void StopKickAttack() { OnStopKickAttack?.Invoke(); }
 }

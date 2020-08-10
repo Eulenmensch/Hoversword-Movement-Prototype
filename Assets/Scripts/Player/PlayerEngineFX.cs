@@ -7,18 +7,18 @@ using Cinemachine;
 
 public class PlayerEngineFX : MonoBehaviour
 {
-    // [SerializeField] private StudioEventEmitter EngineEmitter;
-    // [SerializeField] private StudioEventEmitter ThrustersEmitter;
     [SerializeField] private Rigidbody RB;
     [SerializeField] private PlayerHandling Handling;
-    [SerializeField] private PlayerDash Dash;
-    [SerializeField] private PlayerJump Jump;
     [SerializeField] private Renderer SwordRenderer;
 
+    [Header( "Dash" )]
+    [SerializeField] private PlayerDash Dash;
     [SerializeField] private ParticleSystem[] DashChargeParticles;
     [SerializeField] private ParticleSystem[] DashBoardParticles;
     [SerializeField] private ParticleSystem DashJetParticles;
+
     [Header( "Jump" )]
+    [SerializeField] private PlayerJump Jump;
     [SerializeField, ColorUsage( true, true )] private Color JumpMinChargeColor;
     [SerializeField, ColorUsage( true, true )] private Color JumpMaxChargeColor;
     [SerializeField, ColorUsage( true, true )] private Color JumpFullChargeFeedbackColor;
@@ -28,6 +28,8 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private ParticleSystem JumpJetParticles;
     [SerializeField] private ParticleSystemRenderer JumpChargeParticleRenderer;
     [SerializeField] private ParticleSystemRenderer JumpJetParticleRenderer;
+
+    [Header( "Driving" )]
     [SerializeField] private GameObject SpeedLines;
     [SerializeField] private Color JetDefaultColor;
     [SerializeField] private Color JetCarveColor;
@@ -82,8 +84,11 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var dashChargeParticle in DashChargeParticles )
             {
-                var main = dashChargeParticle.main;
-                main.simulationSpeed = ( 1.0f / Dash.ChargeTime );
+                if ( dashChargeParticle != null )
+                {
+                    var main = dashChargeParticle.main;
+                    main.simulationSpeed = ( 1.0f / Dash.ChargeTime );
+                }
             }
 
         }
@@ -91,8 +96,11 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var dashChargeParticle in DashChargeParticles )
             {
-                var main = dashChargeParticle.main;
-                main.simulationSpeed = 0.0f;
+                if ( dashChargeParticle != null )
+                {
+                    var main = dashChargeParticle.main;
+                    main.simulationSpeed = 0.0f;
+                }
             }
         }
     }
@@ -104,7 +112,10 @@ public class PlayerEngineFX : MonoBehaviour
             {
                 foreach ( var dashChargeParticle in DashChargeParticles )
                 {
-                    dashChargeParticle.Play();
+                    if ( dashChargeParticle != null )
+                    {
+                        dashChargeParticle.Play();
+                    }
                 }
                 DashChargeStarted = true;
             }
@@ -113,7 +124,10 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var dashChargeParticle in DashChargeParticles )
             {
-                dashChargeParticle.Stop();
+                if ( dashChargeParticle != null )
+                {
+                    dashChargeParticle.Stop();
+                }
             }
             DashChargeStarted = false;
         }
@@ -121,13 +135,16 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlayDashJetParticles()
     {
-        if ( Handling.IsDashing )
+        if ( DashJetParticles != null )
         {
-            DashJetParticles.Play();
-        }
-        else if ( !Handling.IsDashing )
-        {
-            DashJetParticles.Stop();
+            if ( Handling.IsDashing )
+            {
+                DashJetParticles.Play();
+            }
+            else if ( !Handling.IsDashing )
+            {
+                DashJetParticles.Stop();
+            }
         }
     }
 
@@ -137,7 +154,10 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var dashBoardParticle in DashBoardParticles )
             {
-                dashBoardParticle.Play();
+                if ( dashBoardParticle != null )
+                {
+                    dashBoardParticle.Play();
+                }
             }
             DashIsPlaying = true;
         }
@@ -145,7 +165,10 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var dashBoardParticle in DashBoardParticles )
             {
-                dashBoardParticle.Stop();
+                if ( dashBoardParticle != null )
+                {
+                    dashBoardParticle.Stop();
+                }
             }
             DashIsPlaying = false;
         }
@@ -157,7 +180,10 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var system in JumpChargeParticles )
             {
-                system.Play();
+                if ( system != null )
+                {
+                    system.Play();
+                }
             }
             JumpHasCharged = true;
         }
@@ -165,8 +191,11 @@ public class PlayerEngineFX : MonoBehaviour
         {
             foreach ( var system in JumpChargeParticles )
             {
-                system.Stop();
-                system.Clear();
+                if ( system != null )
+                {
+                    system.Stop();
+                    system.Clear();
+                }
             }
             JumpHasCharged = false;
         }
@@ -174,7 +203,10 @@ public class PlayerEngineFX : MonoBehaviour
 
     public void PlayJumpJetParticles()
     {
-        JumpJetParticles.Play();
+        if ( JumpJetParticles != null )
+        {
+            JumpJetParticles.Play();
+        }
     }
 
     void SetJetParticleParameters()
@@ -184,22 +216,28 @@ public class PlayerEngineFX : MonoBehaviour
 
     void SetJumpChargeSpinSpeed()
     {
-        var rotation = JumpChargeSpinParticles.rotationOverLifetime;
-        var value = JumpChargeSpinSpeed.Evaluate( Jump.JumpForceCharge );
-        rotation.yMultiplier = value;
+        if ( JumpChargeSpinParticles != null )
+        {
+            var rotation = JumpChargeSpinParticles.rotationOverLifetime;
+            var value = JumpChargeSpinSpeed.Evaluate( Jump.JumpForceCharge );
+            rotation.yMultiplier = value;
+        }
     }
 
     void SetJumpChargeColor()
     {
-        Color chargeColor = Color.Lerp( JumpMinChargeColor, JumpMaxChargeColor, Jump.JumpForceCharge );
-        SwordRenderer.materials[3].SetColor( "_EmissionColor", chargeColor );
-        JumpChargeParticleRenderer.material.SetColor( "_EmissionColor", chargeColor );
-        JumpJetParticleRenderer.material.SetColor( "_EmissionColor", chargeColor );
-        if ( Jump.JumpForceCharge >= 1 )
+        if ( JumpChargeParticleRenderer != null && JumpJetParticleRenderer != null && SwordRenderer != null )
         {
-            SwordRenderer.materials[1].SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
-            JumpChargeParticleRenderer.material.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
-            JumpJetParticleRenderer.material.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+            Color chargeColor = Color.Lerp( JumpMinChargeColor, JumpMaxChargeColor, Jump.JumpForceCharge );
+            SwordRenderer.materials[3].SetColor( "_EmissionColor", chargeColor );
+            JumpChargeParticleRenderer.material.SetColor( "_EmissionColor", chargeColor );
+            JumpJetParticleRenderer.material.SetColor( "_EmissionColor", chargeColor );
+            if ( Jump.JumpForceCharge >= 1 )
+            {
+                SwordRenderer.materials[1].SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+                JumpChargeParticleRenderer.material.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+                JumpJetParticleRenderer.material.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
+            }
         }
     }
 
