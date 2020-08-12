@@ -44,5 +44,5 @@ Material:
     - _SpriteSheetRows: 2
     - __dirty: 0
     m_Colors:
-    - _Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
+    - _Color: {r: 0.5149702, g: 0.9254902, b: 0.45098037, a: 1}
     - _TintColor: {r: 0, g: 0, b: 0, a: 1}

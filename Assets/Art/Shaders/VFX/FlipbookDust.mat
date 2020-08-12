@@ -44,7 +44,7 @@ Material:
     - _Cutoff: 0.16
     - _EmissionIntensity: 20.96
     - _InvFade: 1
-    - _ScrollSpeed: 20
+    - _ScrollSpeed: 14.9
     - _SpriteSheetColumns: 4
     - _SpriteSheetRows: 2
     - __dirty: 0
