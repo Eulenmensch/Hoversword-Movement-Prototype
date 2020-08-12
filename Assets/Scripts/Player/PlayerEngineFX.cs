@@ -34,6 +34,10 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private Color JetDefaultColor;
     [SerializeField] private Color JetCarveColor;
 
+    [Header( "Attacks" )]
+    [SerializeField] private ParticleSystem[] FlipAttackParticles;
+    [SerializeField] private ParticleSystem[] SlashAttackParticles;
+
     private CinemachineImpulseSource CameraShake;
 
     private float RPM;
@@ -58,6 +62,12 @@ public class PlayerEngineFX : MonoBehaviour
     private void Awake()
     {
         CameraShake = GetComponent<CinemachineImpulseSource>();
+    }
+
+    private void OnEnable()
+    {
+        PlayerEvents.Instance.OnStartKickAttack += PlayKickAttackParticles;
+        PlayerEvents.Instance.OnStartSlashAttack += PlaySlashAttackParticles;
     }
 
     private void Start()
@@ -206,6 +216,28 @@ public class PlayerEngineFX : MonoBehaviour
         if ( JumpJetParticles != null )
         {
             JumpJetParticles.Play();
+        }
+    }
+
+    void PlayKickAttackParticles()
+    {
+        foreach ( var system in FlipAttackParticles )
+        {
+            if ( system != null )
+            {
+                system.Play();
+            }
+        }
+    }
+
+    void PlaySlashAttackParticles()
+    {
+        foreach ( var system in SlashAttackParticles )
+        {
+            if ( system != null )
+            {
+                system.Play();
+            }
         }
     }
 
