@@ -19917,6 +19917,36 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b4090013-96c9-44ac-9fd4-416454eaae68
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1532267218694751950}
+        m_MethodName: SetAiming
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7d96252e-c277-4f72-8bf0-ca4d81e9aba9
+    m_ActionName: Player/Aim[/XInputControllerWindows/leftTrigger,/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1532267218694751950}
+        m_MethodName: SetAiming
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7d96252e-c277-4f72-8bf0-ca4d81e9aba9
+    m_ActionName: Player/Aim[/XInputControllerWindows/leftTrigger,/Keyboard/leftCtrl]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -20247,7 +20277,7 @@ MonoBehaviour:
   IdleSpeed: 10
   IdleFriction: 30
   TurnFriction: 20
-  LerpTime: 0.5
+  LerpTime: 0.03
 --- !u!114 &1532267218694751946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35231,6 +35261,8 @@ MonoBehaviour:
   SpeedLines: {fileID: 0}
   JetDefaultColor: {r: 0.13456745, g: 0.6792453, b: 0.2539643, a: 1}
   JetCarveColor: {r: 0.6784314, g: 0.13333333, b: 0.60982835, a: 1}
+  FlipAttackParticles: []
+  SlashAttackParticles: []
 --- !u!114 &2006778664812413436
 MonoBehaviour:
   m_ObjectHideFlags: 0

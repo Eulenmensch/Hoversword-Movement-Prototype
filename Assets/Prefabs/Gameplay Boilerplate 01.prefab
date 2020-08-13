@@ -427,6 +427,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7137253284759210365, guid: 63c62feb3ca22594098a36ec00b26117,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[17].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7137253284759210365, guid: 63c62feb3ca22594098a36ec00b26117,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[17].m_ActionId
+      value: b4090013-96c9-44ac-9fd4-416454eaae68
+      objectReference: {fileID: 0}
+    - target: {fileID: 7137253284759210365, guid: 63c62feb3ca22594098a36ec00b26117,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[17].m_ActionName
+      value: UI/TrackedDeviceOrientation
+      objectReference: {fileID: 0}
     - target: {fileID: 7137253285880123618, guid: 63c62feb3ca22594098a36ec00b26117,
         type: 3}
       propertyPath: m_Name
@@ -690,6 +705,11 @@ PrefabInstance:
       propertyPath: Handling
       value: 
       objectReference: {fileID: 3176343749423937634}
+    - target: {fileID: 1232326685260365667, guid: f586ccd69bf13e543887bcb044400424,
+        type: 3}
+      propertyPath: MaxChromaticAberration
+      value: 0.598
+      objectReference: {fileID: 0}
     - target: {fileID: 1275518415794427705, guid: f586ccd69bf13e543887bcb044400424,
         type: 3}
       propertyPath: m_LocalPosition.x

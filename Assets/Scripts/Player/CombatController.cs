@@ -51,6 +51,7 @@ public class CombatController : MonoBehaviour
     [SerializeField] private bool _debugCollider;
 
     private int _attackID;
+    private bool _aimingInput;
 
     private void Awake()
     {
@@ -71,15 +72,15 @@ public class CombatController : MonoBehaviour
     private void Update()
     {
         // Process aiming input TODO: Do this with the new input system
-        bool aimingInput = Input.GetAxis( "Left Trigger" ) > 0.15;
+        // _aimingInput = Input.GetAxis( "Left Trigger" ) > 0.15;
 
-        if ( aimingInput && !isAiming && _attackState == AttackStates.None && ( !_handling.IsGrounded || _aimOnGround ) )
+        if ( _aimingInput && !isAiming && _attackState == AttackStates.None && ( !_handling.IsGrounded || _aimOnGround ) )
         {
             //print( "start" );
             StartAim();
         }
 
-        if ( isAiming && ( ( _handling.IsGrounded && !_aimOnGround ) || !aimingInput ) )
+        if ( isAiming && ( ( _handling.IsGrounded && !_aimOnGround ) || !_aimingInput ) )
         {
             // print( "stop" );
             StopAim();
@@ -255,4 +256,17 @@ public class CombatController : MonoBehaviour
     //    }
     //    _attackables.Clear();
     //}
+
+    public void SetAiming(InputAction.CallbackContext context)
+    {
+        if ( context.started )
+        {
+            _aimingInput = true;
+        }
+
+        else if ( context.canceled )
+        {
+            _aimingInput = false;
+        }
+    }
 }
