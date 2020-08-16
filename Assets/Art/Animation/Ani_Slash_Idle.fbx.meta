@@ -1,0 +1,309 @@
+fileFormatVersion: 2
+guid: 982d035a2df949541a8558a75a13bace
+ModelImporter:
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      74: -6782828239645090832
+    second: Armature|Anim_Boost_Charge
+  - first:
+      74: 9031583136947900555
+    second: Armature|Anim_Boost_Idle
+  - first:
+      74: 1509494715888793083
+    second: Armature|Anim_Boost_Relaxing
+  - first:
+      74: 6407382594004523037
+    second: Armature|Anim_Idle
+  - first:
+      74: 4859519209192974427
+    second: Armature|Anim_Idle_Old
+  - first:
+      74: 7356836026757722689
+    second: Armature|Anim_Jump_02_Old
+  - first:
+      74: -8512493146248490887
+    second: Armature|Anim_Jump_03_Old
+  - first:
+      74: 6632475094087552113
+    second: Armature|Anim_Jump_04_Old
+  - first:
+      74: 6659025504924671914
+    second: Armature|Anim_Jump_05
+  - first:
+      74: -2000704418147795109
+    second: Armature|Anim_Jump_Charge
+  - first:
+      74: 5864203188968960764
+    second: Armature|Anim_Jump_Charge_Hold
+  - first:
+      74: 5345357432142511230
+    second: Armature|Anim_Jump_Charge_Old
+  - first:
+      74: -5226059902392761166
+    second: Armature|Anim_Jump_Falling
+  - first:
+      74: -1407830141756836613
+    second: Armature|Anim_Jump_Falling_Old
+  - first:
+      74: 1974120891068710996
+    second: Armature|Anim_Jump_Falling_Old02
+  - first:
+      74: -7118163572251556663
+    second: Armature|Anim_Jump_Landing
+  - first:
+      74: 4108647148129028101
+    second: Armature|Anim_Jump_Landing_oLD
+  - first:
+      74: -5832488099647189581
+    second: "Armature|Anim_Jump_Landing_StarreH\xFCfte"
+  - first:
+      74: 8579204508887562040
+    second: Armature|Anim_Jump_MovingHips
+  - first:
+      74: 8873283797149351770
+    second: Armature|Anim_Jump_Old
+  - first:
+      74: 5242302179320550331
+    second: Armature|Anim_Jump_Old.001
+  - first:
+      74: -4046352026788507064
+    second: Armature|Anim_Kick
+  - first:
+      74: -6572621845051732296
+    second: Armature|Anim_Slash
+  - first:
+      74: -3019455193765032024
+    second: Armature|Anim_Slash_Back
+  - first:
+      74: 1201586826982487496
+    second: Armature|Anim_Slash_Charge
+  - first:
+      74: -2223977943553495429
+    second: Armature|Anim_Slash_ChargE_bACKUP
+  - first:
+      74: 2268312985183749690
+    second: Armature|Anim_Slash_Charge_old
+  - first:
+      74: -7962436357218480871
+    second: Armature|Anim_Slash_Charge_Poses
+  - first:
+      74: 6167964038903491837
+    second: Armature|Anim_Slash_Charge_Poses.001
+  - first:
+      74: -4293256092205263106
+    second: Armature|Anim_Slash_Idle
+  - first:
+      74: 8572128733249382407
+    second: Armature|Anim_Slash_Old
+  - first:
+      74: -675589584247893321
+    second: Armature|Anim_Slash_Old.001
+  - first:
+      74: 9119082460293992654
+    second: Armature|Anim_Slash_Recover
+  - first:
+      74: 9129157941541519398
+    second: Armature|Anim_T-Pose
+  - first:
+      74: -3307403082730355070
+    second: Armature|Anim_TakeDamage
+  - first:
+      74: 7138590903494346141
+    second: Armature|blade 2D texture.001Action
+  - first:
+      74: 2767546677009240388
+    second: Armature|blade 2D texture.002Action
+  - first:
+      74: 7607316395316714817
+    second: Armature|blade 2D texture.002Action.001
+  - first:
+      74: -4202098104505023990
+    second: Armature|blade 2D texture.002Action.002
+  - first:
+      74: 8796365591331805898
+    second: Armature|blade 2D texture.005Action
+  - first:
+      74: -2722845528709522418
+    second: Armature|blade bottom.001Action
+  - first:
+      74: -253054652345442456
+    second: Armature|blade bottom.001Action.001
+  - first:
+      74: 354173547994177074
+    second: Armature|blade bottom.001Action.002
+  - first:
+      74: -5417783448297436824
+    second: Armature|blade bottom.004Action
+  - first:
+      74: 787483543485276506
+    second: Armature|blade top.001Action
+  - first:
+      74: -1084739975100222631
+    second: Armature|blade top.001Action.001
+  - first:
+      74: -2459560729751795569
+    second: Armature|blade top.001Action.002
+  - first:
+      74: -2297124375065704469
+    second: Armature|blade top.004Action
+  - first:
+      74: -1259362793817493511
+    second: Armature|Camera.004Action
+  - first:
+      74: -1403109822618731413
+    second: Armature|Crossguard.001Action
+  - first:
+      74: -2574203149481288328
+    second: Armature|Crossguard.001Action.001
+  - first:
+      74: -8567251384741081018
+    second: Armature|Crossguard.001Action.002
+  - first:
+      74: -7245717386383437731
+    second: Armature|Crossguard.004Action
+  - first:
+      74: 7327491913463717344
+    second: Armature|Energy Gauge.001Action
+  - first:
+      74: 6663135311044782924
+    second: Armature|Energy Gauge.001Action.001
+  - first:
+      74: -7741766090331373019
+    second: Armature|Energy Gauge.001Action.002
+  - first:
+      74: -1332087895024828522
+    second: Armature|Energy Gauge.004Action
+  - first:
+      74: 1815592482667435062
+    second: Armature|Hilt inner.001Action
+  - first:
+      74: -5322043266479577419
+    second: Armature|Hilt inner.001Action.001
+  - first:
+      74: 92252858820224488
+    second: Armature|Hilt inner.001Action.002
+  - first:
+      74: -7413988009247031341
+    second: Armature|Hilt inner.004Action
+  - first:
+      74: 7161021272222671655
+    second: Armature|Hilt.003Action
+  - first:
+      74: 2844445801693445010
+    second: Armature|Hilt.003Action.001
+  - first:
+      74: 3637119384324071095
+    second: Armature|Hilt.003Action.002
+  - first:
+      74: 4089322326471268101
+    second: Armature|Hilt.005Action
+  - first:
+      74: 8842436772160525209
+    second: Armature|HoverswordoAction
+  - first:
+      74: -433535040566169763
+    second: Armature|IKMainAction
+  - first:
+      74: 6021834333154758883
+    second: Armature|mirror.001Action
+  - first:
+      74: -3910995924364556302
+    second: Armature|mirror.001Action.001
+  - first:
+      74: -5242637227965634832
+    second: Armature|mirror.001Action.002
+  - first:
+      74: 3877712689545149987
+    second: Armature|mirror.004Action
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 0.001
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
