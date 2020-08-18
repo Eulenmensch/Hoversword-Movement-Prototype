@@ -1,5 +1,151 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1748248504375780064
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8283826490949090597}
+  - component: {fileID: 5586952128662967855}
+  m_Layer: 0
+  m_Name: CM Drift VCAM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8283826490949090597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748248504375780064}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.7531438, y: 1.5490332, z: 0.785511}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5127945235894655265}
+  m_Father: {fileID: 8095073806807851488}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5586952128662967855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748248504375780064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ExcludedPropertiesInInspector:
+  - m_Script
+  m_LockStageInInspector: 
+  m_StreamingVersion: 20170927
+  m_Priority: 10
+  m_StandbyUpdate: 2
+  m_LookAt: {fileID: 0}
+  m_Follow: {fileID: 0}
+  m_Lens:
+    FieldOfView: 90
+    OrthographicSize: 10
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
+    Dutch: 0
+    LensShift: {x: 0, y: 0}
+  m_Transitions:
+    m_BlendHint: 0
+    m_InheritPosition: 0
+    m_OnCameraLive:
+      m_PersistentCalls:
+        m_Calls: []
+  m_LegacyBlendHint: 0
+  m_ComponentOwner: {fileID: 5127945235894655265}
+--- !u!1 &7829402230700835836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5127945235894655265}
+  - component: {fileID: 3864443637059889832}
+  - component: {fileID: 8555928577776450834}
+  - component: {fileID: 7961384980032577144}
+  m_Layer: 0
+  m_Name: cm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5127945235894655265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7829402230700835836}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.7531438, y: -1.5490332, z: -0.785511}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8283826490949090597}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3864443637059889832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7829402230700835836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8555928577776450834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7829402230700835836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7961384980032577144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7829402230700835836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: {x: 0, y: 0, z: 0}
+  ShoulderOffset: {x: 0.7, y: 0.3, z: -0.3}
+  VerticalArmLength: 0.4
+  CameraSide: 1
+  CameraDistance: 2
+  CameraCollisionFilter:
+    serializedVersion: 2
+    m_Bits: 1
+  IgnoreTag: 
+  CameraRadius: 0.2
 --- !u!1 &8095073806807851489
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +179,7 @@ Transform:
   - {fileID: 7741903799708130527}
   - {fileID: 7741903798550932055}
   - {fileID: 4658322530798790456}
+  - {fileID: 8283826490949090597}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -60,16 +207,37 @@ MonoBehaviour:
   m_LayerIndex: 0
   m_ShowDebugText: 1
   m_ChildCameras:
-  - {fileID: 7741903799708130524}
-  - {fileID: 7741903798550932053}
-  - {fileID: 4658322530798790457}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_Instructions:
   - m_FullHash: -1192906254
     m_VirtualCamera: {fileID: 4658322530798790457}
     m_ActivateAfter: 0
     m_MinDuration: 0
-  - m_FullHash: 1459142704
+  - m_FullHash: -171824650
     m_VirtualCamera: {fileID: 7741903798550932053}
+    m_ActivateAfter: 0
+    m_MinDuration: 0
+  - m_FullHash: 1202917484
+    m_VirtualCamera: {fileID: 7741903799708130524}
+    m_ActivateAfter: 0
+    m_MinDuration: 0
+  - m_FullHash: 28773604
+    m_VirtualCamera: {fileID: 5586952128662967855}
+    m_ActivateAfter: 0
+    m_MinDuration: 0
+  - m_FullHash: -275121872
+    m_VirtualCamera: {fileID: 5586952128662967855}
+    m_ActivateAfter: 0
+    m_MinDuration: 0
+  - m_FullHash: -295698119
+    m_VirtualCamera: {fileID: 7741903799708130524}
+    m_ActivateAfter: 0
+    m_MinDuration: 0
+  - m_FullHash: -822806213
+    m_VirtualCamera: {fileID: 7741903799708130524}
     m_ActivateAfter: 0
     m_MinDuration: 0
   m_DefaultBlend:
@@ -82,7 +250,33 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   m_CustomBlends: {fileID: 11400000, guid: be81c1047fe96434c8f4ac22c32ac22e, type: 2}
-  m_ParentHash: []
+  m_ParentHash:
+  - m_Hash: -1751635351
+    m_ParentHash: 756556552
+  - m_Hash: -1192906254
+    m_ParentHash: 756556552
+  - m_Hash: -171824650
+    m_ParentHash: 756556552
+  - m_Hash: 336801659
+    m_ParentHash: 756556552
+  - m_Hash: 1202917484
+    m_ParentHash: 756556552
+  - m_Hash: 262021495
+    m_ParentHash: 756556552
+  - m_Hash: 880736829
+    m_ParentHash: 756556552
+  - m_Hash: 28773604
+    m_ParentHash: 756556552
+  - m_Hash: -1504890846
+    m_ParentHash: 756556552
+  - m_Hash: -295698119
+    m_ParentHash: 756556552
+  - m_Hash: -275121872
+    m_ParentHash: 756556552
+  - m_Hash: -822806213
+    m_ParentHash: 756556552
+  - m_Hash: -2032547808
+    m_ParentHash: 756556552
 --- !u!114 &8095073806807851518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,13 +303,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FreeLook: {fileID: 4658322530798790457}
+  DriftCam: {fileID: 5586952128662967855}
   Handling: {fileID: 0}
   Dash: {fileID: 0}
+  Carve: {fileID: 0}
   RB: {fileID: 0}
   MaxZOffset: 5
   MaxXOffset: 3
   XLerpTime: 0.02
   ZLerpTime: 0.03
+  DriftLerpSpeed: 0
+  CarveZOffset: 0
+  CarveXMultiplier: 0
+  CarveShoulderOffsetMultiplier: 0
   FOVCurve:
     serializedVersion: 2
     m_Curve:

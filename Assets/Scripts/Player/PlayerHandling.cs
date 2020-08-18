@@ -11,13 +11,9 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     public bool IsAirborne { get; private set; }
     public bool IsGrounded { get; private set; }
 
-    public Rigidbody RB { get; private set; }
+    public float TurnInput { get; private set; }
 
-    public Animator Animator
-    {
-        get { return animator; }
-        private set { animator = value; }
-    }
+    public Rigidbody RB { get; private set; }
 
     [SerializeField] PlayerEngineFX BoardFX;
     [SerializeField] Animator animator;
@@ -39,7 +35,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     //Input Fields
     private float ThrustInput;
-    private float TurnInput;
+    // private float TurnInput;
     private float PitchInput;
 
     private void Start()
@@ -68,7 +64,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         Land();
         Thrust( hit );
         Turn();
-        PlayerAirControl.AirControl( PitchInput, IsGrounded );
+        PlayerAirControl.AirControl( PitchInput, IsGrounded, IsDashing );
         Carve();
     }
 

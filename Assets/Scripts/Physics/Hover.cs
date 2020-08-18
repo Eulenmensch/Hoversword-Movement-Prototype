@@ -42,14 +42,16 @@ public class Hover : MonoBehaviour
     #endregion
 
     private Rigidbody RB;               //A reference to the board's rigidbody
-    private Transform[] HoverPoints;   //The points from which ground distance is measured and where hover force is applied
+    private Transform[] HoverPoints;    //The points from which ground distance is measured and where hover force is applied
     private PIDController[] PIDs;       //References to the PIDController class that handles error correction and smoothens out the hovering
     private IMove Movement;             //Reference to a possibly attached component that implements IMove
+    private PlayerHandling Handling;
 
     void Start()
     {
         RB = GetComponent<Rigidbody>();
         Movement = GetComponent<IMove>();
+        Handling = GetComponent<PlayerHandling>();
 
         //Initialize an array to contain all hover points
         HoverPoints = new Transform[HoverPointRows * HoverPointColumns];
@@ -128,7 +130,7 @@ public class Hover : MonoBehaviour
     {
         Ray groundStickRay = new Ray( transform.position, -transform.up );
         RaycastHit hit;
-        if ( StickToGround )
+        if ( StickToGround && !Handling.IsDashing )
         {
             if ( Physics.Raycast( groundStickRay, out hit, GroundStickHeight, GroundMask ) )
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(GroundCheck))]
+[RequireComponent( typeof( Rigidbody ), typeof( GroundCheck ) )]
 public class PlayerThrust : MonoBehaviour
 {
     public float GroundAccelerationForce;                       //The force that accelerates the board in its forward direction, projected on the ground
@@ -20,43 +20,45 @@ public class PlayerThrust : MonoBehaviour
     private void Start()
     {
         RB = GetComponent<Rigidbody>();
+        Handling = GetComponent<PlayerHandling>();
     }
 
     #region Thrust
     public void Thrust(float _thrustInput, bool _grounded, RaycastHit _hit)
     {
-        if (_grounded)
-        {
-            //on ground project thrust direction on ground up
-            ApplyThrustForce(_thrustInput, GroundAccelerationForce, _hit.normal, ThrustMotor.position);
-        }
-
-        else
+        if ( !_grounded || Handling.IsDashing )
         {
             //in air project thrust direction on world up
-            ApplyThrustForce(_thrustInput, AirAccelerationForce, Vector3.up, RB.worldCenterOfMass);
+            ApplyThrustForce( _thrustInput, AirAccelerationForce, Vector3.up, RB.worldCenterOfMass );
         }
-        // if ( _grounded )
+        else if ( _grounded )
+        {
+            //on ground project thrust direction on ground up
+            ApplyThrustForce( _thrustInput, GroundAccelerationForce, _hit.normal, ThrustMotor.position );
+        }
+
+        // else
         // {
-        //     ApplyIdleFriction( _thrustInput );
+        //     //in air project thrust direction on world up
+        //     ApplyThrustForce( _thrustInput, AirAccelerationForce, Vector3.up, RB.worldCenterOfMass );
         // }
     }
 
     private void ApplyThrustForce(float _thrustInput, float _accelerationForce, Vector3 _projectedPlaneNormal, Vector3 _forcePosition)
     {
-        ThrustDirection = Vector3.ProjectOnPlane(transform.forward, _projectedPlaneNormal);
+        ThrustDirection = Vector3.ProjectOnPlane( transform.forward, _projectedPlaneNormal );
         Vector3 thrustForce = ThrustDirection * _accelerationForce * _thrustInput;
-        RB.AddForceAtPosition(thrustForce, _forcePosition, ForceMode.Acceleration);
+        RB.AddForceAtPosition( thrustForce, _forcePosition, ForceMode.Acceleration );
     }
     #endregion
 
     private void ApplyIdleFriction(float _thrustInput)
     {
-        if (_thrustInput <= 0.1 && RB.velocity.magnitude <= IdleSpeed)
+        if ( _thrustInput <= 0.1 && RB.velocity.magnitude <= IdleSpeed )
         {
-            float friction = Mathf.Lerp(IdleFriction, 0.0f, RB.velocity.magnitude / IdleSpeed);
-            RB.AddForce(-RB.velocity * friction, ForceMode.Acceleration);
-            RB.AddTorque(-RB.angularVelocity * friction, ForceMode.Acceleration);
+            float friction = Mathf.Lerp( IdleFriction, 0.0f, RB.velocity.magnitude / IdleSpeed );
+            RB.AddForce( -RB.velocity * friction, ForceMode.Acceleration );
+            RB.AddTorque( -RB.angularVelocity * friction, ForceMode.Acceleration );
         }
     }
 }
