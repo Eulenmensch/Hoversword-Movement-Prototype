@@ -15,11 +15,16 @@ public class CharacterAnimationController : MonoBehaviour
         PlayerEvents.Instance.OnStopDash += StopDash;
         PlayerEvents.Instance.OnStopDashCharge += CancelDash;
 
+        PlayerEvents.Instance.OnStartCarve += StartCarve;
+        PlayerEvents.Instance.OnStopCarve += StopCarve;
+
         PlayerEvents.Instance.OnStartKickAttack += KickAttack;
 
         PlayerEvents.Instance.OnStartAim += StartAim;
         PlayerEvents.Instance.OnStopAim += StopAim;
         PlayerEvents.Instance.OnStartSlashAttack += SlashAttack;
+
+        PlayerEvents.Instance.OnTakeDamage += TakeDamage;
     }
 
     private void Start()
@@ -60,6 +65,26 @@ public class CharacterAnimationController : MonoBehaviour
         }
     }
 
+    void StartCarve(float _direction)
+    {
+        string direction = "";
+        if ( _direction > 0 )
+        {
+            direction = "Right";
+        }
+        else if ( _direction < 0 )
+        {
+            direction = "Left";
+        }
+
+        animator.SetTrigger( "StartDrift" + direction );
+    }
+
+    void StopCarve()
+    {
+        animator.SetTrigger( "StopDrift" );
+    }
+
     void KickAttack()
     {
         animator.SetTrigger( "FlipAttack" );
@@ -78,5 +103,10 @@ public class CharacterAnimationController : MonoBehaviour
     void SlashAttack()
     {
         animator.SetTrigger( "SlashAttack" );
+    }
+
+    void TakeDamage()
+    {
+        animator.SetTrigger( "TakeDamage" );
     }
 }

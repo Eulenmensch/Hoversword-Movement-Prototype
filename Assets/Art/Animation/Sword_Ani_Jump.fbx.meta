@@ -131,7 +131,7 @@ ModelImporter:
     second: BladeAramature|mirror.004Action
   - first:
       74: -7578927902708660593
-    second: Sword_Jump
+    second: Sword Jump
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -161,7 +161,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Sword_Jump
+      name: Sword Jump
       takeName: BladeAramature|Blade_Ani_Jump
       internalID: 0
       firstFrame: 0

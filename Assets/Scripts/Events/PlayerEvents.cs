@@ -38,8 +38,8 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnStopDash;
     public void StopDash() { OnStopDash?.Invoke(); }
 
-    public event Action OnStartCarve;
-    public void StartCarve() { OnStartCarve?.Invoke(); }
+    public event Action<float> OnStartCarve;
+    public void StartCarve(float _direction) { OnStartCarve?.Invoke( _direction ); }
 
     public event Action OnStopCarve;
     public void StopCarve() { OnStopCarve?.Invoke(); }
@@ -61,4 +61,7 @@ public class PlayerEvents : MonoBehaviour
 
     public event Action OnStopKickAttack;
     public void StopKickAttack() { OnStopKickAttack?.Invoke(); }
+
+    public event Action OnTakeDamage;
+    public void TakeDamage() { OnTakeDamage?.Invoke(); }
 }

@@ -86,7 +86,6 @@ public class PlayerDash : MonoBehaviour
     private void StopDash()
     {
         Handling.IsDashing = false;
-        // Handling.Animator.SetTrigger( "StopDash" );
         PlayerEvents.Instance.StopDash();
     }
 

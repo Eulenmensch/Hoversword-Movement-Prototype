@@ -7,6 +7,11 @@ public class BoardAnimationController : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerEvents.Instance.OnJump += Jump;
+
+        PlayerEvents.Instance.OnStartCarve += StartCarve;
+        PlayerEvents.Instance.OnStopCarve += StopCarve;
+
         PlayerEvents.Instance.OnStartAim += StartAim;
         PlayerEvents.Instance.OnStopAim += StopAim;
         PlayerEvents.Instance.OnStartSlashAttack += StartSlashAttack;
@@ -19,6 +24,31 @@ public class BoardAnimationController : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    void Jump()
+    {
+        animator.SetTrigger( "Jump" );
+    }
+
+    void StartCarve(float _direction)
+    {
+        string direction = "";
+        if ( _direction > 0 )
+        {
+            direction = "Right";
+        }
+        else if ( _direction < 0 )
+        {
+            direction = "Left";
+        }
+
+        animator.SetTrigger( "StartDrift" + direction );
+    }
+
+    void StopCarve()
+    {
+        animator.SetTrigger( "StopDrift" );
     }
 
     void StartAim()
