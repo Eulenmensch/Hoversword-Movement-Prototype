@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FlipbookDust
-  m_Shader: {fileID: 4800000, guid: 8be7d5bbd41f76443a81e73f4250bc42, type: 3}
+  m_Shader: {fileID: 4800000, guid: b834a83bb80eb5e4d8a4a3884b667669, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
@@ -24,7 +24,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Flipbook:
-        m_Texture: {fileID: 2800000, guid: 21e49170ad812a84ea2c3245cdcbae6f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 034f40845cbd9b6449b0dacf04eeed11, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -41,13 +41,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
+    - _ASEOutlineWidth: 0
     - _Cutoff: 0.16
-    - _EmissionIntensity: 20.96
+    - _EmissionIntensity: 1.66
     - _InvFade: 1
-    - _ScrollSpeed: 14.9
+    - _ScrollSpeed: 21.44
     - _SpriteSheetColumns: 4
     - _SpriteSheetRows: 2
     - __dirty: 0
     m_Colors:
-    - _Color: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
     - _TintColor: {r: 0, g: 0, b: 0, a: 1}
