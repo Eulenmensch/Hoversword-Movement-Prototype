@@ -42,7 +42,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 11fc78ada92048d4996e33d0e7dadd8c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 15374b6d7713c0b47a863d00e8ce1a89, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -83,7 +83,7 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 1
-    - _SoftParticlesFarFadeDistance: 5.62
+    - _SoftParticlesFarFadeDistance: 3.72
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
@@ -91,6 +91,6 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 1.1292799, g: 1.1292799, b: 1.1292799, a: 1}
+    - _Color: {r: 4.8928394, g: 4.8928394, b: 4.8928394, a: 1}
     - _EmissionColor: {r: 32, g: 17.694118, b: 17.694118, a: 1}
-    - _SoftParticleFadeParams: {r: 0, g: 0.17793594, b: 0, a: 0}
+    - _SoftParticleFadeParams: {r: 0, g: 0.26881722, b: 0, a: 0}
