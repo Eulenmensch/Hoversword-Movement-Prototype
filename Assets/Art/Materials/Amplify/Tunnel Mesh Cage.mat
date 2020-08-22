@@ -34,7 +34,7 @@ Material:
     m_Floats:
     - _CamDepthFadeLength: 0
     - _CamDepthFadeOffset: 0
-    - _LightGradientIntensity: 8.64
+    - _LightGradientIntensity: 14.67
     - _LightGradientOffset: 0.12
     - _LightGradientScale: 0.12
     - _NormalStrength: 0
@@ -46,4 +46,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _GradientKey01: {r: 0.5659999, g: 0.5659999, b: 0.5659999, a: 1}
     - _GradientKey02: {r: 0.644, g: 0.36193618, b: 0.2646839, a: 1}
+    - _ShadowColor: {r: 0.11320745, g: 0.11320745, b: 0.11320745, a: 0}
     - _Tiling: {r: 0.005, g: 0.005, b: 0, a: 0}

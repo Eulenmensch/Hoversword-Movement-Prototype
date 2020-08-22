@@ -34,7 +34,7 @@ Material:
     m_Floats:
     - _CamDepthFadeLength: 0
     - _CamDepthFadeOffset: 0
-    - _LightGradientIntensity: 8.64
+    - _LightGradientIntensity: 16.56
     - _LightGradientOffset: 0.12
     - _LightGradientScale: 0.12
     - _NormalStrength: 0
