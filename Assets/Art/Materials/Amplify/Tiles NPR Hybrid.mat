@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tiles NPR Hybrid
+  m_Shader: {fileID: 4800000, guid: 960fc0c5a95e7044bacbdfda2be892e3, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTexture:
+        m_Texture: {fileID: 2800000, guid: 714974d831a7a8c468e7e2a80bf7466d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TileTexture:
+        m_Texture: {fileID: 2800000, guid: 714974d831a7a8c468e7e2a80bf7466d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _CamDepthFadeLength: 120
+    - _CamDepthFadeOffset: 120
+    - _LightGradientIntensity: 8.7
+    - _LightGradientIntensity1: 2.24
+    - _LightGradientOffset: 0.12
+    - _LightGradientOffset1: -0.5
+    - _LightGradientScale: 0.12
+    - _LightGradientScale1: 0.04
+    - _NormalStrength: 0.92
+    - _PosterizeSteps: 18.01
+    - _PosterizeSteps1: 36.48
+    - _Smoothness: 0.34
+    - __dirty: 0
+    m_Colors:
+    - _GradientKey01: {r: 0.4339623, g: 0.25497586, b: 0.23131008, a: 1}
+    - _GradientKey02: {r: 0.49019608, g: 0.42314297, b: 0.40784314, a: 1}
+    - _GradientKey2: {r: 0.8117647, g: 0.6981177, b: 0.6981177, a: 1}
+    - _GradientKey3: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 1}
+    - _ShadowColor1: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0}
