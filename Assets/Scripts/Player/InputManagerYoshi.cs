@@ -2,7 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-[RequireComponent( typeof( HoverBoardControllerYoshi02 ) )]
+[RequireComponent(typeof(HoverBoardControllerYoshi02))]
 public class InputManagerYoshi : MonoBehaviour
 {
     [SerializeField] UnityEvent OnJump;
@@ -24,59 +24,59 @@ public class InputManagerYoshi : MonoBehaviour
     public void GetMoveInput(InputAction.CallbackContext context)
     {
         Vector2 inputVector = context.ReadValue<Vector2>();
-        ControllerYoshi02.SetMoveInput( inputVector.y, inputVector.x );
-        EngineFX.SetMoveInput( inputVector.y, inputVector.x );
-        RigController.SetMoveInput( inputVector );
+        ControllerYoshi02.SetMoveInput(inputVector.y, inputVector.x);
+        EngineFX.SetMoveInput(inputVector.y, inputVector.x);
+        // RigController.SetMoveInput( inputVector );
     }
     public void GetAirControlInput(InputAction.CallbackContext context)
     {
         Vector2 inputVector = context.ReadValue<Vector2>();
-        ControllerYoshi02.SetAirControlInput( inputVector.y, inputVector.x );
+        ControllerYoshi02.SetAirControlInput(inputVector.y, inputVector.x);
     }
 
     public void GetCrouchJumpInput(InputAction.CallbackContext context) //FIXME: Refactor with a press and release modifier in the input asset
     {
-        if ( context.performed )
+        if (context.performed)
         {
             OnJump.Invoke();
         }
-        if ( context.started )
+        if (context.started)
         {
-            EngineFX.SetCrouching( true );
+            EngineFX.SetCrouching(true);
         }
-        if ( context.canceled )
+        if (context.canceled)
         {
-            EngineFX.SetCrouching( false );
+            EngineFX.SetCrouching(false);
         }
     }
 
     public void GetDashInput(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if (context.started)
         {
-            EngineFX.SetDashing( true );
+            EngineFX.SetDashing(true);
         }
-        if ( context.performed )
+        if (context.performed)
         {
-            ControllerYoshi02.SetDashInput( true );
+            ControllerYoshi02.SetDashInput(true);
         }
-        if ( context.canceled )
+        if (context.canceled)
         {
-            EngineFX.SetDashing( false );
-            ControllerYoshi02.SetDashInput( false );
+            EngineFX.SetDashing(false);
+            ControllerYoshi02.SetDashInput(false);
         }
     }
 
     public void GetLeftSideShiftInput(InputAction.CallbackContext context)
     {
-        if ( context.performed )
+        if (context.performed)
         {
             OnLeftSideShift.Invoke();
         }
     }
     public void GetRightSideShiftInput(InputAction.CallbackContext context)
     {
-        if ( context.performed )
+        if (context.performed)
         {
             OnRightSideShift.Invoke();
         }
@@ -84,30 +84,30 @@ public class InputManagerYoshi : MonoBehaviour
 
     public void GetSeismicChargeInput(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if (context.started)
         {
-            Projectiles.SetPreviewing( true );
+            Projectiles.SetPreviewing(true);
         }
-        else if ( context.canceled )
+        else if (context.canceled)
         {
-            Projectiles.SetPreviewing( false );
+            Projectiles.SetPreviewing(false);
             OnSeismicChargeFire.Invoke();
         }
     }
 
     public void GetCarveInput(InputAction.CallbackContext context)
     {
-        if ( context.performed && !IsCarving )
+        if (context.performed && !IsCarving)
         {
             IsCarving = true;
-            ControllerYoshi02.SetCarveInput( IsCarving );
-            EngineFX.SetCarving( IsCarving );
+            ControllerYoshi02.SetCarveInput(IsCarving);
+            EngineFX.SetCarving(IsCarving);
         }
-        else if ( context.performed && IsCarving )
+        else if (context.performed && IsCarving)
         {
             IsCarving = false;
-            ControllerYoshi02.SetCarveInput( IsCarving );
-            EngineFX.SetCarving( IsCarving );
+            ControllerYoshi02.SetCarveInput(IsCarving);
+            EngineFX.SetCarving(IsCarving);
         }
     }
 }

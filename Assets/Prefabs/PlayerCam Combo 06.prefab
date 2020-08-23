@@ -279,6 +279,11 @@ PrefabInstance:
       propertyPath: CarveShoulderOffsetMultiplier
       value: -0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 6756226749300479830, guid: 6bd5d2abaad0e6141820769d1e7108ad,
+        type: 3}
+      propertyPath: HeadAimTarget
+      value: 
+      objectReference: {fileID: 3821144185039953463}
     - target: {fileID: 8095073806807851488, guid: 6bd5d2abaad0e6141820769d1e7108ad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -956,6 +961,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c73148e5bf30a459edff921b85286f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &3821144185039953463 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4848200327919161748, guid: 6e83456f9fe941748b40bfbddb8bd009,
+    type: 3}
+  m_PrefabInstance: {fileID: 8525079791015481251}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &7137253284023284132 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1532267219569114631, guid: 6e83456f9fe941748b40bfbddb8bd009,

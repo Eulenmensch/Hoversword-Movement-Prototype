@@ -18,8 +18,8 @@ public class CustomFPS : MonoBehaviour
 
         public void Update()
         {
-            // this.position = this.transform.position;
-            this.Rotation = this.Transform.rotation;
+            this.Position = this.Transform.localPosition;
+            this.Rotation = this.Transform.localRotation;
             this.Scale = this.Transform.localScale;
         }
     }
@@ -27,22 +27,22 @@ public class CustomFPS : MonoBehaviour
     private Dictionary<int, Snapshot> Snapshots = new Dictionary<int, Snapshot>();
     private float UpdateTime = 0f;
 
-    [Range( 1, 60 )] public int FPS = 20;
+    [Range(1, 60)] public int FPS = 20;
 
     private void LateUpdate()
     {
-        if ( Time.unscaledTime - this.UpdateTime > 1f / this.FPS )
+        if (Time.unscaledTime - this.UpdateTime > 1f / this.FPS)
         {
-            this.SaveSnapshot( transform );
+            this.SaveSnapshot(transform);
             this.UpdateTime = Time.unscaledTime;
         }
 
-        foreach ( KeyValuePair<int, Snapshot> item in this.Snapshots )
+        foreach (KeyValuePair<int, Snapshot> item in this.Snapshots)
         {
-            if ( item.Value.Transform != null )
+            if (item.Value.Transform != null)
             {
-                // item.Value.transform.position = item.Value.position;
-                item.Value.Transform.rotation = item.Value.Rotation;
+                item.Value.Transform.localPosition = item.Value.Position;
+                item.Value.Transform.localRotation = item.Value.Rotation;
                 item.Value.Transform.localScale = item.Value.Scale;
             }
         }
@@ -50,16 +50,16 @@ public class CustomFPS : MonoBehaviour
 
     private void SaveSnapshot(Transform parent)
     {
-        if ( parent == null ) return;
+        if (parent == null) return;
         int childrenCount = parent.childCount;
 
-        for ( int i = 0; i < childrenCount; ++i )
+        for (int i = 0; i < childrenCount; ++i)
         {
-            Transform target = parent.GetChild( i );
+            Transform target = parent.GetChild(i);
             int uid = target.GetInstanceID();
 
-            this.Snapshots[uid] = new Snapshot( target );
-            this.SaveSnapshot( target );
+            this.Snapshots[uid] = new Snapshot(target);
+            this.SaveSnapshot(target);
         }
     }
 }
