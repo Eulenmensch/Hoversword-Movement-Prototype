@@ -49,20 +49,17 @@ public class CharacterAnimationController : MonoBehaviour
     {
         animator.SetTrigger( "StartDash" );
         animator.SetBool( "Dashing", true );
+        animator.SetBool( "DashCancel", false );
     }
 
     void StopDash()
     {
-        // animator.SetTrigger( "StopDash" );
         animator.SetBool( "Dashing", false );
     }
 
     void CancelDash()
     {
-        if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Boost Charge" ) )
-        {
-            animator.SetTrigger( "CancelDash" );
-        }
+        animator.SetBool( "DashCancel", true );
     }
 
     void StartCarve(float _direction)

@@ -142,6 +142,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
             BoardFX.SetDashing( false );
             // animator.SetTrigger( "CancelDash" );
             PlayerEvents.Instance.StopDashCharge();
+            print( "dash canceled" );
         }
     }
 
