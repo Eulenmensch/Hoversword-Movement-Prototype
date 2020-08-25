@@ -20,13 +20,18 @@ public class TimeManager : MonoBehaviour
     [ShowOnly, SerializeField] private float _ingameTimeScale = 1f;
     [ShowOnly, SerializeField] private float _timeScale;
 
+    private Tween _timeTween;
     [Header("Aiming Bullet Time")]
     [SerializeField] private float _bulletTimescaleAiming;
     [SerializeField] private float _bulletTimeAimingFadeInDuration;
     [SerializeField] private float _bulletTimeAimingFadeOutDuration;
     [SerializeField] Ease _bulletTimeAimingEaseIn;
     [SerializeField] Ease _bulletTimeAimingEaseOut;
-    private Tween _timeTween;
+
+    [Header("Aiming Bullet Time")]
+    [SerializeField] private float _bulletTimescaleDeath;
+    [SerializeField] private float _bulletTimeDeathFadeInDuration;
+    [SerializeField] Ease _bulletTimeDeathEaseIn;
 
     // Debugging timeScale
     private float[] timeScaleSteps = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.5f, 2f, 3f, 4f, 5f };
@@ -130,5 +135,18 @@ public class TimeManager : MonoBehaviour
         _timeTween?.Kill();
         _timeTween = DOTween.To(() => _ingameTimeScale, x => _ingameTimeScale = x, 1f, _bulletTimeAimingFadeOutDuration)
             .SetEase(_bulletTimeAimingEaseOut).SetUpdate(true);
+    }
+
+    public void StartDeath()
+    {
+        _timeTween?.Kill();
+        _timeTween = DOTween.To(() => _ingameTimeScale, x => _ingameTimeScale = x, _bulletTimescaleDeath, _bulletTimeDeathFadeInDuration)
+            .SetEase(_bulletTimeDeathEaseIn).SetUpdate(true);
+    }
+
+    public void StopDeath()
+    {
+        _timeTween?.Kill();
+        _ingameTimeScale = 1f;
     }
 }

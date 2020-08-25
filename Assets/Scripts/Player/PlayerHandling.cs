@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 [RequireComponent( typeof( GroundCheck ), typeof( Rigidbody ) )]
 public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
+    public bool IsActive { get; set; } = true;
+
     public float MaxSpeed { get; private set; }
     public bool IsDashing { get; set; }
     public bool IsBoosting { get; set; }
@@ -54,8 +56,19 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         RB = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            IsActive = !IsActive;
+        }
+    }
+
     private void FixedUpdate()
     {
+        if (!IsActive)
+            return;
+
         RaycastHit hit;
         IsGrounded = GroundCheck.IsGrounded( out hit );
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
+using UnityEngine.XR;
 
 public class CharacterRigController : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class CharacterRigController : MonoBehaviour
 
     void Update()
     {
+        if (!Handling.IsActive)
+            return;
+
         MoveRoot();
         RotateSpine();
         HipDamping();

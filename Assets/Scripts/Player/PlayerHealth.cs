@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class PlayerHealth : MonoBehaviour/*, IReset*/
+public class PlayerHealth : MonoBehaviour, IReset
 {
+    private PlayerHandling _playerHandling;
     private PlayerCheckpointResetter _playerCheckpointResetter;
+    private RagdollController _ragdollController;
 
     [SerializeField] private bool _isImmortal;
 
@@ -21,7 +23,7 @@ public class PlayerHealth : MonoBehaviour/*, IReset*/
     public int health
     {
         get { return _health; }
-        private set { _health = Mathf.Clamp( value, 0, maxHealth ); }
+        private set { _health = Mathf.Clamp(value, 0, maxHealth); }
     }
 
     [SerializeField] private float _damageCooldown = 1f;
@@ -33,14 +35,17 @@ public class PlayerHealth : MonoBehaviour/*, IReset*/
 
     private void Awake()
     {
-        _health = _initialHealth;
+        _playerHandling = GetComponent<PlayerHandling>();
         _playerCheckpointResetter = GetComponent<PlayerCheckpointResetter>();
+        _ragdollController = GetComponent<RagdollController>();
         _playerEffects = GetComponentInChildren<PlayerEffects>();
+
+        _health = _initialHealth;
     }
 
     public void ResetHealth()
     {
-        health = Mathf.Max( _resetHealth, _health );
+        health = Mathf.Max(_resetHealth, _health);
     }
 
     public void FillHealth()
@@ -50,39 +55,39 @@ public class PlayerHealth : MonoBehaviour/*, IReset*/
 
     public void AddHealth(int value)
     {
-        health += Mathf.Min( value, _maxHealth );
+        health += Mathf.Min(value, _maxHealth);
     }
 
     public void Damage(int value, DamageTypes damageType)
     {
-        if ( !( Time.unscaledTime > _damageTimestamp + _damageCooldown ) )
+        if (!(Time.unscaledTime > _damageTimestamp + _damageCooldown))
             return;
 
-        health = Mathf.Max( 0, health - value );
+        health = Mathf.Max(0, health - value);
 
         _damageTimestamp = Time.unscaledTime;
-        _playerEffects.Damage( damageType );
+        _playerEffects.Damage(damageType);
         PlayerEvents.Instance.TakeDamage();
-        if ( _damageSound != null )
+        if (damageType == DamageTypes.Laser)
             _damageSound.Play();
 
-        if ( health <= 0 && !_isImmortal )
+        if (health <= 0 && !_isImmortal)
             Die();
     }
 
     public void UseHealth(int value)
     {
         health -= value;
-        if ( health <= 0 )
+        if (health <= 0)
             Die();
     }
 
     public void HealthGain(HealthGainData healthGainData)
     {
-        switch ( healthGainData.healingType )
+        switch (healthGainData.healingType)
         {
             case HealingTypes.Adding:
-                AddHealth( healthGainData.healthGain );
+                AddHealth(healthGainData.healthGain);
                 break;
             case HealingTypes.Reset:
                 ResetHealth();
@@ -95,12 +100,16 @@ public class PlayerHealth : MonoBehaviour/*, IReset*/
 
     private void Die()
     {
-        ResetHealth();
+        _ragdollController.RagdollCrash();
+        _playerHandling.IsActive = false;
         _playerCheckpointResetter.Reset();
+        TimeManager.Instance.StartDeath();
     }
 
-    //public void Reset()
-    //{
-    //    ResetHealth();
-    //}
+    public void Reset()
+    {
+        ResetHealth();
+        _playerHandling.IsActive = true;
+        TimeManager.Instance.StopDeath();
+    }
 }

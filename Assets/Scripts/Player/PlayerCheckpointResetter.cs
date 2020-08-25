@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class PlayerCheckpointResetter : MonoBehaviour
     private Vector3 _startPosition;
     private Quaternion _startRotation;
     private Checkpoint _lastCheckpoint;
+
+    [SerializeField] private float _delay;
 
     private void Start()
     {
@@ -22,7 +25,7 @@ public class PlayerCheckpointResetter : MonoBehaviour
         _lastCheckpoint = checkpoint;
     }
 
-    public void Reset()
+    private void ResetPlayer()
     {
         if (_lastCheckpoint == null)
         {
@@ -36,8 +39,6 @@ public class PlayerCheckpointResetter : MonoBehaviour
             transform.rotation = _lastCheckpoint.targetPosition.rotation;
             _rb.velocity = _lastCheckpoint.targetPosition.forward * _lastCheckpoint.speed;
         }
-
-        ResetAll();
     }
 
     private static void ResetAll()
@@ -47,5 +48,17 @@ public class PlayerCheckpointResetter : MonoBehaviour
         {
             reset.Reset();
         }
+    }
+
+    public void Reset()
+    {
+        StartCoroutine(C_Reset(_delay));
+    }
+
+    private IEnumerator C_Reset(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ResetPlayer();
+        ResetAll();
     }
 }
