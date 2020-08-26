@@ -10,6 +10,7 @@ public class CharacterAnimationController : MonoBehaviour
         PlayerEvents.Instance.OnJump += StartJump;
         PlayerEvents.Instance.OnJumpCharge += StartJumpCharge;
         PlayerEvents.Instance.OnLand += StopJump;
+        PlayerEvents.Instance.OnJumpCancel += CancelJump;
 
         PlayerEvents.Instance.OnStartDashCharge += StartDash;
         PlayerEvents.Instance.OnStopDash += StopDash;
@@ -39,10 +40,16 @@ public class CharacterAnimationController : MonoBehaviour
     void StartJumpCharge()
     {
         animator.SetTrigger( "StartJumpCharge" );
+        animator.SetBool( "JumpCancel", false );
     }
     void StopJump()
     {
         animator.SetTrigger( "StopJump" );
+    }
+
+    void CancelJump()
+    {
+        animator.SetBool( "JumpCancel", true );
     }
 
     void StartDash()
@@ -68,10 +75,12 @@ public class CharacterAnimationController : MonoBehaviour
         if ( _direction > 0 )
         {
             direction = "Right";
+            animator.SetBool( "DriftingRight", true );
         }
         else if ( _direction < 0 )
         {
             direction = "Left";
+            animator.SetBool( "DriftingLeft", true );
         }
 
         animator.SetTrigger( "StartDrift" + direction );
@@ -80,6 +89,8 @@ public class CharacterAnimationController : MonoBehaviour
     void StopCarve()
     {
         animator.SetTrigger( "StopDrift" );
+        animator.SetBool( "DriftingRight", false );
+        animator.SetBool( "DriftingLeft", false );
     }
 
     void KickAttack()

@@ -71,6 +71,9 @@ MonoBehaviour:
   _bulletTimeAimingFadeOutDuration: 0.3
   _bulletTimeAimingEaseIn: 1
   _bulletTimeAimingEaseOut: 1
+  _bulletTimescaleDeath: 0.2
+  _bulletTimeDeathFadeInDuration: 0.5
+  _bulletTimeDeathEaseIn: 2
   stopFrame: 0
   frameStep: 2
   fixedframes: 0

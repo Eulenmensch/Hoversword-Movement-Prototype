@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows.Speech;
 
 public class RagdollController : MonoBehaviour, IReset
 {
-    [Header("References")]
+    [Header( "References" )]
     [SerializeField] private GameObject _character;
     private Collider[] _characterColliders;
     private Rigidbody[] _characterRigidbodies;
@@ -19,7 +18,7 @@ public class RagdollController : MonoBehaviour, IReset
 
     private Rigidbody RB;
 
-    [Header("Crashing")]
+    [Header( "Crashing" )]
     [SerializeField] private bool _crashOnCollision;
     [SerializeField] private float _forceMin = 20f;
     [SerializeField] private float _forceMax = 40f;
@@ -30,7 +29,7 @@ public class RagdollController : MonoBehaviour, IReset
     [SerializeField] private float _sumThresold = 1.6f;
     [SerializeField] private LayerMask _collisionMask;
 
-    [Header("Ragdolling")]
+    [Header( "Ragdolling" )]
     [SerializeField] private float DeathForce = 200;
 
     private PlayerHealth _playerHealth;
@@ -54,8 +53,8 @@ public class RagdollController : MonoBehaviour, IReset
         _characterAnimator = _character.GetComponent<Animator>();
         _boardAnimator = _board.GetComponent<Animator>();
 
-        SetRigidbodiesKinematic(true);
-        SetCollidersEnabled(false);
+        SetRigidbodiesKinematic( true );
+        SetCollidersEnabled( false );
 
         SetStartingPositions();
     }
@@ -64,7 +63,7 @@ public class RagdollController : MonoBehaviour, IReset
     {
         _resetPositions = new Dictionary<Transform, Vector3>();
         _resetRotations = new Dictionary<Transform, Quaternion>();
-        foreach (var item in _characterRigidbodies)
+        foreach ( var item in _characterRigidbodies )
         {
             _resetPositions[item.transform] = item.transform.localPosition;
             _resetRotations[item.transform] = item.transform.localRotation;
@@ -75,7 +74,7 @@ public class RagdollController : MonoBehaviour, IReset
 
     private void ResetPositions()
     {
-        foreach (var pair in _resetPositions)
+        foreach ( var pair in _resetPositions )
         {
             pair.Key.localPosition = pair.Value;
             pair.Key.localRotation = _resetRotations[pair.Key];
@@ -84,32 +83,32 @@ public class RagdollController : MonoBehaviour, IReset
 
     public void Die(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if ( context.started )
         {
-            Vector3 crashForce = (transform.forward + transform.up + RB.velocity) * DeathForce;
-            RagdollCrash(crashForce);
+            Vector3 crashForce = ( transform.forward + transform.up + RB.velocity ) * DeathForce;
+            RagdollCrash( crashForce );
         }
     }
 
-    public void RagdollCrash() => RagdollCrash(RB.velocity);
+    public void RagdollCrash() => RagdollCrash( RB.velocity );
 
     public void RagdollCrash(Vector3 _crashForce)
     {
-        SetRigidbodiesKinematic(false);
-        SetCollidersEnabled(true);
+        SetRigidbodiesKinematic( false );
+        SetCollidersEnabled( true );
         _characterAnimator.enabled = false;
         _boardAnimator.enabled = false;
-        foreach (var body in _characterRigidbodies)
+        foreach ( var body in _characterRigidbodies )
         {
             //var forceMultiplier = Random.Range(0.8f, 1.2f);
-            body.AddForce(_crashForce/* * forceMultiplier*/, ForceMode.VelocityChange);
+            body.AddForce( _crashForce/* * forceMultiplier*/, ForceMode.VelocityChange );
         }
-        _boardRigidbody.AddForce(_crashForce/* * forceMultiplier*/, ForceMode.VelocityChange);
+        _boardRigidbody.AddForce( _crashForce/* * forceMultiplier*/, ForceMode.VelocityChange );
     }
 
     private void SetRigidbodiesKinematic(bool _isKinematic)
     {
-        foreach (var body in _characterRigidbodies)
+        foreach ( var body in _characterRigidbodies )
         {
             body.isKinematic = _isKinematic;
         }
@@ -118,7 +117,7 @@ public class RagdollController : MonoBehaviour, IReset
 
     private void SetCollidersEnabled(bool _isEnabled)
     {
-        foreach (var collider in _characterColliders)
+        foreach ( var collider in _characterColliders )
         {
             collider.enabled = _isEnabled;
         }
@@ -127,19 +126,19 @@ public class RagdollController : MonoBehaviour, IReset
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!_crashOnCollision)
+        if ( !_crashOnCollision )
             return;
 
-        if (((1 << collision.gameObject.layer) & _collisionMask) == 0)
+        if ( ( ( 1 << collision.gameObject.layer ) & _collisionMask ) == 0 )
             return;
 
         ContactPoint[] contactPoints = new ContactPoint[collision.contactCount];
-        collision.GetContacts(contactPoints);
+        collision.GetContacts( contactPoints );
 
-        foreach (var contactPoint in contactPoints)
+        foreach ( var contactPoint in contactPoints )
         {
-            DebugExtension.DebugPoint(contactPoint.point, Color.black, duration: 10f);
-            Debug.DrawLine(contactPoint.point, contactPoint.point + contactPoint.normal, Color.grey, duration: 10f);
+            DebugExtension.DebugPoint( contactPoint.point, Color.black, duration: 10f );
+            Debug.DrawLine( contactPoint.point, contactPoint.point + contactPoint.normal, Color.grey, duration: 10f );
             //Debug.DrawLine(contactPoints[0].point, contactPoints[0].point + relativeVelocity, Color.red, duration: 10f);
         }
 
@@ -148,34 +147,34 @@ public class RagdollController : MonoBehaviour, IReset
         var normal = contactPoints[0].normal;
         //var impulse = collision.impulse.magnitude;
 
-        var dotFront = Vector3.Dot(normal, -transform.forward);
-        var dotUp = Vector3.Dot(normal, transform.up);
+        var dotFront = Vector3.Dot( normal, -transform.forward );
+        var dotUp = Vector3.Dot( normal, transform.up );
         //print($"up: {dotUp}; front: {dotFront}; force: {force}; impulse: {impulse}");
 
-        float forceWeight = Utility.RemapNumberClamped(force, _forceMin, _forceMax, 0f, 1f);
-        float upWeight = Utility.RemapNumberClamped(dotUp, _upMin, _upMax, 0, -1f);
-        float frontWeight = Utility.RemapNumber(dotFront, _frontMin, _frontMax, 0f, 1f);
+        float forceWeight = Utility.RemapNumberClamped( force, _forceMin, _forceMax, 0f, 1f );
+        float upWeight = Utility.RemapNumberClamped( dotUp, _upMin, _upMax, 0, -1f );
+        float frontWeight = Utility.RemapNumber( dotFront, _frontMin, _frontMax, 0f, 1f );
         float sum = forceWeight + upWeight + frontWeight;
         //print($"upW: {upWeight}; frontW: {frontWeight}; forceW: {forceWeight}; sum: {sum}");
 
-        if (sum > _sumThresold)
+        if ( sum > _sumThresold )
         {
-            Crash(-relativeVelocity);
+            Crash( -relativeVelocity );
         }
     }
 
     private void Crash(Vector3 crashForce)
     {
-        RagdollCrash(crashForce * 1.5f);
-        _playerHealth.Damage(1000, DamageTypes.Default);
+        RagdollCrash( crashForce * 1.5f );
+        _playerHealth.Damage( 1000, DamageTypes.Default );
     }
 
     public void Reset()
     {
         // Reset Animators and Rigid & so on
 
-        SetRigidbodiesKinematic(true);
-        SetCollidersEnabled(false);
+        SetRigidbodiesKinematic( true );
+        SetCollidersEnabled( false );
 
         _characterAnimator.enabled = true;
         _boardAnimator.enabled = true;

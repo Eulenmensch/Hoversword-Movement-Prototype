@@ -26,6 +26,9 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnLand;
     public void Land() { OnLand?.Invoke(); }
 
+    public event Action OnJumpCancel;
+    public void JumpCancel() { OnJumpCancel?.Invoke(); }
+
     public event Action OnStartDashCharge;
     public void StartDashCharge() { OnStartDashCharge?.Invoke(); }
 
@@ -64,4 +67,10 @@ public class PlayerEvents : MonoBehaviour
 
     public event Action OnTakeDamage;
     public void TakeDamage() { OnTakeDamage?.Invoke(); }
+
+    public event Action OnHeal;
+    public void Heal() { OnHeal?.Invoke(); }
+
+    public event Action<string> OnWallContact;
+    public void WallContact(string _direction) { OnWallContact?.Invoke( _direction ); }
 }

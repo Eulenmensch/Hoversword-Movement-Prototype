@@ -31,12 +31,12 @@ public class PlayerEngineFX : MonoBehaviour
 
     [Header( "Driving" )]
     [SerializeField] private GameObject SpeedLines;
-    [SerializeField] private Color JetDefaultColor;
-    [SerializeField] private Color JetCarveColor;
+    [SerializeField] private ParticleSystem[] DustParticles;
 
     [Header( "Attacks" )]
     [SerializeField] private ParticleSystem[] FlipAttackParticles;
     [SerializeField] private ParticleSystem[] SlashAttackParticles;
+    [SerializeField] private ParticleSystem[] SlashAimParticles;
 
     private CinemachineImpulseSource CameraShake;
 
@@ -68,6 +68,8 @@ public class PlayerEngineFX : MonoBehaviour
     {
         PlayerEvents.Instance.OnStartKickAttack += PlayKickAttackParticles;
         PlayerEvents.Instance.OnStartSlashAttack += PlaySlashAttackParticles;
+        PlayerEvents.Instance.OnStartAim += PlaySlashAimParticles;
+        PlayerEvents.Instance.OnStopAim += StopSlashAimParticles;
     }
 
     private void Start()
@@ -78,13 +80,13 @@ public class PlayerEngineFX : MonoBehaviour
     void Update()
     {
         SetJetParticleParameters();
-        //SetJumpChargeColor();
         PlayDashChargeParticles();
         PlayDashJetParticles();
         PlayDashBoardParticles();
         SetJumpChargeSpinSpeed();
         PlayJumpChargeParticles();
         SetSpeedlinePosition();
+        ToggleDustParticles();
     }
 
     void SetDashChargeParticleDuration()
@@ -241,6 +243,24 @@ public class PlayerEngineFX : MonoBehaviour
         }
     }
 
+    void PlaySlashAimParticles()
+    {
+        foreach ( var system in SlashAimParticles )
+        {
+            if ( system != null )
+                system.Play();
+        }
+    }
+
+    void StopSlashAimParticles()
+    {
+        foreach ( var system in SlashAimParticles )
+        {
+            if ( system != null )
+                system.Stop();
+        }
+    }
+
     void SetJetParticleParameters()
     {
 
@@ -256,28 +276,41 @@ public class PlayerEngineFX : MonoBehaviour
         }
     }
 
-    void SetJumpChargeColor()
-    {
-        if ( JumpChargeParticleRenderer != null && JumpJetParticleRenderer != null && SwordRenderer != null )
-        {
-            Color chargeColor = Color.Lerp( JumpMinChargeColor, JumpMaxChargeColor, Jump.JumpForceCharge );
-            SwordRenderer.materials[3].SetColor( "_EmissionColor", chargeColor );
-            JumpChargeParticleRenderer.material.SetColor( "_EmissionColor", chargeColor );
-            JumpJetParticleRenderer.material.SetColor( "_EmissionColor", chargeColor );
-            if ( Jump.JumpForceCharge >= 1 )
-            {
-                SwordRenderer.materials[1].SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
-                JumpChargeParticleRenderer.material.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
-                JumpJetParticleRenderer.material.SetColor( "_EmissionColor", JumpFullChargeFeedbackColor );
-            }
-        }
-    }
-
     void SetSpeedlinePosition()
     {
         if ( SpeedLines != null )
         {
             SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / Handling.MaxSpeed );
+        }
+    }
+
+    void ToggleDustParticles()
+    {
+        if ( Handling.IsGrounded )
+        {
+            foreach ( var system in DustParticles )
+            {
+                if ( system != null )
+                {
+                    if ( !system.isPlaying )
+                    {
+                        system.Play();
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach ( var system in DustParticles )
+            {
+                if ( system != null )
+                {
+                    if ( system.isPlaying )
+                    {
+                        system.Stop();
+                    }
+                }
+            }
         }
     }
 

@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 714974d831a7a8c468e7e2a80bf7466d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9835c7487dd40fc4184079715a311f23, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TileTexture:
@@ -32,22 +32,24 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AlbedoBrightness: 331.1
     - _CamDepthFadeLength: 120
     - _CamDepthFadeOffset: 120
-    - _LightGradientIntensity: 8.7
+    - _LightGradientIntensity: 4.08
     - _LightGradientIntensity1: 3.06
-    - _LightGradientOffset: 0.12
+    - _LightGradientOffset: 0.04
     - _LightGradientOffset1: 0.04
-    - _LightGradientScale: 0.12
+    - _LightGradientScale: 0.04
     - _LightGradientScale1: 0.04
     - _NormalStrength: 0.92
-    - _PosterizeSteps: 18.01
+    - _PosterizeSteps: 9.19
     - _PosterizeSteps1: 36.48
-    - _Smoothness: 0.34
+    - _Smoothness: 0.13
     - __dirty: 0
     m_Colors:
-    - _GradientKey01: {r: 0.4339623, g: 0.25497586, b: 0.23131008, a: 1}
-    - _GradientKey02: {r: 0.49019608, g: 0.42314297, b: 0.40784314, a: 1}
+    - _GradientKey01: {r: 0.643, g: 0.467461, b: 0.467461, a: 1}
+    - _GradientKey02: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 1}
     - _GradientKey2: {r: 0.643, g: 0.467461, b: 0.467461, a: 1}
     - _GradientKey3: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 1}
+    - _ShadowColor: {r: 0.31047618, g: 0.27166665, b: 0.32599998, a: 0}
     - _ShadowColor1: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0}

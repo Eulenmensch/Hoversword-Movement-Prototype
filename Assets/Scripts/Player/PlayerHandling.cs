@@ -33,12 +33,13 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     private PlayerAirControl PlayerAirControl;
     private CustomCenterOfMass CenterOfMass;
     private QuadraticDrag QuadraticDrag;
-    // private Rigidbody RB;
+
+    private CombatController Combat;
 
     //Input Fields
     private float ThrustInput;
-    // private float TurnInput;
     private float PitchInput;
+    private bool CanDash;
 
     private void Start()
     {
@@ -54,11 +55,12 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         QuadraticDrag = GetComponent<QuadraticDrag>();
         CenterOfMass = GetComponent<CustomCenterOfMass>();
         RB = GetComponent<Rigidbody>();
+        Combat = GetComponent<CombatController>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if ( Input.GetKeyDown( KeyCode.J ) )
         {
             IsActive = !IsActive;
         }
@@ -66,7 +68,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void FixedUpdate()
     {
-        if (!IsActive)
+        if ( !IsActive )
             return;
 
         RaycastHit hit;
@@ -79,6 +81,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         Turn();
         PlayerAirControl.AirControl( PitchInput, IsGrounded, IsDashing );
         Carve();
+        SetCanDash();
     }
 
     private void CalculateMaxSpeed()
@@ -130,11 +133,14 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     }
     public void SetCarve(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if ( IsGrounded )
         {
-            PlayerCarve.StartCarve( TurnInput );
+            if ( context.started )
+            {
+                PlayerCarve.StartCarve( TurnInput );
+            }
         }
-        else if ( context.canceled )
+        if ( context.canceled )
         {
             PlayerCarve.StopCarve();
         }
@@ -142,20 +148,20 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     public void Dash(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if ( CanDash )
         {
-            PlayerDash.StartCharge();
-            BoardFX.SetDashing( true );
-            // animator.SetTrigger( "StartDash" );
-            PlayerEvents.Instance.StartDashCharge();
-        }
-        else if ( context.canceled )
-        {
-            PlayerDash.StopCharge();
-            BoardFX.SetDashing( false );
-            // animator.SetTrigger( "CancelDash" );
-            PlayerEvents.Instance.StopDashCharge();
-            print( "dash canceled" );
+            if ( context.started )
+            {
+                PlayerDash.StartCharge();
+                BoardFX.SetDashing( true );
+                PlayerEvents.Instance.StartDashCharge();
+            }
+            else if ( context.canceled )
+            {
+                PlayerDash.StopCharge();
+                BoardFX.SetDashing( false );
+                PlayerEvents.Instance.StopDashCharge();
+            }
         }
     }
 
@@ -165,16 +171,15 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         {
             PlayerJump.SetCharging( true );
             BoardFX.SetCrouching( true );
-            // animator.SetTrigger( "StartJumpCharge" );
             PlayerEvents.Instance.StartJumpCharge();
         }
         else if ( context.canceled )
         {
             PlayerJump.Jump();
+            PlayerJump.StartLandingBuffer();
             BoardFX.PlayJumpJetParticles();
             PlayerJump.SetCharging( false );
             BoardFX.SetCrouching( false );
-            // animator.SetTrigger( "StartJump" );
             PlayerEvents.Instance.Jump();
         }
     }
@@ -188,11 +193,12 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         else if ( IsAirborne && IsGrounded )
         {
             IsAirborne = false;
+
             //this is so that the trigger isn't set when merely falling, which causes the animator to get stuck
-            if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) )
+            if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) || animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump" ) )
             {
-                // animator.SetTrigger( "StopJump" );
                 PlayerEvents.Instance.Land();
+                PlayerJump.StopLandingBuffer();
             }
         }
     }
@@ -206,6 +212,20 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         else
         {
             PlayerJump.StopCoyoteTime();
+        }
+    }
+
+    private void SetCanDash()
+    {
+        if ( IsCarving || Combat.isAiming )
+        {
+            CanDash = false;
+            animator.SetBool( "CanBoost", false );
+        }
+        else
+        {
+            CanDash = true;
+            animator.SetBool( "CanBoost", true );
         }
     }
 }
