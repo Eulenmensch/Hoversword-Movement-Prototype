@@ -44,11 +44,14 @@ public class BoardAnimationController : MonoBehaviour
         }
 
         animator.SetTrigger( "StartDrift" + direction );
+        animator.SetBool( "Drifting", true );
+        animator.SetFloat( "DriftDirection", _direction );
     }
 
     void StopCarve()
     {
         animator.SetTrigger( "StopDrift" );
+        animator.SetBool( "Drifting", false );
     }
 
     void StartAim()

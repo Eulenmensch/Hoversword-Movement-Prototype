@@ -33,6 +33,14 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private GameObject SpeedLines;
     [SerializeField] private ParticleSystem[] DustParticles;
 
+    [Header( "Carving" )]
+    [SerializeField] private ParticleSystem CarveSparksLeft;
+    [SerializeField] private ParticleSystem CarveSparksRight;
+
+    [Header( "Wall Sparks" )]
+    [SerializeField] private ParticleSystem WallSparksLeft;
+    [SerializeField] private ParticleSystem WallSparksRight;
+
     [Header( "Attacks" )]
     [SerializeField] private ParticleSystem[] FlipAttackParticles;
     [SerializeField] private ParticleSystem[] SlashAttackParticles;
@@ -70,6 +78,12 @@ public class PlayerEngineFX : MonoBehaviour
         PlayerEvents.Instance.OnStartSlashAttack += PlaySlashAttackParticles;
         PlayerEvents.Instance.OnStartAim += PlaySlashAimParticles;
         PlayerEvents.Instance.OnStopAim += StopSlashAimParticles;
+
+        PlayerEvents.Instance.OnStartCarve += PlayCarveSparkParticles;
+        PlayerEvents.Instance.OnStopCarve += StopCarveSparkParticles;
+
+        PlayerEvents.Instance.OnStartWallContact += PlayWallSparkParticles;
+        PlayerEvents.Instance.OnStopWallContact += StopWallSparkParticles;
     }
 
     private void Start()
@@ -312,6 +326,44 @@ public class PlayerEngineFX : MonoBehaviour
                 }
             }
         }
+    }
+
+    void PlayCarveSparkParticles(float _direction)
+    {
+        if ( _direction < 0 && CarveSparksLeft != null )
+        {
+            CarveSparksLeft.Play();
+        }
+        else if ( _direction > 0 && CarveSparksRight != null )
+        {
+            CarveSparksRight.Play();
+        }
+    }
+    void StopCarveSparkParticles()
+    {
+        if ( CarveSparksLeft != null )
+            CarveSparksLeft.Stop();
+        if ( CarveSparksRight != null )
+            CarveSparksRight.Stop();
+    }
+
+    void PlayWallSparkParticles(string _direction)
+    {
+        if ( _direction == "Left" && WallSparksLeft != null )
+        {
+            WallSparksLeft.Play();
+        }
+        else if ( _direction == "Right" && WallSparksRight != null )
+        {
+            WallSparksRight.Play();
+        }
+    }
+    void StopWallSparkParticles()
+    {
+        if ( WallSparksLeft != null )
+            WallSparksLeft.Stop();
+        if ( WallSparksRight != null )
+            WallSparksRight.Stop();
     }
 
     public void SetMoveInput(float _thrust, float _turn)

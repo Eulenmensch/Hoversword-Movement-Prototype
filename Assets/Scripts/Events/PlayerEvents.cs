@@ -71,6 +71,9 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnHeal;
     public void Heal() { OnHeal?.Invoke(); }
 
-    public event Action<string> OnWallContact;
-    public void WallContact(string _direction) { OnWallContact?.Invoke( _direction ); }
+    public event Action<string> OnStartWallContact;
+    public void StartWallContact(string _direction) { OnStartWallContact?.Invoke( _direction ); }
+
+    public event Action OnStopWallContact;
+    public void StopWallContact() { OnStopWallContact?.Invoke(); }
 }
