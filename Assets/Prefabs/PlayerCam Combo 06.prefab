@@ -416,16 +416,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7137253285880123621}
     m_Modifications:
-    - target: {fileID: 1532267217882759770, guid: 6e83456f9fe941748b40bfbddb8bd009,
-        type: 3}
-      propertyPath: LegIKs.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1532267217882759770, guid: 6e83456f9fe941748b40bfbddb8bd009,
-        type: 3}
-      propertyPath: LegIKs.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1532267218694751960, guid: 6e83456f9fe941748b40bfbddb8bd009,
         type: 3}
       propertyPath: _character
