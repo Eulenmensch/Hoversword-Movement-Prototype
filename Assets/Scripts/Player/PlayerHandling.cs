@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent( typeof( GroundCheck ), typeof( Rigidbody ) )]
+[RequireComponent(typeof(GroundCheck), typeof(Rigidbody))]
 public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
     public bool IsActive { get; set; } = true;
@@ -12,6 +12,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     public bool IsCarving { get; set; }
     public bool IsAirborne { get; private set; }
     public bool IsGrounded { get; private set; }
+    public bool IsJumping { get; set; }
 
     public float TurnInput { get; private set; }
 
@@ -39,7 +40,27 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     //Input Fields
     private float ThrustInput;
     private float PitchInput;
+
+    //Flags
     private bool CanDash;
+    private bool CanJump;
+    private bool CanCarve;
+    private bool IsFalling;
+
+    private void OnEnable()
+    {
+        PlayerEvents.Instance.OnJumpCharge += SetCanCarveFalse;
+        PlayerEvents.Instance.OnStartDashCharge += SetCanCarveFalse;
+        PlayerEvents.Instance.OnStartAim += SetCanCarveFalse;
+        PlayerEvents.Instance.OnStartKickAttack += SetCanCarveFalse;
+
+        PlayerEvents.Instance.OnLand += SetCanCarveTrue;
+        PlayerEvents.Instance.OnJumpCancel += SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopDash += SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopDashCharge += SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopAim += SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopKickAttack += SetCanCarveTrue;
+    }
 
     private void Start()
     {
@@ -56,11 +77,13 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         CenterOfMass = GetComponent<CustomCenterOfMass>();
         RB = GetComponent<Rigidbody>();
         Combat = GetComponent<CombatController>();
+
+        CanCarve = true;
     }
 
     private void Update()
     {
-        if ( Input.GetKeyDown( KeyCode.J ) )
+        if (Input.GetKeyDown(KeyCode.J))
         {
             IsActive = !IsActive;
         }
@@ -68,28 +91,32 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void FixedUpdate()
     {
-        if ( !IsActive )
+        if (!IsActive)
             return;
 
         RaycastHit hit;
-        IsGrounded = GroundCheck.IsGrounded( out hit );
+        IsGrounded = GroundCheck.IsGrounded(out hit);
 
         CalculateMaxSpeed();
+        SetCanDash();
+        SetCanJump();
+        SetAnimatorGrounded();
+        SetFalling();
+
         CoyoteTime();
         Land();
-        Thrust( hit );
+        Thrust(hit);
         Turn();
-        PlayerAirControl.AirControl( PitchInput, IsGrounded, IsDashing );
+        PlayerAirControl.AirControl(PitchInput, IsGrounded, IsDashing);
         Carve();
-        SetCanDash();
     }
 
     private void CalculateMaxSpeed()
     {
         float force = IsGrounded ? PlayerThrust.GroundAccelerationForce : PlayerThrust.AirAccelerationForce;
-        if ( IsDashing ) force += PlayerDash.BoostForce;
-        if ( IsBoosting ) force += PlayerBoost.BoostForce;
-        MaxSpeed = Mathf.Sqrt( force / QuadraticDrag.Drag );
+        if (IsDashing) force += PlayerDash.BoostForce;
+        if (IsBoosting) force += PlayerBoost.BoostForce;
+        MaxSpeed = Mathf.Sqrt(force / QuadraticDrag.Drag);
     }
 
     public void GetMoveInput(InputAction.CallbackContext context)
@@ -97,7 +124,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         Vector2 inputVector = context.ReadValue<Vector2>();
         ThrustInput = inputVector.y;
         TurnInput = inputVector.x;
-        BoardFX.SetMoveInput( inputVector.y, inputVector.x );
+        BoardFX.SetMoveInput(inputVector.y, inputVector.x);
     }
 
     public void GetPitchInput(InputAction.CallbackContext context)
@@ -107,59 +134,62 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void Thrust(RaycastHit _hit)
     {
-        PlayerThrust.Thrust( ThrustInput, IsGrounded, _hit );
-        if ( IsGrounded )
+        PlayerThrust.Thrust(ThrustInput, IsGrounded, _hit);
+        if (IsGrounded)
         {
-            PlayerFriction.ApplyIdleFriction( ThrustInput, RB );
+            PlayerFriction.ApplyIdleFriction(ThrustInput, RB);
         }
     }
 
     private void Turn()
     {
-        if ( !IsCarving )
+        if (!IsCarving)
         {
-            PlayerTurn.Turn( TurnInput );
-            PlayerFriction.ApplySidewaysFriction( RB, PlayerTurn.TurnFriction );
+            PlayerTurn.Turn(TurnInput);
+            PlayerFriction.ApplySidewaysFriction(RB, PlayerTurn.TurnFriction);
         }
     }
 
     private void Carve()
     {
-        PlayerCarve.Carve( TurnInput );
-        if ( IsCarving )
+        PlayerCarve.Carve(TurnInput);
+        if (IsCarving)
         {
-            PlayerFriction.ApplySidewaysFriction( RB, PlayerCarve.CarveFriction );
+            PlayerFriction.ApplySidewaysFriction(RB, PlayerCarve.CarveFriction);
         }
     }
     public void SetCarve(InputAction.CallbackContext context)
     {
-        if ( IsGrounded )
+        if (CanCarve)
         {
-            if ( context.started )
+            if (IsGrounded)
             {
-                PlayerCarve.StartCarve( TurnInput );
+                if (context.started)
+                {
+                    PlayerCarve.StartCarve(TurnInput);
+                }
             }
-        }
-        if ( context.canceled )
-        {
-            PlayerCarve.StopCarve();
+            if (context.canceled)
+            {
+                PlayerCarve.StopCarve();
+            }
         }
     }
 
     public void Dash(InputAction.CallbackContext context)
     {
-        if ( CanDash )
+        if (CanDash)
         {
-            if ( context.started )
+            if (context.started)
             {
                 PlayerDash.StartCharge();
-                BoardFX.SetDashing( true );
+                BoardFX.SetDashing(true);
                 PlayerEvents.Instance.StartDashCharge();
             }
-            else if ( context.canceled )
+            else if (context.canceled)
             {
                 PlayerDash.StopCharge();
-                BoardFX.SetDashing( false );
+                BoardFX.SetDashing(false);
                 PlayerEvents.Instance.StopDashCharge();
             }
         }
@@ -167,45 +197,47 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if ( context.started )
+        if (CanJump)
         {
-            PlayerJump.SetCharging( true );
-            BoardFX.SetCrouching( true );
-            PlayerEvents.Instance.StartJumpCharge();
-        }
-        else if ( context.canceled )
-        {
-            PlayerJump.Jump();
-            PlayerJump.StartLandingBuffer();
-            BoardFX.PlayJumpJetParticles();
-            PlayerJump.SetCharging( false );
-            BoardFX.SetCrouching( false );
-            PlayerEvents.Instance.Jump();
+            if (context.started)
+            {
+                PlayerJump.SetCharging(true);
+                BoardFX.SetCrouching(true);
+                PlayerEvents.Instance.StartJumpCharge();
+                IsJumping = true;
+            }
+            else if (context.canceled)
+            {
+                PlayerJump.Jump();
+                PlayerJump.StartLandingBuffer();
+                BoardFX.PlayJumpJetParticles();
+                PlayerJump.SetCharging(false);
+                BoardFX.SetCrouching(false);
+                PlayerEvents.Instance.Jump();
+            }
         }
     }
 
     private void Land()
     {
-        if ( !IsGrounded )
+        if (!IsGrounded)
         {
             IsAirborne = true;
         }
-        else if ( IsAirborne && IsGrounded )
+        if (IsGrounded)
         {
-            IsAirborne = false;
-
-            //this is so that the trigger isn't set when merely falling, which causes the animator to get stuck
-            if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) || animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump" ) )
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
             {
                 PlayerEvents.Instance.Land();
                 PlayerJump.StopLandingBuffer();
+                IsJumping = false;
             }
         }
     }
 
     private void CoyoteTime()
     {
-        if ( !IsGrounded )
+        if (!IsGrounded)
         {
             PlayerJump.StartCoyoteTime();
         }
@@ -217,15 +249,64 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void SetCanDash()
     {
-        if ( IsCarving || Combat.isAiming )
+        if (IsCarving || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
         {
             CanDash = false;
-            animator.SetBool( "CanBoost", false );
+            animator.SetBool("CanBoost", false);
         }
         else
         {
             CanDash = true;
-            animator.SetBool( "CanBoost", true );
+            animator.SetBool("CanBoost", true);
         }
+    }
+
+    private void SetCanJump()
+    {
+        if (IsCarving || IsDashing || PlayerDash.IsCharging || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
+        {
+            CanJump = false;
+        }
+        else
+        {
+            CanJump = true;
+        }
+    }
+
+    // private void SetCanCarve()
+    // {
+    //     if (IsJumping || IsDashing || PlayerDash.IsCharging || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
+    //     {
+    //         CanCarve = false;
+    //     }
+    //     else
+    //     {
+    //         CanCarve = true;
+    //     }
+    // }
+
+    private void SetCanCarveTrue() { CanCarve = true; }
+    private void SetCanCarveFalse() { CanCarve = false; }
+
+
+    private void SetFalling()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
+        {
+            if (!IsFalling)
+            {
+                IsFalling = true;
+                PlayerEvents.Instance.JumpFall();
+            }
+        }
+        else
+        {
+            IsFalling = false;
+        }
+    }
+
+    private void SetAnimatorGrounded()
+    {
+        animator.SetBool("Grounded", IsGrounded);
     }
 }

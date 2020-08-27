@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent( typeof( PlayerHandling ), typeof( Rigidbody ) )]
+[RequireComponent(typeof(PlayerHandling), typeof(Rigidbody))]
 public class PlayerJump : MonoBehaviour
 {
     public float JumpForceCharge { get; private set; }  //A value that goes up from 0 to 1 while crouching, impacting how much jump force will be exerted on the body
@@ -39,7 +39,7 @@ public class PlayerJump : MonoBehaviour
 
     private void ChargeJump()
     {
-        if ( IsCharging && JumpForceCharge <= 1 )
+        if (IsCharging && JumpForceCharge <= 1)
         {
             JumpForceCharge += Time.deltaTime / JumpChargeTime;
         }
@@ -47,17 +47,17 @@ public class PlayerJump : MonoBehaviour
 
     public void Jump()
     {
-        if ( IsGrounded )
+        if (IsGrounded)
         {
             ScaleForceWithSpeed();
             Vector3 jumpForce = transform.up * JumpForce * JumpForceCharge;
-            RB.AddForce( jumpForce, ForceMode.VelocityChange );
+            RB.AddForce(jumpForce, ForceMode.VelocityChange);
         }
     }
 
     private void ScaleForceWithSpeed()
     {
-        JumpForce = JumpForceMin + ( ( JumpForceMax - JumpForceMin ) * ( RB.velocity.magnitude / Handling.MaxSpeed ) );
+        JumpForce = JumpForceMin + ((JumpForceMax - JumpForceMin) * (RB.velocity.magnitude / Handling.MaxSpeed));
     }
 
     public void SetCharging(bool _charging)
@@ -68,23 +68,23 @@ public class PlayerJump : MonoBehaviour
 
     public void StartCoyoteTime()
     {
-        if ( !IsCoyoteTimeRunning )
+        if (!IsCoyoteTimeRunning)
         {
-            CoyoteTimeRoutine = StartCoroutine( DoCoyoteTime() );
+            CoyoteTimeRoutine = StartCoroutine(DoCoyoteTime());
             IsCoyoteTimeRunning = true;
         }
     }
 
     private IEnumerator DoCoyoteTime()
     {
-        yield return new WaitForSeconds( CoyoteTime );
+        yield return new WaitForSeconds(CoyoteTime);
         IsGrounded = false;
         IsCoyoteTimeRunning = false;
     }
 
     public void StopCoyoteTime()
     {
-        StopCoroutine( CoyoteTimeRoutine );
+        StopCoroutine(CoyoteTimeRoutine);
         IsGrounded = true;
         IsCoyoteTimeRunning = false;
     }
@@ -93,23 +93,24 @@ public class PlayerJump : MonoBehaviour
     //state machine get stuck in a falling state
     public void StartLandingBuffer()
     {
-        LandingBufferRoutine = StartCoroutine( LandingBuffer() );
+        LandingBufferRoutine = StartCoroutine(LandingBuffer());
     }
 
     private IEnumerator LandingBuffer()
     {
-        yield return new WaitForSeconds( LandingBufferTime );
-        if ( Handling.IsGrounded )
+        yield return new WaitForSeconds(LandingBufferTime);
+        if (Handling.IsGrounded)
         {
             PlayerEvents.Instance.JumpCancel();
+            Handling.IsJumping = false;
         }
     }
 
     public void StopLandingBuffer()
     {
-        if ( LandingBufferRoutine != null )
+        if (LandingBufferRoutine != null)
         {
-            StopCoroutine( LandingBufferRoutine );
+            StopCoroutine(LandingBufferRoutine);
         }
     }
 }

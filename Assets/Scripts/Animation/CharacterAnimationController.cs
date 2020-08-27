@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent( typeof( Animator ) )]
+[RequireComponent(typeof(Animator))]
 public class CharacterAnimationController : MonoBehaviour
 {
     private Animator animator;
@@ -35,86 +35,94 @@ public class CharacterAnimationController : MonoBehaviour
 
     void StartJump()
     {
-        animator.SetTrigger( "StartJump" );
+        animator.SetTrigger("StartJump");
+        animator.SetBool("JumpCharging", false);
     }
     void StartJumpCharge()
     {
-        animator.SetTrigger( "StartJumpCharge" );
-        animator.SetBool( "JumpCancel", false );
+        animator.SetTrigger("StartJumpCharge");
+        animator.SetBool("JumpCancel", false);
+        animator.SetBool("Jumping", true);
+        animator.SetBool("JumpCharging", true);
     }
     void StopJump()
     {
-        animator.SetTrigger( "StopJump" );
+        animator.SetTrigger("StopJump");
+        animator.SetBool("Jumping", false);
     }
 
     void CancelJump()
     {
-        animator.SetBool( "JumpCancel", true );
+        animator.SetBool("Jumping", false);
+        animator.SetBool("JumpCancel", true);
     }
 
     void StartDash()
     {
-        animator.SetTrigger( "StartDash" );
-        animator.SetBool( "Dashing", true );
-        animator.SetBool( "DashCancel", false );
+        animator.SetTrigger("StartDash");
+        animator.SetBool("Dashing", true);
+        animator.SetBool("DashCancel", false);
     }
 
     void StopDash()
     {
-        animator.SetBool( "Dashing", false );
+        animator.SetBool("Dashing", false);
     }
 
     void CancelDash()
     {
-        animator.SetBool( "DashCancel", true );
+        animator.SetBool("DashCancel", true);
     }
 
     void StartCarve(float _direction)
     {
         string direction = "";
-        if ( _direction > 0 )
+        if (_direction > 0)
         {
             direction = "Right";
-            animator.SetBool( "DriftingRight", true );
+            animator.SetBool("DriftingRight", true);
         }
-        else if ( _direction < 0 )
+        else if (_direction < 0)
         {
             direction = "Left";
-            animator.SetBool( "DriftingLeft", true );
+            animator.SetBool("DriftingLeft", true);
         }
 
-        animator.SetTrigger( "StartDrift" + direction );
+        animator.SetTrigger("StartDrift" + direction);
+        animator.SetBool("Drifting", true);
+        animator.SetFloat("DriftDirection", _direction);
     }
 
     void StopCarve()
     {
-        animator.SetTrigger( "StopDrift" );
-        animator.SetBool( "DriftingRight", false );
-        animator.SetBool( "DriftingLeft", false );
+        animator.SetTrigger("StopDrift");
+        animator.SetBool("DriftingRight", false);
+        animator.SetBool("DriftingLeft", false);
+        animator.SetBool("Drifting", false);
     }
 
     void KickAttack()
     {
-        animator.SetTrigger( "FlipAttack" );
+        animator.SetTrigger("FlipAttack");
     }
 
     void StartAim()
     {
-        animator.SetTrigger( "StartAim" );
+        animator.SetTrigger("StartAim");
     }
 
     void StopAim()
     {
-        animator.SetTrigger( "StopAim" );
+        animator.SetTrigger("StopAim");
     }
 
     void SlashAttack()
     {
-        animator.SetTrigger( "SlashAttack" );
+        animator.SetTrigger("SlashAttack");
     }
 
     void TakeDamage()
     {
-        animator.SetTrigger( "TakeDamage" );
+        animator.SetTrigger("TakeDamage");
     }
 }

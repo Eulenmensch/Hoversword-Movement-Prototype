@@ -23,13 +23,18 @@ public class CharacterRigController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerEvents.Instance.OnJump += ToggleLegIKOff;
+        // PlayerEvents.Instance.OnJump += ToggleLegIKOff;
         PlayerEvents.Instance.OnJumpCancel += ToggleLegIKOn;
+        PlayerEvents.Instance.OnJumpFall += ToggleLegIKOn;
         PlayerEvents.Instance.OnLand += ToggleLegIKOn;
+
         PlayerEvents.Instance.OnStartAim += ToggleLegIKOff;
         PlayerEvents.Instance.OnStartAim += ToggleHandIKOn;
         PlayerEvents.Instance.OnStopAim += ToggleLegIKOn;
         PlayerEvents.Instance.OnStopAim += ToggleHandIKOff;
+
+        PlayerEvents.Instance.OnStartKickAttack += ToggleLegIKOff;
+        PlayerEvents.Instance.OnStopKickAttack += ToggleLegIKOn;
     }
 
     private void Start()
@@ -40,7 +45,7 @@ public class CharacterRigController : MonoBehaviour
 
     void Update()
     {
-        if ( !Handling.IsActive )
+        if (!Handling.IsActive)
         {
             return;
         }
@@ -52,36 +57,36 @@ public class CharacterRigController : MonoBehaviour
 
     private void MoveRoot()
     {
-        this.transform.DOLocalMove( MoveBy * MoveAmount, MoveDuration, false );
+        this.transform.DOLocalMove(MoveBy * MoveAmount, MoveDuration, false);
     }
 
     private void RotateSpine()
     {
-        this.transform.DOLocalRotate( RotateBy * RotateAmount, MoveDuration, RotateMode.Fast );
+        this.transform.DOLocalRotate(RotateBy * RotateAmount, MoveDuration, RotateMode.Fast);
     }
 
     private void HipDamping()
     {
-        if ( Handling.IsGrounded )
+        if (Handling.IsGrounded)
         {
             RaycastHit hit;
-            Physics.Raycast( this.transform.position, Vector3.down, out hit, 5.0f, GroundMask );
-            float yPos = ( hit.distance - HipHeight ) * HipDampingScale;
-            yPos = Mathf.Clamp( yPos, -1, MaxHipDistance ); //the -1 minimum value is basically no minimum, as the value never goes below -0.2 anyways
-            this.transform.DOLocalMoveY( yPos, HipDampingAmount, false );
+            Physics.Raycast(this.transform.position, Vector3.down, out hit, 5.0f, GroundMask);
+            float yPos = (hit.distance - HipHeight) * HipDampingScale;
+            yPos = Mathf.Clamp(yPos, -1, MaxHipDistance); //the -1 minimum value is basically no minimum, as the value never goes below -0.2 anyways
+            this.transform.DOLocalMoveY(yPos, HipDampingAmount, false);
         }
     }
 
     private void ToggleLegIKOn()
     {
-        foreach ( var legIK in LegIKs )
+        foreach (var legIK in LegIKs)
         {
             legIK.weight = 1;
         }
     }
     private void ToggleLegIKOff()
     {
-        foreach ( var legIK in LegIKs )
+        foreach (var legIK in LegIKs)
         {
             legIK.weight = 0;
         }
@@ -89,14 +94,14 @@ public class CharacterRigController : MonoBehaviour
 
     private void ToggleHandIKOn()
     {
-        foreach ( var handIK in HandIKs )
+        foreach (var handIK in HandIKs)
         {
             handIK.weight = 1;
         }
     }
     private void ToggleHandIKOff()
     {
-        foreach ( var handIK in HandIKs )
+        foreach (var handIK in HandIKs)
         {
             handIK.weight = 0;
         }
@@ -105,9 +110,9 @@ public class CharacterRigController : MonoBehaviour
     public void SetMoveInput(InputAction.CallbackContext context)
     {
         Vector2 move = context.ReadValue<Vector2>();
-        MoveBy = new Vector3( move.x, -0.2f, 0 );
+        MoveBy = new Vector3(move.x, -0.2f, 0);
 
-        RotateBy = new Vector3( 0, move.x, 0 );
+        RotateBy = new Vector3(0, move.x, 0);
     }
 
 }

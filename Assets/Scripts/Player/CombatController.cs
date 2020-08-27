@@ -18,7 +18,7 @@ public class CombatController : MonoBehaviour
     public enum AttackStates { None, Flip, Slash }
     [Header("States")]
     [SerializeField] private AttackStates _attackState = AttackStates.None;
-    //public AttackStates attackState { get { return _attackState; } private set { _attackState = value; } }
+    public AttackStates attackState { get { return _attackState; } private set { _attackState = value; } }
 
     [Header("Aiming")]
     [SerializeField, ShowOnly] private bool _isAiming;
@@ -120,8 +120,11 @@ public class CombatController : MonoBehaviour
         {
             if (!isAiming && _attackState == AttackStates.None)
             {
+                if (_handling.IsDashing)
+                {
+                    return;
+                }
                 StartFlip();
-                // _handling.Animator.SetTrigger( "FlipAttack" );
             }
 
             if (isAiming && _attackState == AttackStates.None)
