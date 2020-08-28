@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent( typeof( Animator ) )]
+[RequireComponent(typeof(Animator))]
 public class BoardAnimationController : MonoBehaviour
 {
     private Animator animator;
@@ -28,59 +28,60 @@ public class BoardAnimationController : MonoBehaviour
 
     void Jump()
     {
-        animator.SetTrigger( "Jump" );
+        animator.SetTrigger("Jump");
     }
 
     void StartCarve(float _direction)
     {
         string direction = "";
-        if ( _direction > 0 )
+        if (_direction > 0)
         {
             direction = "Right";
         }
-        else if ( _direction < 0 )
+        else if (_direction < 0)
         {
             direction = "Left";
         }
 
-        animator.SetTrigger( "StartDrift" + direction );
-        animator.SetBool( "Drifting", true );
-        animator.SetFloat( "DriftDirection", _direction );
+        animator.SetTrigger("StartDrift" + direction);
+        animator.SetBool("Drifting", true);
+        animator.SetFloat("DriftDirection", _direction);
     }
 
     void StopCarve()
     {
-        animator.SetTrigger( "StopDrift" );
-        animator.SetBool( "Drifting", false );
+        animator.SetTrigger("StopDrift");
+        animator.SetBool("Drifting", false);
     }
 
     void StartAim()
     {
-        animator.SetBool( "Aim", true );
+        animator.SetBool("Aim", true);
+        animator.SetTrigger("StartAim");
     }
 
     void StopAim()
     {
-        animator.SetBool( "Aim", false );
+        animator.SetBool("Aim", false);
     }
 
     void StartKickAttack()
     {
-        animator.SetBool( "Flip", true );
+        animator.SetBool("Flip", true);
     }
 
     void StopKickAttack()
     {
-        animator.SetBool( "Flip", false );
+        animator.SetBool("Flip", false);
     }
 
     void StartSlashAttack()
     {
-        animator.SetBool( "Slash", true );
+        animator.SetBool("Slash", true);
     }
 
     void StopSlashAttack()
     {
-        animator.SetBool( "Slash", false );
+        animator.SetBool("Slash", false);
     }
 }

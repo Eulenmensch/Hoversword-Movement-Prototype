@@ -32,6 +32,9 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnJumpCancel;
     public void JumpCancel() { OnJumpCancel?.Invoke(); }
 
+    public event Action OnHandleJumpAfterAim; //This is a workaround event for poor legacy vfx code - for turning off charge particles
+    public void HandleJumpAfterAim() { OnHandleJumpAfterAim?.Invoke(); }
+
     public event Action OnStartDashCharge;
     public void StartDashCharge() { OnStartDashCharge?.Invoke(); }
 

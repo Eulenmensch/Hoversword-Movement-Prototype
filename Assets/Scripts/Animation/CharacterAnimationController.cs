@@ -11,6 +11,7 @@ public class CharacterAnimationController : MonoBehaviour
         PlayerEvents.Instance.OnJumpCharge += StartJumpCharge;
         PlayerEvents.Instance.OnLand += StopJump;
         PlayerEvents.Instance.OnJumpCancel += CancelJump;
+        PlayerEvents.Instance.OnHandleJumpAfterAim += HandleJumpAfterAim;
 
         PlayerEvents.Instance.OnStartDashCharge += StartDash;
         PlayerEvents.Instance.OnStopDash += StopDash;
@@ -53,8 +54,13 @@ public class CharacterAnimationController : MonoBehaviour
 
     void CancelJump()
     {
-        animator.SetBool("Jumping", false);
+        // animator.SetBool("Jumping", false);
         animator.SetBool("JumpCancel", true);
+    }
+
+    void HandleJumpAfterAim()
+    {
+        animator.SetBool("JumpCharging", false);
     }
 
     void StartDash()
@@ -109,11 +115,13 @@ public class CharacterAnimationController : MonoBehaviour
     void StartAim()
     {
         animator.SetTrigger("StartAim");
+        animator.SetBool("Aiming", true);
     }
 
     void StopAim()
     {
         animator.SetTrigger("StopAim");
+        animator.SetBool("Aiming", false);
     }
 
     void SlashAttack()

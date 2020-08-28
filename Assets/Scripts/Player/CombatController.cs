@@ -139,6 +139,8 @@ public class CombatController : MonoBehaviour
         isAiming = true;
         TimeManager.Instance?.StartAim();
         // _boardAnimator.SetBool("Aim", true);
+        PlayerEvents.Instance?.StopCarve();
+        // PlayerEvents.Instance.JumpFall();
         PlayerEvents.Instance?.StartAim();
         // _boardExtension.SetActive( true );
     }

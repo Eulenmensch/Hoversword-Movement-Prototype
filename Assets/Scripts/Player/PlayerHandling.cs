@@ -169,11 +169,12 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
                     PlayerCarve.StartCarve(TurnInput);
                 }
             }
-            if (context.canceled)
-            {
-                PlayerCarve.StopCarve();
-            }
         }
+        if (context.canceled)
+        {
+            PlayerCarve.StopCarve();
+        }
+
     }
 
     public void Dash(InputAction.CallbackContext context)
@@ -206,7 +207,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
                 PlayerEvents.Instance.StartJumpCharge();
                 IsJumping = true;
             }
-            else if (context.canceled)
+            else if (context.canceled && IsJumping)
             {
                 PlayerJump.Jump();
                 PlayerJump.StartLandingBuffer();
@@ -215,6 +216,10 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
                 BoardFX.SetCrouching(false);
                 PlayerEvents.Instance.Jump();
             }
+        }
+        else if (context.canceled)
+        {
+            PlayerEvents.Instance.HandleJumpAfterAim();
         }
     }
 
@@ -272,18 +277,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
             CanJump = true;
         }
     }
-
-    // private void SetCanCarve()
-    // {
-    //     if (IsJumping || IsDashing || PlayerDash.IsCharging || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
-    //     {
-    //         CanCarve = false;
-    //     }
-    //     else
-    //     {
-    //         CanCarve = true;
-    //     }
-    // }
 
     private void SetCanCarveTrue() { CanCarve = true; }
     private void SetCanCarveFalse() { CanCarve = false; }

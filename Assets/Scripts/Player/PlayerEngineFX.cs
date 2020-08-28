@@ -11,17 +11,17 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private PlayerHandling Handling;
     [SerializeField] private Renderer SwordRenderer;
 
-    [Header( "Dash" )]
+    [Header("Dash")]
     [SerializeField] private PlayerDash Dash;
     [SerializeField] private ParticleSystem[] DashChargeParticles;
     [SerializeField] private ParticleSystem[] DashBoardParticles;
     [SerializeField] private ParticleSystem DashJetParticles;
 
-    [Header( "Jump" )]
+    [Header("Jump")]
     [SerializeField] private PlayerJump Jump;
-    [SerializeField, ColorUsage( true, true )] private Color JumpMinChargeColor;
-    [SerializeField, ColorUsage( true, true )] private Color JumpMaxChargeColor;
-    [SerializeField, ColorUsage( true, true )] private Color JumpFullChargeFeedbackColor;
+    [SerializeField, ColorUsage(true, true)] private Color JumpMinChargeColor;
+    [SerializeField, ColorUsage(true, true)] private Color JumpMaxChargeColor;
+    [SerializeField, ColorUsage(true, true)] private Color JumpFullChargeFeedbackColor;
     [SerializeField] private AnimationCurve JumpChargeSpinSpeed;
     [SerializeField] private ParticleSystem[] JumpChargeParticles;
     [SerializeField] private ParticleSystem JumpChargeSpinParticles;
@@ -29,19 +29,19 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private ParticleSystemRenderer JumpChargeParticleRenderer;
     [SerializeField] private ParticleSystemRenderer JumpJetParticleRenderer;
 
-    [Header( "Driving" )]
+    [Header("Driving")]
     [SerializeField] private GameObject SpeedLines;
     [SerializeField] private ParticleSystem[] DustParticles;
 
-    [Header( "Carving" )]
+    [Header("Carving")]
     [SerializeField] private ParticleSystem CarveSparksLeft;
     [SerializeField] private ParticleSystem CarveSparksRight;
 
-    [Header( "Wall Sparks" )]
+    [Header("Wall Sparks")]
     [SerializeField] private ParticleSystem WallSparksLeft;
     [SerializeField] private ParticleSystem WallSparksRight;
 
-    [Header( "Attacks" )]
+    [Header("Attacks")]
     [SerializeField] private ParticleSystem[] FlipAttackParticles;
     [SerializeField] private ParticleSystem[] SlashAttackParticles;
     [SerializeField] private ParticleSystem[] SlashAimParticles;
@@ -84,6 +84,11 @@ public class PlayerEngineFX : MonoBehaviour
 
         PlayerEvents.Instance.OnStartWallContact += PlayWallSparkParticles;
         PlayerEvents.Instance.OnStopWallContact += StopWallSparkParticles;
+
+        PlayerEvents.Instance.OnJumpCharge += SetCrouchingTrue;
+        PlayerEvents.Instance.OnJump += SetCrouchingFalse;
+        PlayerEvents.Instance.OnJumpCancel += SetCrouchingFalse;
+        PlayerEvents.Instance.OnHandleJumpAfterAim += SetCrouchingFalse;
     }
 
     private void Start()
@@ -106,23 +111,23 @@ public class PlayerEngineFX : MonoBehaviour
     void SetDashChargeParticleDuration()
     {
         float chargeTime = Dash.ChargeTime;
-        if ( chargeTime != 0 )
+        if (chargeTime != 0)
         {
-            foreach ( var dashChargeParticle in DashChargeParticles )
+            foreach (var dashChargeParticle in DashChargeParticles)
             {
-                if ( dashChargeParticle != null )
+                if (dashChargeParticle != null)
                 {
                     var main = dashChargeParticle.main;
-                    main.simulationSpeed = ( 1.0f / Dash.ChargeTime );
+                    main.simulationSpeed = (1.0f / Dash.ChargeTime);
                 }
             }
 
         }
         else
         {
-            foreach ( var dashChargeParticle in DashChargeParticles )
+            foreach (var dashChargeParticle in DashChargeParticles)
             {
-                if ( dashChargeParticle != null )
+                if (dashChargeParticle != null)
                 {
                     var main = dashChargeParticle.main;
                     main.simulationSpeed = 0.0f;
@@ -132,13 +137,13 @@ public class PlayerEngineFX : MonoBehaviour
     }
     void PlayDashChargeParticles()
     {
-        if ( Dash.IsCharging )
+        if (Dash.IsCharging)
         {
-            if ( !DashChargeStarted )
+            if (!DashChargeStarted)
             {
-                foreach ( var dashChargeParticle in DashChargeParticles )
+                foreach (var dashChargeParticle in DashChargeParticles)
                 {
-                    if ( dashChargeParticle != null )
+                    if (dashChargeParticle != null)
                     {
                         dashChargeParticle.Play();
                     }
@@ -148,9 +153,9 @@ public class PlayerEngineFX : MonoBehaviour
         }
         else
         {
-            foreach ( var dashChargeParticle in DashChargeParticles )
+            foreach (var dashChargeParticle in DashChargeParticles)
             {
-                if ( dashChargeParticle != null )
+                if (dashChargeParticle != null)
                 {
                     dashChargeParticle.Stop();
                 }
@@ -161,13 +166,13 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlayDashJetParticles()
     {
-        if ( DashJetParticles != null )
+        if (DashJetParticles != null)
         {
-            if ( Handling.IsDashing )
+            if (Handling.IsDashing)
             {
                 DashJetParticles.Play();
             }
-            else if ( !Handling.IsDashing )
+            else if (!Handling.IsDashing)
             {
                 DashJetParticles.Stop();
             }
@@ -176,22 +181,22 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlayDashBoardParticles()
     {
-        if ( ( Handling.IsDashing && !DashIsPlaying ) || ( Dash.IsCharging && !DashChargeStarted ) )
+        if ((Handling.IsDashing && !DashIsPlaying) || (Dash.IsCharging && !DashChargeStarted))
         {
-            foreach ( var dashBoardParticle in DashBoardParticles )
+            foreach (var dashBoardParticle in DashBoardParticles)
             {
-                if ( dashBoardParticle != null )
+                if (dashBoardParticle != null)
                 {
                     dashBoardParticle.Play();
                 }
             }
             DashIsPlaying = true;
         }
-        else if ( !Handling.IsDashing && !Dash.IsCharging )
+        else if (!Handling.IsDashing && !Dash.IsCharging)
         {
-            foreach ( var dashBoardParticle in DashBoardParticles )
+            foreach (var dashBoardParticle in DashBoardParticles)
             {
-                if ( dashBoardParticle != null )
+                if (dashBoardParticle != null)
                 {
                     dashBoardParticle.Stop();
                 }
@@ -202,22 +207,22 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlayJumpChargeParticles()
     {
-        if ( IsCrouching && !JumpHasCharged )
+        if (IsCrouching && !JumpHasCharged)
         {
-            foreach ( var system in JumpChargeParticles )
+            foreach (var system in JumpChargeParticles)
             {
-                if ( system != null )
+                if (system != null)
                 {
                     system.Play();
                 }
             }
             JumpHasCharged = true;
         }
-        else if ( !IsCrouching )
+        else if (!IsCrouching)
         {
-            foreach ( var system in JumpChargeParticles )
+            foreach (var system in JumpChargeParticles)
             {
-                if ( system != null )
+                if (system != null)
                 {
                     system.Stop();
                     system.Clear();
@@ -229,7 +234,7 @@ public class PlayerEngineFX : MonoBehaviour
 
     public void PlayJumpJetParticles()
     {
-        if ( JumpJetParticles != null )
+        if (JumpJetParticles != null)
         {
             JumpJetParticles.Play();
         }
@@ -237,9 +242,9 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlayKickAttackParticles()
     {
-        foreach ( var system in FlipAttackParticles )
+        foreach (var system in FlipAttackParticles)
         {
-            if ( system != null )
+            if (system != null)
             {
                 system.Play();
             }
@@ -248,9 +253,9 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlaySlashAttackParticles()
     {
-        foreach ( var system in SlashAttackParticles )
+        foreach (var system in SlashAttackParticles)
         {
-            if ( system != null )
+            if (system != null)
             {
                 system.Play();
             }
@@ -259,18 +264,18 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlaySlashAimParticles()
     {
-        foreach ( var system in SlashAimParticles )
+        foreach (var system in SlashAimParticles)
         {
-            if ( system != null )
+            if (system != null)
                 system.Play();
         }
     }
 
     void StopSlashAimParticles()
     {
-        foreach ( var system in SlashAimParticles )
+        foreach (var system in SlashAimParticles)
         {
-            if ( system != null )
+            if (system != null)
                 system.Stop();
         }
     }
@@ -282,31 +287,31 @@ public class PlayerEngineFX : MonoBehaviour
 
     void SetJumpChargeSpinSpeed()
     {
-        if ( JumpChargeSpinParticles != null )
+        if (JumpChargeSpinParticles != null)
         {
             var rotation = JumpChargeSpinParticles.rotationOverLifetime;
-            var value = JumpChargeSpinSpeed.Evaluate( Jump.JumpForceCharge );
+            var value = JumpChargeSpinSpeed.Evaluate(Jump.JumpForceCharge);
             rotation.yMultiplier = value;
         }
     }
 
     void SetSpeedlinePosition()
     {
-        if ( SpeedLines != null )
+        if (SpeedLines != null)
         {
-            SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp( -14.0f, -11.5f, RB.velocity.magnitude / Handling.MaxSpeed );
+            SpeedLines.transform.localPosition = Vector3.forward * Mathf.Lerp(-14.0f, -11.5f, RB.velocity.magnitude / Handling.MaxSpeed);
         }
     }
 
     void ToggleDustParticles()
     {
-        if ( Handling.IsGrounded )
+        if (Handling.IsGrounded)
         {
-            foreach ( var system in DustParticles )
+            foreach (var system in DustParticles)
             {
-                if ( system != null )
+                if (system != null)
                 {
-                    if ( !system.isPlaying )
+                    if (!system.isPlaying)
                     {
                         system.Play();
                     }
@@ -315,11 +320,11 @@ public class PlayerEngineFX : MonoBehaviour
         }
         else
         {
-            foreach ( var system in DustParticles )
+            foreach (var system in DustParticles)
             {
-                if ( system != null )
+                if (system != null)
                 {
-                    if ( system.isPlaying )
+                    if (system.isPlaying)
                     {
                         system.Stop();
                     }
@@ -330,39 +335,39 @@ public class PlayerEngineFX : MonoBehaviour
 
     void PlayCarveSparkParticles(float _direction)
     {
-        if ( _direction < 0 && CarveSparksLeft != null )
+        if (_direction < 0 && CarveSparksLeft != null)
         {
             CarveSparksLeft.Play();
         }
-        else if ( _direction > 0 && CarveSparksRight != null )
+        else if (_direction > 0 && CarveSparksRight != null)
         {
             CarveSparksRight.Play();
         }
     }
     void StopCarveSparkParticles()
     {
-        if ( CarveSparksLeft != null )
+        if (CarveSparksLeft != null)
             CarveSparksLeft.Stop();
-        if ( CarveSparksRight != null )
+        if (CarveSparksRight != null)
             CarveSparksRight.Stop();
     }
 
     void PlayWallSparkParticles(string _direction)
     {
-        if ( _direction == "Left" && WallSparksLeft != null )
+        if (_direction == "Left" && WallSparksLeft != null)
         {
             WallSparksLeft.Play();
         }
-        else if ( _direction == "Right" && WallSparksRight != null )
+        else if (_direction == "Right" && WallSparksRight != null)
         {
             WallSparksRight.Play();
         }
     }
     void StopWallSparkParticles()
     {
-        if ( WallSparksLeft != null )
+        if (WallSparksLeft != null)
             WallSparksLeft.Stop();
-        if ( WallSparksRight != null )
+        if (WallSparksRight != null)
             WallSparksRight.Stop();
     }
 
@@ -384,6 +389,9 @@ public class PlayerEngineFX : MonoBehaviour
 
     public void SetCrouching(bool _crouching)
     {
-        IsCrouching = _crouching;
+        // IsCrouching = _crouching;
     }
+
+    private void SetCrouchingTrue() { IsCrouching = true; }
+    private void SetCrouchingFalse() { IsCrouching = false; }
 }
