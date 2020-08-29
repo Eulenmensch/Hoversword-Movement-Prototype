@@ -98,7 +98,7 @@ Material:
     - _GradientScale: 0.02
     - _GradientScale1: 0.12
     - _InternalNoiseScale: 0.2
-    - _LightGradientIntensity: 29.95
+    - _LightGradientIntensity: 1
     - _LightGradientIntensity1: 17.2
     - _LightGradientOffset: 0.12
     - _LightGradientScale: 0.12
@@ -134,15 +134,15 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelColor: {r: 0.8490566, g: 0.5246529, b: 0.6459035, a: 0}
-    - _GradientKey01: {r: 0.7264151, g: 0.4905488, b: 0.31181002, a: 1}
-    - _GradientKey02: {r: 0.7547169, g: 0.30590683, b: 0.2385188, a: 1}
+    - _FresnelColor: {r: 0.509434, g: 0.22574916, b: 0, a: 0}
+    - _GradientKey01: {r: 1, g: 0.7771344, b: 0.3632075, a: 1}
+    - _GradientKey02: {r: 1, g: 0.859621, b: 0.30660376, a: 1}
     - _GradientKey2: {r: 0.7264151, g: 0.4905488, b: 0.31181017, a: 1}
     - _GradientKey3: {r: 0.7547169, g: 0.30590698, b: 0.23851895, a: 1}
-    - _HighColor: {r: 0.24603918, g: 0.37153617, b: 0.53773564, a: 0.9843137}
+    - _HighColor: {r: 1, g: 0.41501603, b: 0.11792449, a: 0.9843137}
     - _LowColor: {r: 0, g: 0, b: 0, a: 0}
     - _MidColor: {r: 0.28977814, g: 0.2791474, b: 0.4811321, a: 0}
     - _PlayerPosition: {r: 0.2211583, g: -3.3420503, b: -0.41286984, a: 0}
-    - _SandSpeckColor: {r: 0.24630618, g: 0.40942445, b: 0.424528, a: 0}
-    - _TrailColor: {r: 0.7924528, g: 0.041117348, b: 0.3345963, a: 1}
+    - _SandSpeckColor: {r: 0.24630612, g: 0.4094244, b: 0.4245279, a: 0}
+    - _TrailColor: {r: 0.8490566, g: 0.399302, b: 0, a: 1}
     - _Vector0: {r: -10, g: -10, b: 0, a: 0}

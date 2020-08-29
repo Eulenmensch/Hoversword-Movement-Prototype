@@ -15,8 +15,14 @@ public sealed class StylizedFogPPSSettings : PostProcessEffectSettings
 	public FloatParameter _LerpAlpha = new FloatParameter { value = 0f };
 	[Tooltip( "Fog Color" )]
 	public ColorParameter _FogColor = new ColorParameter { value = new Color(0.8113207f,0.6988862f,0.5549127f,0f) };
+	[Tooltip( "Fog Color" )]
+	public ColorParameter _FogColor1 = new ColorParameter { value = new Color(0f,0.2602676f,1f,0f) };
 	[Tooltip( "Max Fog Intensity" )]
 	public FloatParameter _MaxFogIntensity = new FloatParameter { value = 0f };
+	[Tooltip( "Scale" )]
+	public FloatParameter _Scale = new FloatParameter { value = 0f };
+	[Tooltip( "Offset" )]
+	public FloatParameter _Offset = new FloatParameter { value = 0f };
 }
 
 public sealed class StylizedFogPPSRenderer : PostProcessEffectRenderer<StylizedFogPPSSettings>
@@ -27,7 +33,10 @@ public sealed class StylizedFogPPSRenderer : PostProcessEffectRenderer<StylizedF
 		sheet.properties.SetFloat( "_DepthDivisor", settings._DepthDivisor );
 		sheet.properties.SetFloat( "_LerpAlpha", settings._LerpAlpha );
 		sheet.properties.SetColor( "_FogColor", settings._FogColor );
+		sheet.properties.SetColor( "_FogColor1", settings._FogColor1 );
 		sheet.properties.SetFloat( "_MaxFogIntensity", settings._MaxFogIntensity );
+		sheet.properties.SetFloat( "_Scale", settings._Scale );
+		sheet.properties.SetFloat( "_Offset", settings._Offset );
 		context.command.BlitFullscreenTriangle( context.source, context.destination, sheet, 0 );
 	}
 }
