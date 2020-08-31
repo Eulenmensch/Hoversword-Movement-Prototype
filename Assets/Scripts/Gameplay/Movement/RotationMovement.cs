@@ -117,6 +117,7 @@ public class RotationMovement : MonoBehaviour, IMovement
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         SetRotationAxis();
@@ -139,4 +140,5 @@ public class RotationMovement : MonoBehaviour, IMovement
             Handles.DrawSolidArc(transform.position, rotationAxis, start, _endAngle - _startAngle, 1f);
         }
     }
+#endif
 }

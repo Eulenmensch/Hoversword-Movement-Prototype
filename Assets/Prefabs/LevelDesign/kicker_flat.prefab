@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 6550263078753865726}
   - component: {fileID: 6550263078753865725}
   m_Layer: 8
-  m_Name: kicker_flat (1)
+  m_Name: kicker_flat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6550263078753865724
 Transform:

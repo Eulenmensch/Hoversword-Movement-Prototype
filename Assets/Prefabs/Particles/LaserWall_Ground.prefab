@@ -309,6 +309,8 @@ GameObject:
   - component: {fileID: 2423343371424094575}
   - component: {fileID: 2423343371424094574}
   - component: {fileID: 2423343371424094569}
+  - component: {fileID: 4551615470553476907}
+  - component: {fileID: 6669540325289057259}
   m_Layer: 12
   m_Name: LaserWallModel
   m_TagString: Untagged
@@ -607,6 +609,34 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &4551615470553476907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2423343371424094568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcca2600785ce154e8114f30fd5ec2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
+  _damageType: 1
+--- !u!114 &6669540325289057259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2423343371424094568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b33c681f8b6714e93eb1a8ff62d3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pushStrength: 40
+  _pushType: 0
 --- !u!1 &4577481355524399242
 GameObject:
   m_ObjectHideFlags: 0
@@ -655,12 +685,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isActive: 1
-  _applyDamage: 1
-  _damage: 1
-  _damageType: 0
-  _forceMagnitude: 100
-  _damageDirectionType: 0
-  _destroy: 0
   _laserModel:
   - {fileID: 2423343371424094568}
   - {fileID: 1892156259521963464}

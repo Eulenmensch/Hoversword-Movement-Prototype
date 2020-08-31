@@ -145,6 +145,7 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnGUI()
     {
         if (showGroundDistanceText)
@@ -160,4 +161,5 @@ public class HoverBoardControllerMilan01 : MonoBehaviour
             }
         }
     }
+#endif
 }
