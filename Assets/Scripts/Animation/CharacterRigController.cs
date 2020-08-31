@@ -2,6 +2,7 @@
 using DG.Tweening;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
+using FIMSpace.FTail;
 
 public class CharacterRigController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class CharacterRigController : MonoBehaviour
     [SerializeField] PlayerHandling Handling;
     [SerializeField] TwoBoneIKConstraint[] LegIKs;
     [SerializeField] ChainIKConstraint[] HandIKs;
+    [SerializeField] FTail_Animator[] ArmIKs;
 
     private Vector3 MoveBy;
     private Vector3 RotateBy;
@@ -30,8 +32,10 @@ public class CharacterRigController : MonoBehaviour
 
         PlayerEvents.Instance.OnStartAim += ToggleLegIKOff;
         PlayerEvents.Instance.OnStartAim += ToggleHandIKOn;
+        PlayerEvents.Instance.OnStartAim += ToggleArmIKOff;
         PlayerEvents.Instance.OnStopAim += ToggleLegIKOn;
         PlayerEvents.Instance.OnStopAim += ToggleHandIKOff;
+        PlayerEvents.Instance.OnStopAim += ToggleArmIKOn;
 
         PlayerEvents.Instance.OnStartKickAttack += ToggleLegIKOff;
         PlayerEvents.Instance.OnStopKickAttack += ToggleLegIKOn;
@@ -104,6 +108,23 @@ public class CharacterRigController : MonoBehaviour
         foreach (var handIK in HandIKs)
         {
             handIK.weight = 0;
+        }
+    }
+
+    private void ToggleArmIKOn()
+    {
+        foreach (var armIK in ArmIKs)
+        {
+            // armIK.enabled = true;
+            armIK.enabled = false;
+        }
+    }
+
+    private void ToggleArmIKOff()
+    {
+        foreach (var armIK in ArmIKs)
+        {
+            armIK.enabled = false;
         }
     }
 
