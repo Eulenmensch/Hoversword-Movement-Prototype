@@ -17,7 +17,6 @@ public class PlayerJump : MonoBehaviour
     private Rigidbody RB;
 
     private float JumpForce;                //The impulse applied to the body upwards to make it jump
-    private bool IsCharging;
     private bool IsGrounded;
     private bool IsCoyoteTimeRunning;
 
@@ -39,7 +38,7 @@ public class PlayerJump : MonoBehaviour
 
     private void ChargeJump()
     {
-        if (IsCharging && JumpForceCharge <= 1)
+        if (Handling.IsJumpCharging && JumpForceCharge <= 1)
         {
             JumpForceCharge += Time.deltaTime / JumpChargeTime;
         }
@@ -60,9 +59,8 @@ public class PlayerJump : MonoBehaviour
         JumpForce = JumpForceMin + ((JumpForceMax - JumpForceMin) * (RB.velocity.magnitude / Handling.MaxSpeed));
     }
 
-    public void SetCharging(bool _charging)
+    public void ResetJumpCharge()
     {
-        IsCharging = _charging;
         JumpForceCharge = JumpForceChargeMin;
     }
 

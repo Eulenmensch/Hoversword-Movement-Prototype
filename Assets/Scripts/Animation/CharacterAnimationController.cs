@@ -54,7 +54,7 @@ public class CharacterAnimationController : MonoBehaviour
 
     void CancelJump()
     {
-        // animator.SetBool("Jumping", false);
+        animator.SetBool("Jumping", false);
         animator.SetBool("JumpCancel", true);
     }
 

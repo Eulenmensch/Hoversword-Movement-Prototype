@@ -13,6 +13,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     public bool IsAirborne { get; private set; }
     public bool IsGrounded { get; private set; }
     public bool IsJumping { get; set; }
+    public bool IsJumpCharging { get; private set; }
 
     public float TurnInput { get; private set; }
 
@@ -202,7 +203,8 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         {
             if (context.started)
             {
-                PlayerJump.SetCharging(true);
+                PlayerJump.ResetJumpCharge();
+                IsJumpCharging = true;
                 BoardFX.SetCrouching(true);
                 PlayerEvents.Instance.StartJumpCharge();
                 IsJumping = true;
@@ -212,7 +214,8 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
                 PlayerJump.Jump();
                 PlayerJump.StartLandingBuffer();
                 BoardFX.PlayJumpJetParticles();
-                PlayerJump.SetCharging(false);
+                PlayerJump.ResetJumpCharge();
+                IsJumpCharging = false;
                 BoardFX.SetCrouching(false);
                 PlayerEvents.Instance.Jump();
             }
@@ -235,7 +238,10 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
             {
                 PlayerEvents.Instance.Land();
                 PlayerJump.StopLandingBuffer();
-                IsJumping = false;
+                if (!IsJumpCharging)
+                {
+                    IsJumping = false;
+                }
             }
         }
     }
@@ -278,7 +284,13 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         }
     }
 
-    private void SetCanCarveTrue() { CanCarve = true; }
+    private void SetCanCarveTrue()
+    {
+        if (!IsJumpCharging)
+        {
+            CanCarve = true;
+        }
+    }
     private void SetCanCarveFalse() { CanCarve = false; }
 
 

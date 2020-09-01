@@ -89,6 +89,7 @@ public class PlayerEngineFX : MonoBehaviour
         PlayerEvents.Instance.OnJump += SetCrouchingFalse;
         PlayerEvents.Instance.OnJumpCancel += SetCrouchingFalse;
         PlayerEvents.Instance.OnHandleJumpAfterAim += SetCrouchingFalse;
+        PlayerEvents.Instance.OnLand += SetCrouchingFalse;
     }
 
     private void Start()
@@ -393,5 +394,11 @@ public class PlayerEngineFX : MonoBehaviour
     }
 
     private void SetCrouchingTrue() { IsCrouching = true; }
-    private void SetCrouchingFalse() { IsCrouching = false; }
+    private void SetCrouchingFalse()
+    {
+        if (!Handling.IsJumpCharging)
+        {
+            IsCrouching = false;
+        }
+    }
 }
