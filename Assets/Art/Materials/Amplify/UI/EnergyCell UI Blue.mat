@@ -42,19 +42,25 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _ColorMask: 15
+    - _FlickerSpeed: 0.5
+    - _FlickerSpeed1: 0.5
     - _GlintScrollSpeed: 0.32
-    - _GlowSpeed: 0.32
+    - _GlowSpeed: 1
     - _OutlineWidth: 0.025
+    - _RedFlickerSpeed: 0.5
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _Type: 0
     - _UseUIAlphaClip: 0
+    - _YellowFlickerSpeed: 0.5
     - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color0: {r: 13.44837, g: 5.7726493, b: 5.7726493, a: 0}
+    - _Color0: {r: 1, g: 1, b: 1, a: 0}
     - _GlintColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlowColor: {r: 0, g: 1.4343096, b: 5.5908804, a: 0}
-    - _OutlineColor: {r: 0.2522632, g: 0.75678957, b: 4.594794, a: 1}
+    - _HDRColor: {r: 0, g: 0.018018799, b: 0.62164855, a: 0}
+    - _OutlineColor: {r: 0.6083302, g: 0.7531707, b: 1.8443027, a: 1}
