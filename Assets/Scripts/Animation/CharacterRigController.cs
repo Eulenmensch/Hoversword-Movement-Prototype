@@ -32,13 +32,31 @@ public class CharacterRigController : MonoBehaviour
 
         PlayerEvents.Instance.OnStartAim += ToggleLegIKOff;
         PlayerEvents.Instance.OnStartAim += ToggleHandIKOn;
-        PlayerEvents.Instance.OnStartAim += ToggleArmIKOff;
+        // PlayerEvents.Instance.OnStartAim += ToggleArmIKOff;
         PlayerEvents.Instance.OnStopAim += ToggleLegIKOn;
         PlayerEvents.Instance.OnStopAim += ToggleHandIKOff;
-        PlayerEvents.Instance.OnStopAim += ToggleArmIKOn;
+        // PlayerEvents.Instance.OnStopAim += ToggleArmIKOn;
 
         PlayerEvents.Instance.OnStartKickAttack += ToggleLegIKOff;
         PlayerEvents.Instance.OnStopKickAttack += ToggleLegIKOn;
+    }
+
+    private void OnDisable()
+    {
+        // PlayerEvents.Instance.OnJump -= ToggleLegIKOff;
+        PlayerEvents.Instance.OnJumpCancel -= ToggleLegIKOn;
+        PlayerEvents.Instance.OnJumpFall -= ToggleLegIKOn;
+        PlayerEvents.Instance.OnLand -= ToggleLegIKOn;
+
+        PlayerEvents.Instance.OnStartAim -= ToggleLegIKOff;
+        PlayerEvents.Instance.OnStartAim -= ToggleHandIKOn;
+        // PlayerEvents.Instance.OnStartAim -= ToggleArmIKOff;
+        PlayerEvents.Instance.OnStopAim -= ToggleLegIKOn;
+        PlayerEvents.Instance.OnStopAim -= ToggleHandIKOff;
+        // PlayerEvents.Instance.OnStopAim -= ToggleArmIKOn;
+
+        PlayerEvents.Instance.OnStartKickAttack -= ToggleLegIKOff;
+        PlayerEvents.Instance.OnStopKickAttack -= ToggleLegIKOn;
     }
 
     private void Start()

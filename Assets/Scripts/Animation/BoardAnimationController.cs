@@ -21,6 +21,22 @@ public class BoardAnimationController : MonoBehaviour
         PlayerEvents.Instance.OnStopKickAttack += StopKickAttack;
     }
 
+    private void OnDisable()
+    {
+        PlayerEvents.Instance.OnJump -= Jump;
+
+        PlayerEvents.Instance.OnStartCarve -= StartCarve;
+        PlayerEvents.Instance.OnStopCarve -= StopCarve;
+
+        PlayerEvents.Instance.OnStartAim -= StartAim;
+        PlayerEvents.Instance.OnStopAim -= StopAim;
+        PlayerEvents.Instance.OnStartSlashAttack -= StartSlashAttack;
+        PlayerEvents.Instance.OnStopSlashAttack -= StopSlashAttack;
+
+        PlayerEvents.Instance.OnStartKickAttack -= StartKickAttack;
+        PlayerEvents.Instance.OnStopKickAttack -= StopKickAttack;
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();

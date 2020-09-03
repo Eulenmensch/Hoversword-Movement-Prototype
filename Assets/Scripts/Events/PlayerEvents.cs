@@ -23,6 +23,9 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnJumpCharge;
     public void StartJumpCharge() { OnJumpCharge?.Invoke(); }
 
+    public event Action OnJumpCharged;
+    public void JumpCharged() { OnJumpCharged?.Invoke(); }
+
     public event Action OnJumpFall;
     public void JumpFall() { OnJumpFall?.Invoke(); }
 
@@ -71,15 +74,27 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnStopKickAttack;
     public void StopKickAttack() { OnStopKickAttack?.Invoke(); }
 
+    public event Action OnExplosion;
+    public void Explosion() { OnExplosion?.Invoke(); }
+
     public event Action OnTakeDamage;
     public void TakeDamage() { OnTakeDamage?.Invoke(); }
 
     public event Action OnHeal;
     public void Heal() { OnHeal?.Invoke(); }
 
-    public event Action<string> OnStartWallContact;
-    public void StartWallContact(string _direction) { OnStartWallContact?.Invoke(_direction); }
+    public event Action OnStartWallContact;
+    public void StartWallContact() { OnStartWallContact?.Invoke(); }
+
+    public event Action<Transform> OnUpdatetWallContact;
+    public void UpdateWallConcact(Transform _collisionPoint) { OnUpdatetWallContact?.Invoke(_collisionPoint); }
 
     public event Action OnStopWallContact;
     public void StopWallContact() { OnStopWallContact?.Invoke(); }
+
+    public event Action OnDeath;
+    public void Death() { OnDeath?.Invoke(); }
+
+    public event Action OnCheckpoint;
+    public void Checkpoint() { OnCheckpoint?.Invoke(); }
 }

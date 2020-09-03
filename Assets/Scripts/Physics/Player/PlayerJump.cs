@@ -19,6 +19,7 @@ public class PlayerJump : MonoBehaviour
     private float JumpForce;                //The impulse applied to the body upwards to make it jump
     private bool IsGrounded;
     private bool IsCoyoteTimeRunning;
+    private bool IsDoneCharging;
 
     private Coroutine CoyoteTimeRoutine;
     private Coroutine LandingBufferRoutine;
@@ -40,7 +41,13 @@ public class PlayerJump : MonoBehaviour
     {
         if (Handling.IsJumpCharging && JumpForceCharge <= 1)
         {
+            IsDoneCharging = false;
             JumpForceCharge += Time.deltaTime / JumpChargeTime;
+        }
+        else if (Handling.IsJumpCharging && !IsDoneCharging && JumpForceCharge > 1)
+        {
+            IsDoneCharging = true;
+            PlayerEvents.Instance.JumpCharged();
         }
     }
 

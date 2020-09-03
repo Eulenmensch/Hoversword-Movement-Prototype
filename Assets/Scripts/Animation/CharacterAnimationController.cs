@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class CharacterAnimationController : MonoBehaviour
 {
+    [SerializeField] PlayerHandling Handling;
     private Animator animator;
 
     private void OnEnable()
@@ -29,6 +30,30 @@ public class CharacterAnimationController : MonoBehaviour
         PlayerEvents.Instance.OnTakeDamage += TakeDamage;
     }
 
+    private void OnDisable()
+    {
+        PlayerEvents.Instance.OnJump -= StartJump;
+        PlayerEvents.Instance.OnJumpCharge -= StartJumpCharge;
+        PlayerEvents.Instance.OnLand -= StopJump;
+        PlayerEvents.Instance.OnJumpCancel -= CancelJump;
+        PlayerEvents.Instance.OnHandleJumpAfterAim -= HandleJumpAfterAim;
+
+        PlayerEvents.Instance.OnStartDashCharge -= StartDash;
+        PlayerEvents.Instance.OnStopDash -= StopDash;
+        PlayerEvents.Instance.OnStopDashCharge -= CancelDash;
+
+        PlayerEvents.Instance.OnStartCarve -= StartCarve;
+        PlayerEvents.Instance.OnStopCarve -= StopCarve;
+
+        PlayerEvents.Instance.OnStartKickAttack -= KickAttack;
+
+        PlayerEvents.Instance.OnStartAim -= StartAim;
+        PlayerEvents.Instance.OnStopAim -= StopAim;
+        PlayerEvents.Instance.OnStartSlashAttack -= SlashAttack;
+
+        PlayerEvents.Instance.OnTakeDamage -= TakeDamage;
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -48,8 +73,11 @@ public class CharacterAnimationController : MonoBehaviour
     }
     void StopJump()
     {
-        animator.SetTrigger("StopJump");
-        animator.SetBool("Jumping", false);
+        if (!Handling.IsJumpCharging)
+        {
+            animator.SetTrigger("StopJump");
+            animator.SetBool("Jumping", false);
+        }
     }
 
     void CancelJump()
@@ -61,6 +89,7 @@ public class CharacterAnimationController : MonoBehaviour
     void HandleJumpAfterAim()
     {
         animator.SetBool("JumpCharging", false);
+        animator.SetTrigger("StopJump");
     }
 
     void StartDash()

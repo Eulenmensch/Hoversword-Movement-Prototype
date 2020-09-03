@@ -83,6 +83,7 @@ public class PlayerEngineFX : MonoBehaviour
         PlayerEvents.Instance.OnStopCarve += StopCarveSparkParticles;
 
         PlayerEvents.Instance.OnStartWallContact += PlayWallSparkParticles;
+        PlayerEvents.Instance.OnUpdatetWallContact += UpdateWallSparkParticles;
         PlayerEvents.Instance.OnStopWallContact += StopWallSparkParticles;
 
         PlayerEvents.Instance.OnJumpCharge += SetCrouchingTrue;
@@ -90,6 +91,27 @@ public class PlayerEngineFX : MonoBehaviour
         PlayerEvents.Instance.OnJumpCancel += SetCrouchingFalse;
         PlayerEvents.Instance.OnHandleJumpAfterAim += SetCrouchingFalse;
         PlayerEvents.Instance.OnLand += SetCrouchingFalse;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEvents.Instance.OnStartKickAttack -= PlayKickAttackParticles;
+        PlayerEvents.Instance.OnStartSlashAttack -= PlaySlashAttackParticles;
+        PlayerEvents.Instance.OnStartAim -= PlaySlashAimParticles;
+        PlayerEvents.Instance.OnStopAim -= StopSlashAimParticles;
+
+        PlayerEvents.Instance.OnStartCarve -= PlayCarveSparkParticles;
+        PlayerEvents.Instance.OnStopCarve -= StopCarveSparkParticles;
+
+        PlayerEvents.Instance.OnStartWallContact -= PlayWallSparkParticles;
+        PlayerEvents.Instance.OnUpdatetWallContact -= UpdateWallSparkParticles;
+        PlayerEvents.Instance.OnStopWallContact -= StopWallSparkParticles;
+
+        PlayerEvents.Instance.OnJumpCharge -= SetCrouchingTrue;
+        PlayerEvents.Instance.OnJump -= SetCrouchingFalse;
+        PlayerEvents.Instance.OnJumpCancel -= SetCrouchingFalse;
+        PlayerEvents.Instance.OnHandleJumpAfterAim -= SetCrouchingFalse;
+        PlayerEvents.Instance.OnLand -= SetCrouchingFalse;
     }
 
     private void Start()
@@ -353,15 +375,21 @@ public class PlayerEngineFX : MonoBehaviour
             CarveSparksRight.Stop();
     }
 
-    void PlayWallSparkParticles(string _direction)
+    void PlayWallSparkParticles()
     {
-        if (_direction == "Left" && WallSparksLeft != null)
-        {
-            WallSparksLeft.Play();
-        }
-        else if (_direction == "Right" && WallSparksRight != null)
+        if (WallSparksRight != null)
         {
             WallSparksRight.Play();
+        }
+
+    }
+    void UpdateWallSparkParticles(Transform _collisionPoint)
+    {
+        if (WallSparksRight != null)
+        {
+            WallSparksRight.transform.position = _collisionPoint.position;
+            WallSparksRight.transform.position += WallSparksRight.transform.forward * 0.1f;
+            WallSparksRight.transform.rotation = _collisionPoint.rotation;
         }
     }
     void StopWallSparkParticles()

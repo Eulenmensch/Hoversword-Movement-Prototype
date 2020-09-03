@@ -4,9 +4,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(GroundCheck), typeof(Rigidbody))]
 public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
-    public bool IsActive { get; set; } = true;
 
     public float MaxSpeed { get; private set; }
+
+    //Public Flags
+    public bool IsActive { get; set; } = true;
     public bool IsDashing { get; set; }
     public bool IsBoosting { get; set; }
     public bool IsCarving { get; set; }
@@ -15,7 +17,10 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
     public bool IsJumping { get; set; }
     public bool IsJumpCharging { get; private set; }
 
+    //Input Fields
     public float TurnInput { get; private set; }
+    public float ThrustInput { get; private set; }
+    public float PitchInput { get; private set; }
 
     public Rigidbody RB { get; private set; }
 
@@ -38,9 +43,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private CombatController Combat;
 
-    //Input Fields
-    private float ThrustInput;
-    private float PitchInput;
 
     //Flags
     private bool CanDash;
@@ -61,6 +63,21 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         PlayerEvents.Instance.OnStopDashCharge += SetCanCarveTrue;
         PlayerEvents.Instance.OnStopAim += SetCanCarveTrue;
         PlayerEvents.Instance.OnStopKickAttack += SetCanCarveTrue;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEvents.Instance.OnJumpCharge -= SetCanCarveFalse;
+        PlayerEvents.Instance.OnStartDashCharge -= SetCanCarveFalse;
+        PlayerEvents.Instance.OnStartAim -= SetCanCarveFalse;
+        PlayerEvents.Instance.OnStartKickAttack -= SetCanCarveFalse;
+
+        PlayerEvents.Instance.OnLand -= SetCanCarveTrue;
+        PlayerEvents.Instance.OnJumpCancel -= SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopDash -= SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopDashCharge -= SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopAim -= SetCanCarveTrue;
+        PlayerEvents.Instance.OnStopKickAttack -= SetCanCarveTrue;
     }
 
     private void Start()
@@ -223,6 +240,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         else if (context.canceled)
         {
             PlayerEvents.Instance.HandleJumpAfterAim();
+            IsJumpCharging = false;
         }
     }
 
