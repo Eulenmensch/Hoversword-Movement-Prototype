@@ -226,7 +226,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
                 PlayerEvents.Instance.StartJumpCharge();
                 IsJumping = true;
             }
-            else if (context.canceled && IsJumping)
+            else if (context.canceled && IsJumping && IsJumpCharging)
             {
                 PlayerJump.Jump();
                 PlayerJump.StartLandingBuffer();
@@ -278,7 +278,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void SetCanDash()
     {
-        if (IsCarving || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
+        if (IsCarving || IsJumpCharging || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
         {
             CanDash = false;
             animator.SetBool("CanBoost", false);

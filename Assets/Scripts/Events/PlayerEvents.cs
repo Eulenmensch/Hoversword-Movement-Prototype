@@ -95,6 +95,9 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnDeath;
     public void Death() { OnDeath?.Invoke(); }
 
+    public event Action OnReset;
+    public void Reset() { OnReset?.Invoke(); }
+
     public event Action OnCheckpoint;
     public void Checkpoint() { OnCheckpoint?.Invoke(); }
 }

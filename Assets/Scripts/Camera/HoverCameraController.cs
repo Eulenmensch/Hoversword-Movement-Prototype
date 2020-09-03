@@ -8,6 +8,7 @@ public class HoverCameraController : MonoBehaviour
 {
     [SerializeField] private CinemachineFreeLook FreeLook;
     [SerializeField] private CinemachineVirtualCamera DriftCam;
+    [SerializeField] private CinemachineVirtualCamera DeathCam;
     [SerializeField] private PlayerHandling Handling;
     [SerializeField] private PlayerDash Dash;
     [SerializeField] private PlayerCarve Carve;
@@ -22,6 +23,8 @@ public class HoverCameraController : MonoBehaviour
     [SerializeField] float CarveShoulderOffsetMultiplier;
     [SerializeField] AnimationCurve FOVCurve;
 
+    private CinemachineStateDrivenCamera StateCamera;
+
     private float ZOffset;
     private float XOffset;
     private float XSpeedMultiplier;
@@ -34,10 +37,22 @@ public class HoverCameraController : MonoBehaviour
     private Vector3 DefaultShoulderOffset;
     private float TurnInput;
 
+    private void OnEnable()
+    {
+        PlayerEvents.Instance.OnDeath += ActivateDeathCam;
+        PlayerEvents.Instance.OnReset += DeactivateDeathCam;
+    }
+    private void OnDisable()
+    {
+        PlayerEvents.Instance.OnDeath -= ActivateDeathCam;
+        PlayerEvents.Instance.OnReset -= DeactivateDeathCam;
+    }
+
     private void Start()
     {
         DefaultFOV = FreeLook.m_Lens.FieldOfView;
         DefaultShoulderOffset = DriftCam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset;
+        StateCamera = GetComponent<CinemachineStateDrivenCamera>();
     }
 
     private void FixedUpdate()
@@ -153,6 +168,15 @@ public class HoverCameraController : MonoBehaviour
                 this.IsDashing = false;
             }
         }
+    }
+
+    private void ActivateDeathCam()
+    {
+        StateCamera.LiveChild = DeathCam;
+    }
+    private void DeactivateDeathCam()
+    {
+        StateCamera.LiveChild = FreeLook;
     }
 
 #if UNITY_EDITOR

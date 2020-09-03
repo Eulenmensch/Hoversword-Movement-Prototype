@@ -82,14 +82,15 @@ public class CharacterAnimationController : MonoBehaviour
 
     void CancelJump()
     {
-        animator.SetBool("Jumping", false);
+        // animator.SetBool("Jumping", false);
         animator.SetBool("JumpCancel", true);
     }
 
     void HandleJumpAfterAim()
     {
         animator.SetBool("JumpCharging", false);
-        animator.SetTrigger("StopJump");
+        // animator.SetTrigger("StopJump");
+        animator.ResetTrigger("StartJump");
     }
 
     void StartDash()

@@ -19,6 +19,8 @@ public class BoardAnimationController : MonoBehaviour
 
         PlayerEvents.Instance.OnStartKickAttack += StartKickAttack;
         PlayerEvents.Instance.OnStopKickAttack += StopKickAttack;
+
+        PlayerEvents.Instance.OnDeath += SetDead;
     }
 
     private void OnDisable()
@@ -35,6 +37,8 @@ public class BoardAnimationController : MonoBehaviour
 
         PlayerEvents.Instance.OnStartKickAttack -= StartKickAttack;
         PlayerEvents.Instance.OnStopKickAttack -= StopKickAttack;
+
+        PlayerEvents.Instance.OnDeath -= SetDead;
     }
 
     private void Start()
@@ -99,5 +103,11 @@ public class BoardAnimationController : MonoBehaviour
     void StopSlashAttack()
     {
         animator.SetBool("Slash", false);
+    }
+
+    void SetDead()
+    {
+        animator.SetBool("Dead", true);
+        animator.SetTrigger("Die");
     }
 }

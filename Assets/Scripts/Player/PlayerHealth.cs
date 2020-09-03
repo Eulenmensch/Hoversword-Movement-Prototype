@@ -109,5 +109,6 @@ public class PlayerHealth : MonoBehaviour, IReset
         ResetHealth();
         _playerHandling.IsActive = true;
         TimeManager.Instance.StopDeath();
+        PlayerEvents.Instance.Reset();
     }
 }

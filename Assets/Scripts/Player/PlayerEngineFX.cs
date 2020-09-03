@@ -9,7 +9,7 @@ public class PlayerEngineFX : MonoBehaviour
 {
     [SerializeField] private Rigidbody RB;
     [SerializeField] private PlayerHandling Handling;
-    [SerializeField] private Renderer SwordRenderer;
+    // [SerializeField] private Renderer SwordRenderer;
 
     [Header("Dash")]
     [SerializeField] private PlayerDash Dash;
@@ -26,10 +26,11 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private ParticleSystem[] JumpChargeParticles;
     [SerializeField] private ParticleSystem JumpChargeSpinParticles;
     [SerializeField] private ParticleSystem JumpJetParticles;
-    [SerializeField] private ParticleSystemRenderer JumpChargeParticleRenderer;
-    [SerializeField] private ParticleSystemRenderer JumpJetParticleRenderer;
+    // [SerializeField] private ParticleSystemRenderer JumpChargeParticleRenderer;
+    // [SerializeField] private ParticleSystemRenderer JumpJetParticleRenderer;
 
     [Header("Driving")]
+    [SerializeField] private ParticleSystem Thruster;
     [SerializeField] private GameObject SpeedLines;
     [SerializeField] private ParticleSystem[] DustParticles;
 
