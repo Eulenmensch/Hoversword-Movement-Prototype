@@ -80,6 +80,9 @@ public class PlayerEvents : MonoBehaviour
     public event Action OnTakeDamage;
     public void TakeDamage() { OnTakeDamage?.Invoke(); }
 
+    public event Action OnTakeDashDamage;
+    public void TakeDashDamage() { OnTakeDashDamage?.Invoke(); }
+
     public event Action OnHeal;
     public void Heal() { OnHeal?.Invoke(); }
 

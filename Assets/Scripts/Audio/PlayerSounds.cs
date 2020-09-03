@@ -56,6 +56,7 @@ public class PlayerSounds : MonoBehaviour
         PlayerEvents.Instance.OnStartKickAttack += PlayKickSound;
         PlayerEvents.Instance.OnStopKickAttack += StopKickSound;
         PlayerEvents.Instance.OnStartAim += PlayBladeModeOnSound;
+        PlayerEvents.Instance.OnStopAim += PlayBladeModeOffSound;
         PlayerEvents.Instance.OnStartSlashAttack += PlaySlashSound;
         PlayerEvents.Instance.OnStopSlashAttack += StopSlashSound;
 
@@ -91,6 +92,7 @@ public class PlayerSounds : MonoBehaviour
         PlayerEvents.Instance.OnStartKickAttack -= PlayKickSound;
         PlayerEvents.Instance.OnStopKickAttack -= StopKickSound;
         PlayerEvents.Instance.OnStartAim -= PlayBladeModeOnSound;
+        PlayerEvents.Instance.OnStopAim -= PlayBladeModeOffSound;
         PlayerEvents.Instance.OnStartSlashAttack -= PlaySlashSound;
         PlayerEvents.Instance.OnStopSlashAttack -= StopSlashSound;
 
@@ -179,12 +181,12 @@ public class PlayerSounds : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         BladeModeOn?.Stop();
     }
-    // private void StartBladeModeOffSound() { BladeModeOff?.Play(); StartCoroutine(StopBladeModeOffSound()); }
-    // private IEnumerator StopBladeModeOffSound()
-    // {
-    //     yield return new WaitForSeconds(0.5f);
-    //     BladeModeOff?.Stop();
-    // }
+    private void PlayBladeModeOffSound() { BladeModeOff?.Play(); StartCoroutine(StopBladeModeOffSound()); }
+    private IEnumerator StopBladeModeOffSound()
+    {
+        yield return new WaitForSeconds(0.55f);
+        BladeModeOff?.Stop();
+    }
     private void PlaySlashSound() { Slash?.Play(); }
     private void StopSlashSound() { Slash?.Stop(); }
 

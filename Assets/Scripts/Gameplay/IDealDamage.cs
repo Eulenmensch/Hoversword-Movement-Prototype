@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DamageTypes { Default, Laser }
+public enum DamageTypes { Default, Laser, Dash }
 
 public interface IDealDamage
 {

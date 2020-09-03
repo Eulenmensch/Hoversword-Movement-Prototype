@@ -16,6 +16,7 @@ public class PlayerEngineFX : MonoBehaviour
     [SerializeField] private ParticleSystem[] DashChargeParticles;
     [SerializeField] private ParticleSystem[] DashBoardParticles;
     [SerializeField] private ParticleSystem DashJetParticles;
+    [SerializeField] private ParticleSystem[] DashDamageParticles;
 
     [Header("Jump")]
     [SerializeField] private PlayerJump Jump;
@@ -92,6 +93,9 @@ public class PlayerEngineFX : MonoBehaviour
         PlayerEvents.Instance.OnJumpCancel += SetCrouchingFalse;
         PlayerEvents.Instance.OnHandleJumpAfterAim += SetCrouchingFalse;
         PlayerEvents.Instance.OnLand += SetCrouchingFalse;
+
+        PlayerEvents.Instance.OnTakeDashDamage += PlayDashDamageParticles;
+        PlayerEvents.Instance.OnTakeDamage += PlayDashDamageParticles;
     }
 
     private void OnDisable()
@@ -113,6 +117,9 @@ public class PlayerEngineFX : MonoBehaviour
         PlayerEvents.Instance.OnJumpCancel -= SetCrouchingFalse;
         PlayerEvents.Instance.OnHandleJumpAfterAim -= SetCrouchingFalse;
         PlayerEvents.Instance.OnLand -= SetCrouchingFalse;
+
+        PlayerEvents.Instance.OnTakeDashDamage -= PlayDashDamageParticles;
+        PlayerEvents.Instance.OnTakeDamage -= PlayDashDamageParticles;
     }
 
     private void Start()
@@ -226,6 +233,14 @@ public class PlayerEngineFX : MonoBehaviour
                 }
             }
             DashIsPlaying = false;
+        }
+    }
+
+    void PlayDashDamageParticles()
+    {
+        foreach (var system in DashDamageParticles)
+        {
+            system.Play();
         }
     }
 

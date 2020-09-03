@@ -64,7 +64,10 @@ public class PlayerHealth : MonoBehaviour, IReset
 
         _damageTimestamp = Time.unscaledTime;
         _playerEffects.Damage(damageType);
-        PlayerEvents.Instance.TakeDamage();
+        if (damageType != DamageTypes.Dash)
+            PlayerEvents.Instance.TakeDamage();
+        if (damageType == DamageTypes.Dash)
+            PlayerEvents.Instance.TakeDashDamage();
         if (damageType == DamageTypes.Laser)
             _damageSound.Play();
 

@@ -299,9 +299,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c73148e5bf30a459edff921b85286f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &2186649237847736854 stripped
+--- !u!4 &242691584122611553 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 2594227628691498680, guid: 141b0bdf634d9e74480dd2fa77bb2b2c,
+  m_CorrespondingSourceObject: {fileID: 4109027889561256911, guid: 141b0bdf634d9e74480dd2fa77bb2b2c,
     type: 3}
   m_PrefabInstance: {fileID: 4204116496712082606}
   m_PrefabAsset: {fileID: 0}
@@ -322,12 +322,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LookAt
       value: 
-      objectReference: {fileID: 2186649237847736854}
+      objectReference: {fileID: 242691584122611553}
     - target: {fileID: 4083112661430408068, guid: 6bd5d2abaad0e6141820769d1e7108ad,
         type: 3}
       propertyPath: m_Follow
       value: 
-      objectReference: {fileID: 2186649237847736854}
+      objectReference: {fileID: 242691584122611553}
     - target: {fileID: 4658322529984968881, guid: 6bd5d2abaad0e6141820769d1e7108ad,
         type: 3}
       propertyPath: m_FollowOffset.y
@@ -637,11 +637,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ParentHash.Array.size
       value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 8095073806807851503, guid: 6bd5d2abaad0e6141820769d1e7108ad,
-        type: 3}
-      propertyPath: m_ChildCameras.Array.size
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8095073806807851503, guid: 6bd5d2abaad0e6141820769d1e7108ad,
         type: 3}
