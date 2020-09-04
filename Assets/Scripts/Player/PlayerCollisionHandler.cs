@@ -40,6 +40,7 @@ public class PlayerCollisionHandler : MonoBehaviour
             CheckForDamage(gO);
             CheckForPushing(gO);
             CheckForCheckpoint(gO);
+            CheckForSceneLoading(gO);
         }
     }
 
@@ -94,6 +95,19 @@ public class PlayerCollisionHandler : MonoBehaviour
         if (checkpoint != null)
         {
             _playerCheckpointResetter.SetCheckpoint(checkpoint);
+        }
+    }
+
+    private void CheckForSceneLoading(GameObject target)
+    {
+        SceneLoading sceneLoading = target.GetComponentInParent<SceneLoading>();
+        if (sceneLoading != null)
+        {
+            if (sceneLoading.IsActive)
+            {
+                SceneHandler.Instance.LoadScenes(sceneLoading.ScenesToLoad);
+                SceneHandler.Instance.SetLight(sceneLoading.ActivateDirectionalLight);
+            }
         }
     }
 
