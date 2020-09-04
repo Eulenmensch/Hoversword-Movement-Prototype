@@ -105,8 +105,9 @@ public class PlayerCollisionHandler : MonoBehaviour
         {
             if (sceneLoading.IsActive)
             {
-                SceneHandler.Instance?.LoadScenes(sceneLoading.ScenesToLoad);
+                SceneHandler.Instance?.LoadScenes(sceneLoading.ScenesToLoad, sceneLoading.ActiveScene);
                 SceneHandler.Instance?.SetLight(sceneLoading.ActivateDirectionalLight);
+                SceneHandler.Instance?.SetFog(sceneLoading.ActivateFog);
             }
         }
     }

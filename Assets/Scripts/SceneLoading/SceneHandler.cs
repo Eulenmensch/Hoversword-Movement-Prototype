@@ -1,8 +1,10 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
@@ -11,15 +13,26 @@ public class SceneHandler : MonoBehaviour
 
     //[SerializeField] private string[] allSceneNames;
 
+
     [SerializeField] private string[] scenesToLoadOnStart;
     [SerializeField] private bool unloadScenesAtStart;
     private List<string> loadedScenes;
+
+    [SerializeField] private string activeSceneOnStart;
 
     bool flag;
 
     [Header("Light")]
     [SerializeField] private bool toggleDirectionalLight = true;
     [SerializeField] private GameObject directionalLight;
+
+    [Header("Post Processing")]
+    [SerializeField] private bool startWithFog = true;
+    [SerializeField] private PostProcessVolume ppVolume;
+    //[SerializeField] private PostProcessProfile ppProfile;
+    private StylizedFogPPSSettings fog;
+
+    private float fogScale;
 
     void Awake()
     {
@@ -31,12 +44,16 @@ public class SceneHandler : MonoBehaviour
 
     private void Start()
     {
+        ppVolume.profile.TryGetSettings(out fog);
+        fogScale = fog._Scale.value;
+        fog._Scale.value = startWithFog ? fogScale : 0f;
+
         loadedScenes = GetLoadedScenes();
         foreach (var name in scenesToLoadOnStart)
         {
             if (!loadedScenes.Contains(SceneManager.GetSceneByName(name).name))
             {
-                StartCoroutine(C_LoadScene(name));
+                StartCoroutine(C_LoadScene(name, name == activeSceneOnStart ? activeSceneOnStart : ""));
             }
         }
 
@@ -53,14 +70,44 @@ public class SceneHandler : MonoBehaviour
         }
     }
 
+    void SetActiveScene(string sceneName)
+    {
+        if (SceneManager.GetActiveScene().name != sceneName)
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+    }
+
     public void SetLight(bool value)
     {
-        Debug.Log($"Set light {value}");
+        //Debug.Log($"Set light {value}");
         if (toggleDirectionalLight)
             directionalLight.SetActive(value);
     }
 
-    public void LoadScenes(string[] sceneNames)
+    public void SetFog(bool value)
+    {
+        //StylizedFogPPSSettings newFog = null;
+        //ppVolume.profile.TryGetSettings(out newFog);
+
+        //Debug.Log(newFog == null ? "null" : "not null");
+        //Debug.Log("val:" + value);
+
+        //newFog.enabled.Override(value);
+
+        float targetScale = value ? fogScale : 0f;
+        //fogScale = fog._Scale.value;
+
+        DOTween.To(() => fog._Scale.value, x => fog._Scale.value = x, targetScale, 5f);
+        // newFog.active= value;
+        //._Offset= value;
+        // newFog.enabled.value = value;
+        //ppVolume.profile.RemoveSettings<StylizedFogPPSSettings>();
+        //ppVolume.profile.AddSettings(newFog);
+
+        //fog.enabled.value = value;
+        //Debug.Log("Set fog to: " + value);
+    }
+
+    public void LoadScenes(string[] sceneNames, string activeScene)
     {
         loadedScenes = GetLoadedScenes();
 
@@ -80,7 +127,11 @@ public class SceneHandler : MonoBehaviour
         {
             if (!loadedScenes.Contains(name))
             {
-                StartCoroutine(C_LoadScene(name));
+                StartCoroutine(C_LoadScene(name, name == activeScene ? activeScene : ""));
+            }
+            else if (name == activeScene)
+            {
+                SetActiveScene(activeScene);
             }
         }
     }
@@ -104,11 +155,15 @@ public class SceneHandler : MonoBehaviour
             Debug.LogError($"Scene '{name}' is already loaded");
     }
 
-    private IEnumerator C_LoadScene(string name)
+    private IEnumerator C_LoadScene(string name, string activeSceneName = "")
     {
         //loadedScenes.Add(name);
         yield return SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
-        Debug.Log($"Scene '{name}' loaded");
+        //Debug.Log($"Scene '{name}' loaded");
+        if (activeSceneName != "")
+        {
+            SetActiveScene(activeSceneName);
+        }
     }
 
     public void UnloadScene(string name)

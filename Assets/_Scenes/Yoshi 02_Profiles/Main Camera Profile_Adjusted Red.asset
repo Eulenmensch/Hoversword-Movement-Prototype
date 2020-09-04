@@ -1691,19 +1691,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c1dece49d1d3544b9d9770bad92f1af, type: 3}
   m_Name: StylizedFogPPSSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   _DepthDivisor:
     overrideState: 1
-    value: 103.6
+    value: 120
   _LerpAlpha:
     overrideState: 1
-    value: 0.6
+    value: 0.22
   _FogColor:
     overrideState: 1
-    value: {r: 0.8113207, g: 0.6988862, b: 0.5549127, a: 0}
+    value: {r: 0.9622642, g: 0.3925412, b: 0.05900679, a: 0}
+  _FogColor1:
+    overrideState: 1
+    value: {r: 0.8867924, g: 0.7748279, b: 0.58143467, a: 0}
   _MaxFogIntensity:
     overrideState: 1
     value: 4.1
+  _Scale:
+    overrideState: 1
+    value: 0.25
+  _Offset:
+    overrideState: 0
+    value: 0
