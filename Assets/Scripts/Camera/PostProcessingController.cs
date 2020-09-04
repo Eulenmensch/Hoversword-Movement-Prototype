@@ -3,11 +3,11 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class PostProcessingController : MonoBehaviour
 {
-    [SerializeField] private Transform Player;
-    [SerializeField] private PostProcessVolume PostProcessVolume;
-    [SerializeField] private PlayerHandling Handling;
+    [SerializeField] private Transform Player = null;
+    [SerializeField] private PostProcessVolume PostProcessVolume = null;
+    [SerializeField] private PlayerHandling Handling = null;
 
-    [SerializeField, Range( 0, 1 )] private float MaxChromaticAberration;
+    [SerializeField, Range( 0, 1 )] private float MaxChromaticAberration = 0f;
 
 
     private void Update()
@@ -17,8 +17,11 @@ public class PostProcessingController : MonoBehaviour
         PostProcessVolume.profile.TryGetSettings( out motionBlur );
         Vector4Parameter para = new Vector4Parameter();
         para.value = pos;
-        motionBlur._Offset.value.x = pos.x;
-        motionBlur._Offset.value.y = pos.y;
+        if ( motionBlur != null )
+        {
+            motionBlur._Offset.value.x = pos.x;
+            motionBlur._Offset.value.y = pos.y;
+        }
 
         ChromaticAberration chromaticAberration;
         PostProcessVolume.profile.TryGetSettings( out chromaticAberration );

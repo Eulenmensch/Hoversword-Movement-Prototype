@@ -12,23 +12,23 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
 
-    [Header("Time")]
+    [Header( "Time" )]
     [ShowOnly, SerializeField] private float gameTime;
 
-    [Header("TimeScale")]
+    [Header( "TimeScale" )]
     [ShowOnly, SerializeField] private float _gameTimeScale = 1f;
     [ShowOnly, SerializeField] private float _ingameTimeScale = 1f;
     [ShowOnly, SerializeField] private float _timeScale;
 
     private Tween _timeTween;
-    [Header("Aiming Bullet Time")]
+    [Header( "Aiming Bullet Time" )]
     [SerializeField] private float _bulletTimescaleAiming;
     [SerializeField] private float _bulletTimeAimingFadeInDuration;
     [SerializeField] private float _bulletTimeAimingFadeOutDuration;
     [SerializeField] Ease _bulletTimeAimingEaseIn;
     [SerializeField] Ease _bulletTimeAimingEaseOut;
 
-    [Header("Aiming Bullet Time")]
+    [Header( "Aiming Bullet Time" )]
     [SerializeField] private float _bulletTimescaleDeath;
     [SerializeField] private float _bulletTimeDeathFadeInDuration;
     [SerializeField] Ease _bulletTimeDeathEaseIn;
@@ -37,7 +37,7 @@ public class TimeManager : MonoBehaviour
     private float[] timeScaleSteps = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.5f, 2f, 3f, 4f, 5f };
     private int currentTimeScaleStep = 3;
 
-    [Header("Fixed Update Frame Stopping")]
+    [Header( "Fixed Update Frame Stopping" )]
     public bool stopFrame;
     public int frameStep;
     int currentFrame = 0;
@@ -46,11 +46,22 @@ public class TimeManager : MonoBehaviour
     [ShowOnly, SerializeField]
     int fixedframes = 0;
 
+    private void OnEnable()
+    {
+        PlayerEvents.Instance.OnStartPause += StartPause;
+        PlayerEvents.Instance.OnStopPause += StopPause;
+    }
+    private void OnDisable()
+    {
+        PlayerEvents.Instance.OnStartPause -= StartPause;
+        PlayerEvents.Instance.OnStopPause -= StopPause;
+    }
+
     void Awake()
     {
-        if (Instance != null && Instance != this)
+        if ( Instance != null && Instance != this )
         {
-            Destroy(this);
+            Destroy( this );
         }
         else
         {
@@ -62,21 +73,21 @@ public class TimeManager : MonoBehaviour
     {
         gameTime = Time.time;
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if ( Input.GetKeyDown( KeyCode.R ) )
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene( SceneManager.GetActiveScene().name );
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if ( Input.GetKeyDown( KeyCode.Escape ) )
         {
             Application.Quit();
         }
 
 
         // Pause Time with F3
-        if (Input.GetKeyDown(KeyCode.F6))
+        if ( Input.GetKeyDown( KeyCode.F6 ) )
         {
-            if (_gameTimeScale != 0)
+            if ( _gameTimeScale != 0 )
             {
                 _gameTimeScale = 0;
             }
@@ -88,14 +99,14 @@ public class TimeManager : MonoBehaviour
 
 
         // Make Time run faster and slower with F1 and F2
-        if (Input.GetKeyDown(KeyCode.F5))
+        if ( Input.GetKeyDown( KeyCode.F5 ) )
         {
             currentTimeScaleStep = currentTimeScaleStep > 0 ? currentTimeScaleStep - 1 : 0;
 
             _gameTimeScale = timeScaleSteps[currentTimeScaleStep];
         }
 
-        if (Input.GetKeyDown(KeyCode.F7))
+        if ( Input.GetKeyDown( KeyCode.F7 ) )
         {
             currentTimeScaleStep = currentTimeScaleStep < timeScaleSteps.Length - 1 ? currentTimeScaleStep + 1 : timeScaleSteps.Length - 1;
             _gameTimeScale = timeScaleSteps[currentTimeScaleStep];
@@ -108,11 +119,11 @@ public class TimeManager : MonoBehaviour
     {
         fixedframes++;
 
-        if (stopFrame/* && useFixedUpdate*/)
+        if ( stopFrame/* && useFixedUpdate*/)
         {
             currentFrame++;
 
-            if (currentFrame >= frameStep)
+            if ( currentFrame >= frameStep )
             {
 #if UNITY_EDITOR
                 EditorApplication.isPaused = true;
@@ -126,25 +137,37 @@ public class TimeManager : MonoBehaviour
     internal void StartAim()
     {
         _timeTween?.Kill();
-        _timeTween = DOTween.To(() => _ingameTimeScale, x => _ingameTimeScale = x, _bulletTimescaleAiming, _bulletTimeAimingFadeInDuration)
-            .SetEase(_bulletTimeAimingEaseIn).SetUpdate(true);
+        _timeTween = DOTween.To( () => _ingameTimeScale, x => _ingameTimeScale = x, _bulletTimescaleAiming, _bulletTimeAimingFadeInDuration )
+            .SetEase( _bulletTimeAimingEaseIn ).SetUpdate( true );
     }
 
     internal void StopAim()
     {
         _timeTween?.Kill();
-        _timeTween = DOTween.To(() => _ingameTimeScale, x => _ingameTimeScale = x, 1f, _bulletTimeAimingFadeOutDuration)
-            .SetEase(_bulletTimeAimingEaseOut).SetUpdate(true);
+        _timeTween = DOTween.To( () => _ingameTimeScale, x => _ingameTimeScale = x, 1f, _bulletTimeAimingFadeOutDuration )
+            .SetEase( _bulletTimeAimingEaseOut ).SetUpdate( true );
     }
 
     public void StartDeath()
     {
         _timeTween?.Kill();
-        _timeTween = DOTween.To(() => _ingameTimeScale, x => _ingameTimeScale = x, _bulletTimescaleDeath, _bulletTimeDeathFadeInDuration)
-            .SetEase(_bulletTimeDeathEaseIn).SetUpdate(true);
+        _timeTween = DOTween.To( () => _ingameTimeScale, x => _ingameTimeScale = x, _bulletTimescaleDeath, _bulletTimeDeathFadeInDuration )
+            .SetEase( _bulletTimeDeathEaseIn ).SetUpdate( true );
     }
 
     public void StopDeath()
+    {
+        _timeTween?.Kill();
+        _ingameTimeScale = 1f;
+    }
+
+    private void StartPause()
+    {
+        _timeTween?.Kill();
+        _ingameTimeScale = 0f;
+    }
+
+    private void StopPause()
     {
         _timeTween?.Kill();
         _ingameTimeScale = 1f;

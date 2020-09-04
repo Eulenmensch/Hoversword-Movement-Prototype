@@ -74,7 +74,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609c8190bb9718e4e8cb46de187e4d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MusicToFadeIn: {fileID: 0}
-  MusicToFadeOut: {fileID: 0}
-  MusicFadeTime: 0
-  ReverbFadeTime: 0
+  FadeIn: Overworld Music
+  FadeOut: Tunnel Music

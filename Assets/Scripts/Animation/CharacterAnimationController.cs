@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent( typeof( Animator ) )]
 public class CharacterAnimationController : MonoBehaviour
 {
     [SerializeField] PlayerHandling Handling;
@@ -61,106 +61,106 @@ public class CharacterAnimationController : MonoBehaviour
 
     void StartJump()
     {
-        animator.SetTrigger("StartJump");
-        animator.SetBool("JumpCharging", false);
+        animator.SetTrigger( "StartJump" );
+        animator.SetBool( "JumpCharging", false );
     }
     void StartJumpCharge()
     {
-        animator.SetTrigger("StartJumpCharge");
-        animator.SetBool("JumpCancel", false);
-        animator.SetBool("Jumping", true);
-        animator.SetBool("JumpCharging", true);
+        animator.SetTrigger( "StartJumpCharge" );
+        animator.SetBool( "JumpCancel", false );
+        animator.SetBool( "Jumping", true );
+        animator.SetBool( "JumpCharging", true );
     }
     void StopJump()
     {
-        if (!Handling.IsJumpCharging)
+        if ( !Handling.IsJumpCharging )
         {
-            animator.SetTrigger("StopJump");
-            animator.SetBool("Jumping", false);
+            animator.SetTrigger( "StopJump" );
+            animator.SetBool( "Jumping", false );
         }
     }
 
     void CancelJump()
     {
         // animator.SetBool("Jumping", false);
-        animator.SetBool("JumpCancel", true);
+        animator.SetBool( "JumpCancel", true );
     }
 
     void HandleJumpAfterAim()
     {
-        animator.SetBool("JumpCharging", false);
+        animator.SetBool( "JumpCharging", false );
         // animator.SetTrigger("StopJump");
-        animator.ResetTrigger("StartJump");
+        animator.ResetTrigger( "StartJump" );
     }
 
     void StartDash()
     {
-        animator.SetTrigger("StartDash");
-        animator.SetBool("Dashing", true);
-        animator.SetBool("DashCancel", false);
+        animator.SetTrigger( "StartDash" );
+        animator.SetBool( "Dashing", true );
+        animator.SetBool( "DashCancel", false );
     }
 
     void StopDash()
     {
-        animator.SetBool("Dashing", false);
+        animator.SetBool( "Dashing", false );
     }
 
     void CancelDash()
     {
-        animator.SetBool("DashCancel", true);
+        animator.SetBool( "DashCancel", true );
     }
 
     void StartCarve(float _direction)
     {
         string direction = "";
-        if (_direction > 0)
+        if ( _direction > 0 )
         {
             direction = "Right";
-            animator.SetBool("DriftingRight", true);
+            // animator.SetBool("DriftingRight", true);
         }
-        else if (_direction < 0)
+        else if ( _direction < 0 )
         {
             direction = "Left";
-            animator.SetBool("DriftingLeft", true);
+            // animator.SetBool("DriftingLeft", true);
         }
 
-        animator.SetTrigger("StartDrift" + direction);
-        animator.SetBool("Drifting", true);
-        animator.SetFloat("DriftDirection", _direction);
+        animator.SetTrigger( "StartDrift" + direction );
+        animator.SetBool( "Drifting", true );
+        animator.SetFloat( "DriftDirection", _direction );
     }
 
     void StopCarve()
     {
-        animator.SetTrigger("StopDrift");
-        animator.SetBool("DriftingRight", false);
-        animator.SetBool("DriftingLeft", false);
-        animator.SetBool("Drifting", false);
+        animator.SetTrigger( "StopDrift" );
+        animator.SetBool( "DriftingRight", false );
+        animator.SetBool( "DriftingLeft", false );
+        animator.SetBool( "Drifting", false );
     }
 
     void KickAttack()
     {
-        animator.SetTrigger("FlipAttack");
+        animator.SetTrigger( "FlipAttack" );
     }
 
     void StartAim()
     {
-        animator.SetTrigger("StartAim");
-        animator.SetBool("Aiming", true);
+        animator.SetTrigger( "StartAim" );
+        animator.SetBool( "Aiming", true );
     }
 
     void StopAim()
     {
-        animator.SetTrigger("StopAim");
-        animator.SetBool("Aiming", false);
+        animator.SetTrigger( "StopAim" );
+        animator.SetBool( "Aiming", false );
     }
 
     void SlashAttack()
     {
-        animator.SetTrigger("SlashAttack");
+        animator.SetTrigger( "SlashAttack" );
     }
 
     void TakeDamage()
     {
-        animator.SetTrigger("TakeDamage");
+        animator.SetTrigger( "TakeDamage" );
     }
 }

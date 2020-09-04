@@ -375,8 +375,13 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_AnimatedTarget: {fileID: 0}
   m_LayerIndex: 0
-  m_ShowDebugText: 1
-  m_ChildCameras: []
+  m_ShowDebugText: 0
+  m_ChildCameras:
+  - {fileID: 7741903799708130524}
+  - {fileID: 7741903798550932053}
+  - {fileID: 4658322530798790457}
+  - {fileID: 5586952128662967855}
+  - {fileID: 4083112661430408068}
   m_Instructions:
   - m_FullHash: -1192906254
     m_VirtualCamera: {fileID: 4658322530798790457}
@@ -416,33 +421,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   m_CustomBlends: {fileID: 11400000, guid: be81c1047fe96434c8f4ac22c32ac22e, type: 2}
-  m_ParentHash:
-  - m_Hash: -1751635351
-    m_ParentHash: 756556552
-  - m_Hash: -1192906254
-    m_ParentHash: 756556552
-  - m_Hash: -171824650
-    m_ParentHash: 756556552
-  - m_Hash: 336801659
-    m_ParentHash: 756556552
-  - m_Hash: 1202917484
-    m_ParentHash: 756556552
-  - m_Hash: 262021495
-    m_ParentHash: 756556552
-  - m_Hash: 880736829
-    m_ParentHash: 756556552
-  - m_Hash: 28773604
-    m_ParentHash: 756556552
-  - m_Hash: -1504890846
-    m_ParentHash: 756556552
-  - m_Hash: -295698119
-    m_ParentHash: 756556552
-  - m_Hash: -275121872
-    m_ParentHash: 756556552
-  - m_Hash: -822806213
-    m_ParentHash: 756556552
-  - m_Hash: -2032547808
-    m_ParentHash: 756556552
+  m_ParentHash: []
 --- !u!114 &8095073806807851518
 MonoBehaviour:
   m_ObjectHideFlags: 0

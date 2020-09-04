@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(GroundCheck), typeof(Rigidbody))]
+[RequireComponent( typeof( GroundCheck ), typeof( Rigidbody ) )]
 public class PlayerHandling : MonoBehaviour/*, IMove*/
 {
 
@@ -45,10 +45,10 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
 
     //Flags
-    private bool CanDash;
-    private bool CanJump;
-    private bool CanCarve;
-    private bool IsFalling;
+    private bool CanDash = true;
+    private bool CanJump = true;
+    private bool CanCarve = true;
+    private bool IsFalling = true;
 
     private void OnEnable()
     {
@@ -101,7 +101,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if ( Input.GetKeyDown( KeyCode.J ) )
         {
             IsActive = !IsActive;
         }
@@ -109,11 +109,11 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void FixedUpdate()
     {
-        if (!IsActive)
+        if ( !IsActive )
             return;
 
         RaycastHit hit;
-        IsGrounded = GroundCheck.IsGrounded(out hit);
+        IsGrounded = GroundCheck.IsGrounded( out hit );
 
         CalculateMaxSpeed();
         SetCanDash();
@@ -123,18 +123,18 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
         CoyoteTime();
         Land();
-        Thrust(hit);
+        Thrust( hit );
         Turn();
-        PlayerAirControl.AirControl(PitchInput, IsGrounded, IsDashing);
+        PlayerAirControl.AirControl( PitchInput, IsGrounded, IsDashing );
         Carve();
     }
 
     private void CalculateMaxSpeed()
     {
         float force = IsGrounded ? PlayerThrust.GroundAccelerationForce : PlayerThrust.AirAccelerationForce;
-        if (IsDashing) force += PlayerDash.BoostForce;
-        if (IsBoosting) force += PlayerBoost.BoostForce;
-        MaxSpeed = Mathf.Sqrt(force / QuadraticDrag.Drag);
+        if ( IsDashing ) force += PlayerDash.BoostForce;
+        if ( IsBoosting ) force += PlayerBoost.BoostForce;
+        MaxSpeed = Mathf.Sqrt( force / QuadraticDrag.Drag );
     }
 
     public void GetMoveInput(InputAction.CallbackContext context)
@@ -142,7 +142,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
         Vector2 inputVector = context.ReadValue<Vector2>();
         ThrustInput = inputVector.y;
         TurnInput = inputVector.x;
-        BoardFX.SetMoveInput(inputVector.y, inputVector.x);
+        BoardFX.SetMoveInput( inputVector.y, inputVector.x );
     }
 
     public void GetPitchInput(InputAction.CallbackContext context)
@@ -152,43 +152,43 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void Thrust(RaycastHit _hit)
     {
-        PlayerThrust.Thrust(ThrustInput, IsGrounded, _hit);
-        if (IsGrounded)
+        PlayerThrust.Thrust( ThrustInput, IsGrounded, _hit );
+        if ( IsGrounded )
         {
-            PlayerFriction.ApplyIdleFriction(ThrustInput, RB);
+            PlayerFriction.ApplyIdleFriction( ThrustInput, RB );
         }
     }
 
     private void Turn()
     {
-        if (!IsCarving)
+        if ( !IsCarving )
         {
-            PlayerTurn.Turn(TurnInput);
-            PlayerFriction.ApplySidewaysFriction(RB, PlayerTurn.TurnFriction);
+            PlayerTurn.Turn( TurnInput );
+            PlayerFriction.ApplySidewaysFriction( RB, PlayerTurn.TurnFriction );
         }
     }
 
     private void Carve()
     {
-        PlayerCarve.Carve(TurnInput);
-        if (IsCarving)
+        PlayerCarve.Carve( TurnInput );
+        if ( IsCarving )
         {
-            PlayerFriction.ApplySidewaysFriction(RB, PlayerCarve.CarveFriction);
+            PlayerFriction.ApplySidewaysFriction( RB, PlayerCarve.CarveFriction );
         }
     }
     public void SetCarve(InputAction.CallbackContext context)
     {
-        if (CanCarve)
+        if ( CanCarve )
         {
-            if (IsGrounded)
+            if ( IsGrounded )
             {
-                if (context.started)
+                if ( context.started )
                 {
-                    PlayerCarve.StartCarve(TurnInput);
+                    PlayerCarve.StartCarve( TurnInput );
                 }
             }
         }
-        if (context.canceled)
+        if ( context.canceled )
         {
             PlayerCarve.StopCarve();
         }
@@ -197,18 +197,18 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     public void Dash(InputAction.CallbackContext context)
     {
-        if (CanDash)
+        if ( CanDash )
         {
-            if (context.started)
+            if ( context.started )
             {
                 PlayerDash.StartCharge();
-                BoardFX.SetDashing(true);
+                BoardFX.SetDashing( true );
                 PlayerEvents.Instance.StartDashCharge();
             }
-            else if (context.canceled)
+            else if ( context.canceled )
             {
                 PlayerDash.StopCharge();
-                BoardFX.SetDashing(false);
+                BoardFX.SetDashing( false );
                 PlayerEvents.Instance.StopDashCharge();
             }
         }
@@ -216,28 +216,28 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (CanJump)
+        if ( CanJump )
         {
-            if (context.started)
+            if ( context.started )
             {
                 PlayerJump.ResetJumpCharge();
                 IsJumpCharging = true;
-                BoardFX.SetCrouching(true);
+                BoardFX.SetCrouching( true );
                 PlayerEvents.Instance.StartJumpCharge();
                 IsJumping = true;
             }
-            else if (context.canceled && IsJumping && IsJumpCharging)
+            else if ( context.canceled && IsJumping && IsJumpCharging )
             {
                 PlayerJump.Jump();
                 PlayerJump.StartLandingBuffer();
                 BoardFX.PlayJumpJetParticles();
                 PlayerJump.ResetJumpCharge();
                 IsJumpCharging = false;
-                BoardFX.SetCrouching(false);
+                BoardFX.SetCrouching( false );
                 PlayerEvents.Instance.Jump();
             }
         }
-        else if (context.canceled)
+        else if ( context.canceled )
         {
             PlayerEvents.Instance.HandleJumpAfterAim();
             IsJumpCharging = false;
@@ -246,17 +246,17 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void Land()
     {
-        if (!IsGrounded)
+        if ( !IsGrounded )
         {
             IsAirborne = true;
         }
-        if (IsGrounded)
+        if ( IsGrounded )
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
+            if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) )
             {
                 PlayerEvents.Instance.Land();
                 PlayerJump.StopLandingBuffer();
-                if (!IsJumpCharging)
+                if ( !IsJumpCharging )
                 {
                     IsJumping = false;
                 }
@@ -266,7 +266,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void CoyoteTime()
     {
-        if (!IsGrounded)
+        if ( !IsGrounded )
         {
             PlayerJump.StartCoyoteTime();
         }
@@ -278,21 +278,21 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void SetCanDash()
     {
-        if (IsCarving || IsJumpCharging || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
+        if ( IsCarving || IsJumpCharging || Combat.isAiming || ( Combat.attackState == CombatController.AttackStates.Flip ) )
         {
             CanDash = false;
-            animator.SetBool("CanBoost", false);
+            animator.SetBool( "CanBoost", false );
         }
         else
         {
             CanDash = true;
-            animator.SetBool("CanBoost", true);
+            animator.SetBool( "CanBoost", true );
         }
     }
 
     private void SetCanJump()
     {
-        if (IsCarving || IsDashing || PlayerDash.IsCharging || Combat.isAiming || (Combat.attackState == CombatController.AttackStates.Flip))
+        if ( IsCarving || IsDashing || PlayerDash.IsCharging || Combat.isAiming || ( Combat.attackState == CombatController.AttackStates.Flip ) )
         {
             CanJump = false;
         }
@@ -304,7 +304,7 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void SetCanCarveTrue()
     {
-        if (!IsJumpCharging)
+        if ( !IsJumpCharging )
         {
             CanCarve = true;
         }
@@ -314,9 +314,9 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void SetFalling()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Falling"))
+        if ( animator.GetCurrentAnimatorStateInfo( 0 ).IsName( "Jump Falling" ) )
         {
-            if (!IsFalling)
+            if ( !IsFalling )
             {
                 IsFalling = true;
                 PlayerEvents.Instance.JumpFall();
@@ -330,6 +330,6 @@ public class PlayerHandling : MonoBehaviour/*, IMove*/
 
     private void SetAnimatorGrounded()
     {
-        animator.SetBool("Grounded", IsGrounded);
+        animator.SetBool( "Grounded", IsGrounded );
     }
 }

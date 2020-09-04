@@ -7,9 +7,9 @@ public class PlayerEvents : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
+        if ( Instance != null && Instance != this )
         {
-            Destroy(this);
+            Destroy( this );
         }
         else
         {
@@ -45,13 +45,13 @@ public class PlayerEvents : MonoBehaviour
     public void StopDashCharge() { OnStopDashCharge?.Invoke(); }
 
     public event Action<float> OnStartDash;
-    public void StartDash(float _duration) { OnStartDash?.Invoke(_duration); }
+    public void StartDash(float _duration) { OnStartDash?.Invoke( _duration ); }
 
     public event Action OnStopDash;
     public void StopDash() { OnStopDash?.Invoke(); }
 
     public event Action<float> OnStartCarve;
-    public void StartCarve(float _direction) { OnStartCarve?.Invoke(_direction); }
+    public void StartCarve(float _direction) { OnStartCarve?.Invoke( _direction ); }
 
     public event Action OnStopCarve;
     public void StopCarve() { OnStopCarve?.Invoke(); }
@@ -90,7 +90,7 @@ public class PlayerEvents : MonoBehaviour
     public void StartWallContact() { OnStartWallContact?.Invoke(); }
 
     public event Action<Transform> OnUpdatetWallContact;
-    public void UpdateWallConcact(Transform _collisionPoint) { OnUpdatetWallContact?.Invoke(_collisionPoint); }
+    public void UpdateWallConcact(Transform _collisionPoint) { OnUpdatetWallContact?.Invoke( _collisionPoint ); }
 
     public event Action OnStopWallContact;
     public void StopWallContact() { OnStopWallContact?.Invoke(); }
@@ -103,4 +103,10 @@ public class PlayerEvents : MonoBehaviour
 
     public event Action OnCheckpoint;
     public void Checkpoint() { OnCheckpoint?.Invoke(); }
+
+    public event Action OnStartPause;
+    public void StartPause() { OnStartPause?.Invoke(); }
+
+    public event Action OnStopPause;
+    public void StopPause() { OnStopPause?.Invoke(); }
 }
