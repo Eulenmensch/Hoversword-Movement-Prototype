@@ -56,8 +56,8 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
-    NearClipPlane: 0.1
-    FarClipPlane: 5000
+    NearClipPlane: 0.6
+    FarClipPlane: 1000
     Dutch: 0
     LensShift: {x: 0, y: 0}
   m_Transitions:
@@ -161,6 +161,7 @@ MonoBehaviour:
   m_XDamping: 0.2
   m_YDamping: 0.2
   m_ZDamping: 0.3
+  m_TargetMovementOnly: 0
   m_ScreenX: 0.334
   m_ScreenY: 0.583
   m_CameraDistance: 10
@@ -196,7 +197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9beda531928fc40968802117a5d256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ApplyBeforeBody: 1
   m_RecenterTarget: 2
   m_VerticalAxis:
     Value: 0
@@ -246,3 +246,4 @@ MonoBehaviour:
     m_RecenteringTime: 0.5
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
+  m_ApplyBeforeBody: 1

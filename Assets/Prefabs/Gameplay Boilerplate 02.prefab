@@ -1689,11 +1689,6 @@ PrefabInstance:
       propertyPath: m_PixelPerfect
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2838436967452303425, guid: 41e4910ae5301244bb39f390486f46dd,
-        type: 3}
-      propertyPath: m_PlaneDistance
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2838436967452303428, guid: 41e4910ae5301244bb39f390486f46dd,
         type: 3}
       propertyPath: m_LocalRotation.x
